@@ -71,6 +71,7 @@ Read `CLAUDE.md`, this file and `library/README.md`. Then use AskUserQuestion, o
      - `XFADE` at place changes, `flashAt` after the hook;
      - `CAMS` (`push()` keys for holds; `flyPath` / `follow` / `whip` / `orbit` / `crane` so the framing changes every 1.5-3 s; motivated moves link places, hard cuts only for punches);
      - `KICKS` on impacts, `DOF` per beat;
+     - light arcs and density (reference study 2026-11-03): let the light change with the story (`lightTo` storm / dusk, `rays` for reveals), and dress every set (`scatter`, `backdrop`, `rain`, `birds`) so no frame shows bare ground or empty sky;
      - it ends with `FILM = makeFilm(...)`.
    - `cast.ts`: `stage(id, t, cam)` with `human` / `critter` / `card` / `burst`. Reactions land 0-3 frames before their word (`after()`).
    - `index.tsx`: the places (set builders + a `variant` the variety log hasn't used lately), `pose()` toggles, `makeShort()`.

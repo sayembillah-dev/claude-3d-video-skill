@@ -19,7 +19,9 @@ Register it in `src/Root.tsx`: `<Composition id="X" component={MyShort} duration
 ## director/camera.ts (timeline, camera, lens)
 - Types:
   - `V3 = [x, y, z]` (metres; y up; the camera usually looks toward −z).
-  - `ShotDef = { id, a, b, light: "day"|"golden", set: placeKey, sunAz?, sunEl? }`: frames `a..b`. The sun is camera-relative degrees: az 0 = backlight, 90 = screen right, 180 = behind the camera.
+  - `ShotDef = { id, a, b, light: "day"|"golden"|"storm"|"dusk", set: placeKey, sunAz?, sunEl?, lightTo?, rays? }`: frames `a..b`. The sun is camera-relative degrees: az 0 = backlight, 90 = screen right, 180 = behind the camera.
+    - `lightTo: { light, a, b }`: blend sky, fog, ambient, sun colour, clouds and grade to another preset between frames a..b (storm rolls in, day turns to dusk). The sun direction and shadows stay the shot's.
+    - `rays: { n?=5, k?=.6, at?: V3, spread?=10, len?=40 }`: god-ray shafts along the shot's sun (default anchor on the ground between camera and look point). Best with a high side sun (sunEl 30-45) in storm or golden.
 - `makeFilm({ total, shots, xfade?, cams, kicks?, dof, flashAt? })` → `Film`.
   - `xfade[id]` = crossfade frames into shot id.
   - `kicks: [timeS, strength]` = 7-frame impact shakes.
@@ -51,6 +53,8 @@ Register it in `src/Root.tsx`: `<Composition id="X" component={MyShort} duration
 - Effects:
   - `burst(out, t, t0, x, y, z, w, dur=.3)`: impact star.
   - `puff(out, t, t0, x, y, z, w)`: dust puff.
+  - `rain(out, t, cam, { n=220, area=9, depth=16, h=10, speed=14, slant=.18, len=.9 })`: world-anchored rain streaks in front of the camera (parallax on moves). Pair with storm light.
+  - `birds(out, t, cx, cy, cz, { n=5, r=6, size=.5, speed=.35 })`: ink-V flock circling a point; keep it in open sky (size ~.8 at 15-20 m).
 - Timing:
   - `after(t, wordStart)`: true from 2 f before the word.
   - `lidAt(t, i)`: blinks.
@@ -72,6 +76,10 @@ Register it in `src/Root.tsx`: `<Composition id="X" component={MyShort} duration
 
 ## sets/sets.ts (every builder: local coordinates, ground y = 0, place it with `x` in the production)
 Every builder takes `variant` (0 = original, 1-3 re-dress: wall / stone colours, tree layout, house styles). Check `scripts/variety.py recent` first.
+
+**Dressing** (`sets/dress.ts`, call inside a place's `build(G)` after the set):
+- `scatter(G, { x: [x0, x1], z: [z0, z1], n, kinds?: ("pebble"|"rock"|"tuft"|"flower")[], avoid?: [x, z, r][], y?: (x, z) => h, seed?, stones?, greens?, flowers? })`: ground clutter, kept off `avoid` circles (stand and walk spots). Pebbles have no ink.
+- `backdrop(G, { kind?: "hills"|"mesas"|"peaks", r=130, n=16, h=22, color?, band?, gap?: [deg0, deg1], seed? })`: a far ring for depth; keep `r` inside the light's fog far (storm 170).
 
 | Builder | Options | Layout facts (local) |
 |---|---|---|
@@ -103,7 +111,7 @@ Every builder takes `variant` (0 = original, 1-3 re-dress: wall / stone colours,
 ## engine/ (look; change only with a verifier pass)
 - `build.ts`: `Batch` (`add(geo, mat, matrix?)`, `build(G)`), `boxGeo(min, max, tile)`, `quad`, `tri`, `V`, `lam(key, () => params)` (a cached two-tone material), `addVeg(b, kind, x, y, z, h, seed)` (`round|fat|tall|cone|bush|hedge`), `house(b, x, z, yaw, w, d, h, style)`.
 - `paint.ts`: HD textures `planksHD`, `beamHD`, `stoneHD(key, cols, mortar)`, `cobbleHD`, `grassHD`, `roofHD`, `facadeHD`, `cloudHD`; plus `ctex(key, w, h, draw)` for your own canvas texture and `rep`.
-- `lights.ts`: `LIGHTS` / `LOOK` for `day | golden`.
+- `lights.ts`: `LIGHTS` / `LOOK` for `day | golden | storm | dusk`; `mixLight` / `mixLook` blend two (used by `lightTo`).
 - `ink.ts` (`NOINK` layer), `lensblur.ts`, `blur.ts` (camera motion blur), `grade.ts`, `shade.ts`, `cardshade.ts`: the post and look internals.
 
 ## captions/, thumbnail/, audio/, music/
