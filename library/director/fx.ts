@@ -1,12 +1,13 @@
 // Effects kit (reference study 2026-11-03: emotion and physics shown as cartoon 2D effects inside the 3D world).
 // Stage helpers in the style of puff / burst: push FxPlace cards into out.fx, pure functions of t (seconds), with
 // progress quantised into the cache key so the textures are reused. Head-anchored helpers take the head centre in
-// world metres (a standing human card of scale 1: head centre ≈ y + 1.55).
+// world metres (a standing human card of scale 1: head centre ≈ y + 1.5).
 //   steam, sweat, flush (face colour), glow, smoke, foam, explode; buildUp for time-lapse assembly in pose().
 // Speed lines are a screen overlay, not a card: FilmData.speedLines (transitions.tsx).
 import * as THREE from "three";
 import { Stage, CamInfo, hh, q } from "./stage";
 import { Pen, Outfit, SKIN, INK, fxBurst } from "../engine/toon";
+import { drawProp, PROP_SIZE, PropKind, PropOpts } from "../sets/props";
 
 const clamp01 = (x: number) => Math.max(0, Math.min(1, x));
 const smoothU = (x: number) => { const u = clamp01(x); return u * u * (3 - 2 * u); };
@@ -141,4 +142,11 @@ export const buildUp = (pieces: THREE.Object3D[], k: number, o: { overlap?: numb
     if (o.from === "drop") { m.scale.copy(b.s); m.position.y = b.y + (1 - Math.min(1, back)) * 3; }
     else { m.scale.copy(b.s).multiplyScalar(Math.max(1e-3, back)); m.position.y = b.y; }
   });
+};
+
+/** a text prop held up or thrust at the lens (newspaper, calendar page, label): a camera-facing card, w metres wide.
+ *  For props fixed in a place use textBoard (sets/props.ts). Unlit: keep it to day / golden or a lit interior. */
+export const textCard = (out: Stage, kind: PropKind, o: PropOpts, x: number, y: number, z: number, w: number, rot = 0) => {
+  const [W, H] = PROP_SIZE[kind], k = Math.min(1, 1024 / W), cw = Math.round(W * k), ch = Math.round(H * k);
+  out.fx.push({ key: `txt|${kind}|${JSON.stringify(o)}`, cw, ch, draw: (p) => drawProp(p.g, kind, o, cw, ch), x, y, z, w, h: (w * H) / W, rot });
 };

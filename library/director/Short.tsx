@@ -8,9 +8,9 @@
 // Place changes crossfade by stacking a second canvas for the fade frames (dissolve, ripple = SVG displacement over both
 // layers, double = held half-mix: transitions.tsx); speed-line overlay; optional 4-frame white flash; captions last.
 // Usage (a video's index.tsx): export const MyShort = makeShort(PRODUCTION, { words, keywords });
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import * as THREE from "three";
-import { AbsoluteFill, getInputProps, useCurrentFrame } from "remotion";
+import { AbsoluteFill, continueRender, delayRender, getInputProps, useCurrentFrame } from "remotion";
 import { ThreeCanvas } from "@remotion/three";
 import { useThree } from "@react-three/fiber";
 import { EffectComposer } from "@react-three/postprocessing";
@@ -22,6 +22,7 @@ import { LensBlur, GrainEffect } from "../engine/lensblur";
 import { GradeEffect, GRADES, GRADE_STRENGTH, gradeMix } from "../engine/grade";
 import { Captions, Word, CaptionStyle } from "../captions/Captions";
 import { RippleWrap, SpeedLines } from "./transitions";
+import { propFont } from "../sets/props";
 
 /** A/B switches for test stills only (Remotion inputProps `{ post: { ink: false, ... } }`); everything is on by default. */
 type PostToggles = { ink: boolean; lens: boolean; pre: boolean; blur: boolean; bloom: boolean; grade: boolean; grain: boolean };
@@ -114,6 +115,12 @@ export type ShortOptions = { words?: Word[]; keywords?: string[]; captionStyle?:
  *  (inputProps `{ captions: false }` renders without captions, e.g. for a clean master) */
 export const makeShort = (prod: Production, o: ShortOptions = {}): React.FC => () => {
   const f = useCurrentFrame();
+  // text props paint at build time: mount the shot canvases only once the prop font is loaded, and release the
+  // frame after they have mounted (their own delayRender holds it from then on)
+  const [handle] = useState(() => delayRender("prop font"));
+  const [ready, setReady] = useState(false);
+  useEffect(() => { propFont().then(() => setReady(true), () => setReady(true)); }, []);
+  useEffect(() => { if (ready) continueRender(handle); }, [ready, handle]);
   const fa = prod.film.flashAt ?? -99;
   const flash = f >= fa && f < fa + 4 ? [1, 0.75, 0.45, 0.2][f - fa] : 0;
   const caps = o.words && (getInputProps() as { captions?: boolean }).captions !== false;
@@ -121,7 +128,7 @@ export const makeShort = (prod: Production, o: ShortOptions = {}): React.FC => (
   return (
     <AbsoluteFill style={{ background: o.background ?? "#cfe3f2" }}>
       <RippleWrap k={tr && tr.kind === "ripple" ? tr.k : null}>
-        {prod.film.layersAt(f).map((l, i) => <ShotView key={i ? "over" : "base"} id={l.id} prod={prod} alpha={l.alpha} />)}
+        {ready && prod.film.layersAt(f).map((l, i) => <ShotView key={i ? "over" : "base"} id={l.id} prod={prod} alpha={l.alpha} />)}
       </RippleWrap>
       <SpeedLines f={f} k={sp.k} cx={sp.cx} cy={sp.cy} />
       {flash > 0 && <AbsoluteFill style={{ background: "#ffffff", opacity: flash }} />}

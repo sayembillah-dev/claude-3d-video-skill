@@ -238,9 +238,10 @@ export class World {
     for (const [k, g] of Object.entries(this.sets)) g.visible = k === s.set;
     this.prod.pose?.(id, f, t, this.handles);
     // ---- cast + effects ----
-    const right = V(0, 0, 0).setFromMatrixColumn(cam.matrixWorld, 0);
+    const right = V(0, 0, 0).setFromMatrixColumn(cam.matrixWorld, 0), up = V(0, 0, 0).setFromMatrixColumn(cam.matrixWorld, 1);
+    const fwd = V(0, 0, 0).setFromMatrixColumn(cam.matrixWorld, 2).negate();
     beginStage(lt.k < 0.5 ? lt.A : lt.B, { pos: cam.position, right });
-    const st = this.prod.stage(id, t, { pos: cam.position, right });
+    const st = this.prod.stage(id, t, { pos: cam.position, right, up, fwd, fov: cam.fov, aspect: cam.aspect });
     this.frustum.setFromProjectionMatrix(this.m4.multiplyMatrices(cam.projectionMatrix, cam.matrixWorldInverse));
     let ai = 0;
     const used: Actor[] = [];

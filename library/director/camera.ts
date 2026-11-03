@@ -73,6 +73,17 @@ export const at = (p: V3, dx: number, dy: number, dz: number): V3 => [p[0] + dx,
 export const push = (f: number, pos: V3, look: V3, o: { rate?: number; punch?: number; n?: number; fov?: number; roll?: number; cut?: boolean; dur?: number } = {}): Key =>
   ({ f, cut: o.cut, dur: o.dur, s: (g) => dolly(pos, look, pushK(g, f, o.rate ?? 0.0025, o.punch ?? 0, o.n ?? 35), { fov: o.fov ?? 40, roll: o.roll ?? 0 }) });
 
+/** HEAD_H: a human card's head height in metres (scale 1), for close-up framing */
+export const HEAD_H = 0.42;
+/** close-up / extreme close-up on a head (centre ≈ feet + 1.5 m): the head fills `fill` of the frame height
+ *  (.35 close-up, .5-.6 extreme). dir = from the face toward the camera (default slightly high, frontal). Pair with a
+ *  shallow DOF beat. Holds still unless rate is set; push in with punch for a shock. */
+export const closeUp = (f: number, head: V3, o: { fill?: number; dir?: V3; fov?: number; rate?: number; punch?: number; roll?: number; cut?: boolean; dur?: number } = {}): Key => {
+  const fov = o.fov ?? 32, fill = o.fill ?? 0.45, [dx, dy, dz] = o.dir ?? [0, 0.12, 1], l = Math.hypot(dx, dy, dz) || 1;
+  const dist = HEAD_H / (fill * 2 * Math.tan((fov * Math.PI) / 360));
+  return push(f, [head[0] + (dx / l) * dist, head[1] + (dy / l) * dist, head[2] + (dz / l) * dist], [head[0], head[1], head[2]], { rate: 0, ...o, fov });
+};
+
 // ---------------- moving-camera keys (fly-throughs, follows, whips, orbits) ----------------
 /** default motion-blur exposure in frames (0.5 = 180-degree shutter); slow creeps stay sharp (blur.ts dead zone) */
 export const SHUTTER = 0.5;

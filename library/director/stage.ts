@@ -116,7 +116,9 @@ export type Place = {
 };
 export type FxPlace = { key: string; cw: number; ch: number; draw: (p: Pen) => void; x: number; y: number; z: number; w: number; h: number; flat?: boolean; rot?: number; soft?: boolean };
 /** sun = world direction TOWARD the sun (optional: when absent the scene's shadow-casting light is used) */
-export type CamInfo = { pos: THREE.Vector3; right: THREE.Vector3; sun?: THREE.Vector3 };
+export type CamInfo = { pos: THREE.Vector3; right: THREE.Vector3; sun?: THREE.Vector3;
+  /** set by world.ts: camera up / forward (unit), vertical fov (deg) and aspect, for screen-placed helpers (people.ts) */
+  up?: THREE.Vector3; fwd?: THREE.Vector3; fov?: number; aspect?: number };
 
 export const hh = (i: number, s = 0) => { const v = Math.sin(i * 127.1 + s * 311.7) * 43758.5453; return v - Math.floor(v); };
 export const q = (v: number, n = 120) => Math.round(v * n) / n;
