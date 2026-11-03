@@ -34,14 +34,14 @@ const home = (cam: CamInfo, out: Stage, id: number, t: number, f: number) => {
 /** a few small background cells drifting in the micro world */
 const microCrowd = (cam: CamInfo, out: Stage, t: number) => {
   [[-3.6, -7.5], [3.4, -8], [-2.0, -10], [2.2, -11], [-5, -12]].forEach(([dx, dz], i) => {
-    const y = q(0.15 + 0.12 * Math.sin(t * 1.1 + i * 2), 40);
+    const y = 0.15 + 0.12 * Math.sin(t * 1.1 + i * 2);
     card(cam, out, `bgCell${i % 3}`, CELL[0] + dx, y, dz, 0.55 + 0.1 * (i % 3), (p) => cell(p, { file: i % 2 ? i % 3 : -1 }), { shadow: false });
   });
 };
 
 const body = (cam: CamInfo, out: Stage, id: number, t: number, f: number) => {
   microCrowd(cam, out, t);
-  const by = q(0.08 * Math.sin(t * 1.3), 40);
+  const by = 0.08 * Math.sin(t * 1.3);
   if (id === 3 || id === 4) {
     const file = !after(t, 8.74) ? -1 : after(t, 9.44) ? Math.floor((t - 9.44) / 0.35) % 3 : 1;
     const glow = after(t, 9.44) && t < 10.4;
@@ -88,7 +88,7 @@ const street = (cam: CamInfo, out: Stage, id: number, t: number, f: number) => {
   if (id >= 6) {
     const k = id === 6 ? pop(f, 628) : 1;
     if (k > 0) for (const s of [-1, 1]) {
-      const bob = id === 7 ? q(0.06 * Math.abs(Math.sin(t * Math.PI * 1.6 + (s > 0 ? 1.6 : 0))), 40) : 0;
+      const bob = id === 7 ? 0.06 * Math.abs(Math.sin(t * Math.PI * 1.6 + (s > 0 ? 1.6 : 0))) : 0;
       card(cam, out, "tower8", hx + s * 1.35, bob, WALK_Z - 1.3, q(2.2 * k, 60), (p) => driveTower(p, 8));
     }
     if (id === 6) burst(out, t, 20.94, hx, 3.4, WALK_Z - 0.8, 2.0, 0.3);

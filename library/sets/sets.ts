@@ -325,10 +325,11 @@ export function cityStreet(G: THREE.Group, o: Variant = {}) {
   const pave = lam("cityPave", () => ({ color: "#d8d2c8" })), road = lam("cityRoad", () => ({ color: "#575a66" })), white = lam("cityLine", () => ({ color: "#f4f1e6" }));
   const dark = lam("cityDark", () => ({ color: "#3a3446" }));
   b.add(up(-300, 300, -300, 300, 6), lam("grassHD", () => ({ map: grassHD() })));
-  b.add(up(-60, 60, -9, -3, 2), pave);
-  b.add(up(-60, 60, -3, 6, 4, 0.005), road);
-  b.add(up(-60, 60, 6, 9, 2), pave);
-  for (let x = -58; x < 60; x += 4) b.add(up(x, x + 2, 1.35, 1.6, 2, 0.01), white);
+  // lifted off the grass plane (coplanar quads z-fight and flicker)
+  b.add(up(-60, 60, -9, -3, 2, 0.01), pave);
+  b.add(up(-60, 60, -3, 6, 4, 0.01), road);
+  b.add(up(-60, 60, 6, 9, 2, 0.01), pave);
+  for (let x = -58; x < 60; x += 4) b.add(up(x, x + 2, 1.35, 1.6, 2, 0.02), white);
   b.add(boxGeo(V(-60, 0, -3.12), V(60, 0.14, -2.98)), lam("cityKerb", () => ({ color: "#b4ada2" })));
   // shopfront blocks: walls with a window grid, a coloured awning and a dark shop window at street level
   let x = -60, k = 0;
