@@ -13,6 +13,10 @@ export const Root: React.FC = () => (
     <Composition id="BridgeShort" component={BridgeShort} durationInFrames={BRIDGE_FRAMES} fps={30} width={1080} height={1920} />
     <Composition id="AnimalCourt" component={AnimalCourtShort} durationInFrames={COURT_FRAMES} fps={30} width={1080} height={1920} />
     <Composition id="DnaDrive" component={DnaDriveShort} durationInFrames={DNA_FRAMES} fps={30} width={1080} height={1920} />
+    <Composition id="DnaDriveThumb" component={Thumbnail} durationInFrames={1} fps={30} width={1080} height={1920}
+      defaultProps={{ image: "_render/dna-drive-thumb.jpg", lines: ["YOUR BODY IS A", "HARD DRIVE"], accent: ["HARD", "DRIVE"] }} />
+    <Composition id="DnaDriveThumbWide" component={Thumbnail} durationInFrames={1} fps={30} width={1280} height={720}
+      defaultProps={{ image: "_render/dna-drive-thumb-wide.jpg", lines: ["YOUR BODY", "IS A", "HARD DRIVE"], accent: ["HARD", "DRIVE"] }} />
     {/* captions burned onto the finished animal-court render (public/_render/animal-court.mp4, temporary) */}
     <Composition id="AnimalCourtCaptioned" component={CaptionedVideo} durationInFrames={COURT_FRAMES} fps={30} width={1080} height={1920}
       defaultProps={{ src: "_render/animal-court.mp4", words: COURT_WORDS, keywords: COURT_CAP.keywords }} />

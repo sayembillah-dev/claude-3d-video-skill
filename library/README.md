@@ -19,6 +19,7 @@ keep working because they import the same files. Check with `npx tsc --noEmit` a
 | `captions/CaptionedVideo.tsx` | Burns captions onto an already rendered mp4, with no 3D re-render | animal-court |
 | `thumbnail/Thumbnail.tsx` | Thumbnail card (vertical 1080x1920 or wide 1280x720): full-bleed frame, vignette, 1-3 heavy title lines with accent words | animal-court |
 | `audio/dsp.py`, `instruments.py`, `sfx_gen.py` | Sound kit: filters, loudness (BS.1770), reverb, limiter helpers; brass / glock / vibes / pluck / fife / snare / pad; footsteps, creaks, whooshes, splashes, crowds, birds, breeze, hammer | bridge, animal-court |
+| `audio/universal_subscribe_follow_CTA.mp3` | A 2.8 s spoken subscribe / follow call-to-action clip, reusable at the end of any short (user-supplied voice, not generated here) | any video |
 | `audio/sfx_more.py` | Pop, camera shutter, flash whine, monkey hoot, hen cluck / bawk, rat squeak, cat meow, paper thump, church bell, sad trombone, room tone | animal-court |
 | `music/` | Original background music (clean scores, -16 LUFS, wav + mp3) with a catalog: mood, key, BPM, sections. First track: `courtroom-caper_pizzicato_F-major_104bpm_69s` | animal-court |
 | `../public/fonts/Montserrat-Variable.ttf` | Caption and thumbnail font (SIL OFL, licence beside it). It lives in `public/` because Remotion serves fonts from there | captions, thumbnail |
