@@ -16,7 +16,7 @@ The style reference is a channel studied privately (`references/`: STYLE_BIBLE.m
 - Never say the channel's name in a voice-over or description.
 
 User rules that apply:
-- **Captions ON** (changed 2026-11-03): production captions from `library/captions/Captions.tsx`, with a word-by-word highlight and bigger keywords. No other text or labels inside the 3D scene.
+- **Captions ON** (changed 2026-11-03): production captions from `library/captions/Captions.tsx`, with a word-by-word highlight and bigger keywords. No floating labels or overlay text inside the 3D scene. In-world text props are allowed (2026-11-03): a calendar page, a newspaper headline, a banner, a shop sign, a label on a jar. Keep them short, English, painted onto the object, readable for at least 1 s, and out of the caption band (around 79 % of the height). If a prop's text states a fact, it needs a source like any narrated fact.
   - **Captions must never block the visuals.** Keep them small and low: 6.2 % of the frame width, keywords 1.4x, block centre at 79 % of the height (the defaults in `Captions.tsx`).
   - Don't raise or enlarge them without the user asking. Check a few stills of each shot for overlap with faces or key action.
 - English only.
