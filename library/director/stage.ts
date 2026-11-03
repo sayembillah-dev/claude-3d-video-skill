@@ -251,6 +251,33 @@ export const puff = (out: Stage, t: number, t0: number, x: number, y: number, z:
   const u = q((t - t0) / 0.4, 30);
   out.fx.push({ key: `puff${u}`, cw: 300, ch: 300, draw: (p) => fxPuff(p, u), x, y, z, w, h: w, soft: true });
 };
+/** rain: world-anchored streak cards wrapped in a box in front of the camera (so camera moves give parallax).
+ *  n ~ 120-220; area = box half-width (m); slant = screen tilt (rad); falls `speed` m/s. Use with storm light. */
+export const rain = (out: Stage, t: number, cam: CamInfo, o: { n?: number; area?: number; depth?: number; h?: number; speed?: number; slant?: number; len?: number } = {}) => {
+  const n = o.n ?? 220, A = o.area ?? 9, D = o.depth ?? 16, H = o.h ?? 10, sp = o.speed ?? 14, len = o.len ?? 0.9, rot = o.slant ?? 0.18;
+  const fx = cam.right.z, fz = -cam.right.x; // forward = up x right
+  const cx = cam.pos.x + fx * (D / 2 + 1), cz = cam.pos.z + fz * (D / 2 + 1), R = Math.max(A, D / 2);
+  const wrap = (v: number, c: number, w: number) => c + ((((v - c + w) % (2 * w)) + 2 * w) % (2 * w)) - w;
+  for (let i = 0; i < n; i++) {
+    const x = wrap(hh(i, 1) * 400, cx, R), z = wrap(hh(i, 2) * 400, cz, R);
+    if ((x - cam.pos.x) * fx + (z - cam.pos.z) * fz < 2.5) continue; // near streaks fill the frame
+    const y = cam.pos.y + H / 2 - ((((hh(i, 3) * H + t * sp * (0.85 + 0.3 * hh(i, 4))) % H) + H) % H);
+    out.fx.push({ key: "rain", cw: 16, ch: 256, draw: fxRain, x, y, z, w: 0.05, h: len, rot, soft: true });
+  }
+};
+const fxRain = (p: Pen) => { const g = p.g, gr = g.createLinearGradient(0, 0, 0, 256);
+  gr.addColorStop(0, "rgba(225,235,255,0)"); gr.addColorStop(1, "rgba(235,242,255,0.85)"); g.fillStyle = gr; g.fillRect(2, 0, 12, 256); };
+/** birds: a loose flock of ink V's circling (cx, cy, cz) at radius r; flaps are quantised so cards cache. */
+export const birds = (out: Stage, t: number, cx: number, cy: number, cz: number, o: { n?: number; r?: number; size?: number; speed?: number } = {}) => {
+  const n = o.n ?? 5, r = o.r ?? 6, w = o.size ?? 0.5, sp = o.speed ?? 0.35;
+  for (let i = 0; i < n; i++) {
+    const a = t * sp + (i / n) * 1.3 + hh(i, 5) * 0.4, rr = r * (0.8 + 0.4 * hh(i, 6));
+    const u = q(0.5 + 0.5 * Math.sin(t * 9 + i * 2.1), 6);
+    out.fx.push({ key: `bird${u}`, cw: 200, ch: 120, draw: (p) => fxBird(p, u), x: cx + Math.cos(a) * rr, y: cy + Math.sin(t * 0.9 + i) * 0.6 + hh(i, 7) * 1.5, z: cz + Math.sin(a) * rr, w, h: w * 0.6 });
+  }
+};
+const fxBird = (p: Pen, u: number) => { const dy = (u - 0.5) * 70;
+  p.stroke([[12, 60 + dy], [55, 50 + dy * 0.3], [100, 72]], 13); p.stroke([[100, 72], [145, 50 + dy * 0.3], [188, 60 + dy]], 13); };
 export const after = (t: number, ts: number) => t >= ts - LEAD;
 
 /** start a frame's staging: the shot's light preset and the sun as seen from this camera */
