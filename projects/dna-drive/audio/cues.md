@@ -1,0 +1,112 @@
+# What If You Could Store Files in Your DNA? - soundtrack cue sheet
+
+- mix.wav: 48 kHz stereo 24-bit, 3680000 samples = 76.667 s
+- integrated -15.2 LUFS, true peak -1.2 dBTP, max limiter reduction 3.40 dB
+- stems: voice -15.3 / music -22.8 / sfx -34.3 LUFS
+
+## Cues
+
+-   0.00 s  bed L
+-   2.20 s  pop (usb floats in)
+-   2.93 s  flash whoosh
+-   3.23 s  sparkle (flash)
+-   5.66 s  sparkle (DNA)
+-   6.12 s  glide into the cell
+-   6.57 s  bed M
+-   9.43 s  pop (usb 750 MB)
+-  12.77 s  pull-out whoosh
+-  16.13 s  pop (cell field)
+-  16.21 s  pop (cell field)
+-  16.28 s  pop (cell field)
+-  16.36 s  pop (cell field)
+-  16.43 s  pop (cell field)
+-  16.51 s  pop (cell field)
+-  16.58 s  pop (cell field)
+-  16.66 s  pop (cell field)
+-  16.73 s  pop (cell field)
+-  16.81 s  pop (cell field)
+-  16.88 s  pop (cell field)
+-  16.96 s  pop (cell field)
+-  17.03 s  pop (cell field)
+-  17.11 s  pop (cell field)
+-  18.67 s  pop (files)
+-  18.73 s  pop (files)
+-  18.79 s  pop (files)
+-  18.85 s  pop (files)
+-  18.91 s  pop (files)
+-  18.97 s  pop (files)
+-  19.03 s  pop (files)
+-  19.09 s  pop (files)
+-  19.15 s  pop (files)
+-  19.21 s  pop (files)
+-  19.27 s  pop (files)
+-  19.33 s  pop (files)
+-  19.39 s  pop (files)
+-  19.45 s  pop (files)
+-  19.51 s  pop (files)
+-  19.57 s  pop (files)
+-  19.83 s  crane up
+-  20.93 s  sparkle (zettabytes)
+-  22.13 s  bed S
+-  22.30 s  steps
+-  22.66 s  steps
+-  23.02 s  steps
+-  23.38 s  steps
+-  23.74 s  steps
+-  24.10 s  steps
+-  24.46 s  steps
+-  24.82 s  steps
+-  25.18 s  steps
+-  25.54 s  steps
+-  26.10 s  bed L
+-  26.72 s  tower lands
+-  26.92 s  tower lands
+-  27.12 s  tower lands
+-  30.80 s  drives pour into the tube
+-  33.00 s  glass clink (a single gram)
+-  33.00 s  sparkle (gram)
+-  34.58 s  pop (paperclip)
+-  37.80 s  clack body
+-  37.80 s  clapper clack
+-  37.83 s  movie into tube
+-  39.00 s  OS into tube
+-  39.82 s  read back
+-  40.87 s  ding (read back perfectly)
+-  42.13 s  bed S
+-  42.23 s  ding (Luckily)
+-  45.90 s  bed L
+-  45.90 s  sad trombone (Unluckily)
+-  48.07 s  coin clink
+-  48.27 s  coin clink
+-  48.47 s  coin clink
+-  48.67 s  coin clink
+-  48.87 s  coin clink
+-  49.07 s  coin clink
+-  49.27 s  coin clink
+-  49.47 s  coin clink
+-  49.67 s  coin clink
+-  49.87 s  coin clink
+-  50.30 s  clock tick
+-  50.75 s  clock tick
+-  51.20 s  clock tick
+-  51.65 s  clock tick
+-  52.38 s  price tag drops
+-  52.57 s  tag grows
+-  54.77 s  bed M
+-  55.30 s  cell splits
+-  55.90 s  cell splits
+-  56.50 s  cell splits
+-  57.07 s  pop (copy)
+-  57.10 s  cell splits
+-  61.33 s  buzz thump (typo)
+-  61.33 s  wrong note
+-  64.40 s  buzz thump (typo)
+-  64.40 s  wrong note
+-  65.77 s  bed L
+-  68.37 s  cold air
+-  68.47 s  fridge door
+-  69.10 s  no
+-  70.37 s  bed S
+-  74.00 s  sparkle (it's just full)
+-  74.05 s  soft bell
+-  74.60 s  pull-out whoosh
