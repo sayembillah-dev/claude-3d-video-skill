@@ -7,8 +7,10 @@ export type V3 = [number, number, number];
 export type Light = "day" | "golden";
 export type Cam = { pos: V3; look: V3; fov: number; roll: number };
 export type Framing = Partial<Cam> & { pos: V3; look: V3 };
-/** a camera key: from frame f, glide (dur frames, default 24) or cut to framing s(f) */
-export type Key = { f: number; dur?: number; cut?: boolean; s: (f: number) => Framing };
+/** a camera key: from frame f, glide (dur frames, default 24) or cut to framing s(f).
+ *  ease replaces the glide curve; arc swings the view direction (slerp) instead of sliding the look point, which keeps
+ *  big pans from swerving; shutter = motion-blur exposure in frames from this key on (default SHUTTER, 0 = off) */
+export type Key = { f: number; dur?: number; cut?: boolean; ease?: (u: number) => number; arc?: boolean; shutter?: number; s: (f: number) => Framing };
 /** a shot: frames a..b in place `set`, lit by `light`; sunAz/sunEl override the light preset (camera-relative degrees) */
 export type ShotDef = { id: number; a: number; b: number; light: Light; set: string; sunAz?: number; sunEl?: number };
 /** lens per beat: cInf = blur-disc radius (px at 1080 wide) for infinity, 0 = sharp; focus = world point (else look) */
@@ -20,10 +22,27 @@ export const smooth = (x: number) => { const u = clamp01(x); return u * u * (3 -
 export const easeOut = (u: number) => 1 - (1 - clamp01(u)) ** 4;
 /** symmetric smootherstep camera ease */
 export const glide = (u: number) => { const x = clamp01(u); return x * x * x * (x * (6 * x - 15) + 10); };
-const mixCam = (a: Cam, b: Cam, k: number): Cam => ({
-  pos: a.pos.map((v, i) => v + (b.pos[i] - v) * k) as V3, look: a.look.map((v, i) => v + (b.look[i] - v) * k) as V3,
-  fov: a.fov + (b.fov - a.fov) * k, roll: a.roll + (b.roll - a.roll) * k,
-});
+/** whip ease: slow out, very fast middle (peak speed 3x the mean, smootherstep 1.9x), slow settle */
+export const whipEase = (u: number) => { const x = clamp01(u); return x < 0.5 ? 4 * x * x * x : 1 - 4 * (1 - x) ** 3; };
+const lerp3 = (a: V3, b: V3, k: number) => a.map((v, i) => v + (b[i] - v) * k) as V3;
+const sub3 = (a: V3, b: V3) => [a[0] - b[0], a[1] - b[1], a[2] - b[2]] as V3;
+const len3 = (a: V3) => Math.hypot(a[0], a[1], a[2]);
+const slerp3 = (a: V3, b: V3, k: number): V3 => {
+  const la = len3(a) || 1, lb = len3(b) || 1, ua = a.map((v) => v / la) as V3, ub = b.map((v) => v / lb) as V3;
+  const d = Math.max(-1, Math.min(1, ua[0] * ub[0] + ua[1] * ub[1] + ua[2] * ub[2])), th = Math.acos(d);
+  if (th < 1e-4) return lerp3(ua, ub, k);
+  const s0 = Math.sin((1 - k) * th) / Math.sin(th), s1 = Math.sin(k * th) / Math.sin(th);
+  return [ua[0] * s0 + ub[0] * s1, ua[1] * s0 + ub[1] * s1, ua[2] * s0 + ub[2] * s1];
+};
+const mixCam = (a: Cam, b: Cam, k: number, arc = false): Cam => {
+  const pos = lerp3(a.pos, b.pos, k);
+  let look = lerp3(a.look, b.look, k);
+  if (arc) {
+    const da = sub3(a.look, a.pos), db = sub3(b.look, b.pos), L = len3(da) + (len3(db) - len3(da)) * k, u = slerp3(da, db, k);
+    look = [pos[0] + u[0] * L, pos[1] + u[1] * L, pos[2] + u[2] * L];
+  }
+  return { pos, look, fov: a.fov + (b.fov - a.fov) * k, roll: a.roll + (b.roll - a.roll) * k };
+};
 const full = (c: Framing): Cam => ({ fov: 40, roll: 0, ...c });
 
 // ---------------- framing helpers (use inside camera keys) ----------------
@@ -48,6 +67,76 @@ export const at = (p: V3, dx: number, dy: number, dz: number): V3 => [p[0] + dx,
 export const push = (f: number, pos: V3, look: V3, o: { rate?: number; punch?: number; n?: number; fov?: number; roll?: number; cut?: boolean; dur?: number } = {}): Key =>
   ({ f, cut: o.cut, dur: o.dur, s: (g) => dolly(pos, look, pushK(g, f, o.rate ?? 0.0025, o.punch ?? 0, o.n ?? 35), { fov: o.fov ?? 40, roll: o.roll ?? 0 }) });
 
+// ---------------- moving-camera keys (fly-throughs, follows, whips, orbits) ----------------
+/** default motion-blur exposure in frames (0.5 = 180-degree shutter); slow creeps stay sharp (blur.ts dead zone) */
+export const SHUTTER = 0.5;
+type Mov = { fov?: number; roll?: number; cut?: boolean; blend?: number; ease?: (u: number) => number; shutter?: number };
+const cr = (p0: number, p1: number, p2: number, p3: number, t: number) =>
+  0.5 * (2 * p1 + (-p0 + p2) * t + (2 * p0 - 5 * p1 + 4 * p2 - p3) * t * t + (-p0 + 3 * p1 - 3 * p2 + p3) * t * t * t);
+/** constant-speed Catmull-Rom through pts: returns u (0..1 of the length) -> point */
+export const spline = (pts: V3[]) => {
+  const P = [pts[0], ...pts, pts[pts.length - 1]], n = pts.length - 1, N = 64 * n;
+  const raw = (t: number): V3 => {
+    const x = Math.min(n - 1e-9, Math.max(0, t * n)), i = Math.floor(x), u = x - i;
+    return [0, 1, 2].map((c) => cr(P[i][c], P[i + 1][c], P[i + 2][c], P[i + 3][c], u)) as V3;
+  };
+  const acc = [0]; let prev = raw(0);
+  for (let j = 1; j <= N; j++) { const q = raw(j / N); acc.push(acc[j - 1] + len3(sub3(q, prev))); prev = q; }
+  const T = acc[N] || 1;
+  return (u: number): V3 => {
+    if (n < 1) return pts[0];
+    const want = clamp01(u) * T; let lo = 0, hi = N;
+    while (hi - lo > 1) { const m = (lo + hi) >> 1; if (acc[m] < want) lo = m; else hi = m; }
+    const k = (want - acc[lo]) / Math.max(1e-9, acc[hi] - acc[lo]);
+    return raw((lo + k) / N);
+  };
+};
+/** drone fly-through: from frame f the camera travels the smooth path `pts` in `dur` frames (eased, constant speed).
+ *  look: a fixed point, a second path travelled in step, or omitted = look `ahead` metres down the path (+lift).
+ *  bank (rad per rad of turn) rolls into curves like a drone. blend = frames to glide in from the previous key (cut: 0). */
+export const flyPath = (f: number, pts: V3[], o: Mov & { dur: number; look?: V3 | V3[]; ahead?: number; lift?: number; bank?: number }): Key => {
+  const P = spline(pts), Lk = Array.isArray(o.look) && Array.isArray(o.look[0]) ? spline(o.look as V3[]) : null;
+  const ease = o.ease ?? glide, ah = o.ahead ?? 6, du = 1 / Math.max(1, o.dur);
+  const yaw = (u: number) => { const a = P(Math.max(0, u - du)), b = P(Math.min(1, u + du)); return Math.atan2(b[0] - a[0], -(b[2] - a[2])); };
+  return { f, cut: o.cut, dur: o.cut ? 1 : o.blend ?? 10, shutter: o.shutter, s: (g) => {
+    const u = ease((g - f) / o.dur), pos = P(u);
+    let look: V3;
+    if (Lk) look = Lk(u);
+    else if (o.look) look = o.look as V3;
+    else { const T = sub3(P(Math.min(1, u + 0.02)), P(Math.max(0, u - 0.02))), l = len3(T) || 1; look = [pos[0] + (T[0] / l) * ah, pos[1] + (T[1] / l) * ah + (o.lift ?? 0), pos[2] + (T[2] / l) * ah]; }
+    let roll = o.roll ?? 0;
+    if (o.bank) { let dy = yaw(Math.min(1, u + 0.03)) - yaw(Math.max(0, u - 0.03)); dy = Math.atan2(Math.sin(dy), Math.cos(dy)); roll += o.bank * dy; }
+    return { pos, look, fov: o.fov ?? 40, roll };
+  } };
+};
+/** follow a moving object (oil drip, thrown hook, walking hero): the camera sits at offset `off` from where the target
+ *  was `lag` frames ago on average (a soft trailing operator), looking at the target now (+lookOff).
+ *  No motion blur by default: the blur only knows the camera's motion, so a followed card would ghost. */
+export const follow = (f: number, target: (g: number) => V3, off: V3, o: Mov & { lag?: number; lookOff?: V3 } = {}): Key => {
+  const lag = o.lag ?? 6, lo = o.lookOff ?? [0, 0, 0];
+  return { f, cut: o.cut, dur: o.cut ? 1 : o.blend ?? 12, shutter: o.shutter ?? 0, s: (g) => {
+    const p: V3 = [0, 0, 0], n = 7;
+    for (let i = 0; i < n; i++) { const q = target(g - (lag * i) / (n - 1)); p[0] += q[0] / n; p[1] += q[1] / n; p[2] += q[2] / n; }
+    const t = target(g);
+    return { pos: at(p, ...off), look: at(t, ...lo), fov: o.fov ?? 40, roll: o.roll ?? 0 };
+  } };
+};
+/** whip pan: swing the view to framing `to` in n frames (6-10) with the whip ease, turning the direction (arc) not the
+ *  look point. Motion blur carries it; pair with a whoosh SFX. Lands on `to`, so add a push key after it for the hold. */
+export const whip = (f: number, to: Framing | ((g: number) => Framing), n = 8, shutter = 0.75): Key =>
+  ({ f, dur: n, ease: whipEase, arc: true, shutter, s: typeof to === "function" ? to : () => to });
+/** orbit around `center` at radius r, height h (above center.y), from angle a0 to a1 degrees (0 = camera on +z) */
+export const orbit = (f: number, center: V3, o: Mov & { r: number; h: number; a0: number; a1: number; dur: number; lookUp?: number }): Key => {
+  const ease = o.ease ?? glide;
+  return { f, cut: o.cut, dur: o.cut ? 1 : o.blend ?? 12, shutter: o.shutter, s: (g) => {
+    const a = ((o.a0 + (o.a1 - o.a0) * ease((g - f) / o.dur)) * Math.PI) / 180;
+    return { pos: [center[0] + Math.sin(a) * o.r, center[1] + o.h, center[2] + Math.cos(a) * o.r], look: at(center, 0, o.lookUp ?? 0, 0), fov: o.fov ?? 40, roll: o.roll ?? 0 };
+  } };
+};
+/** crane: the camera rises (and pulls back) from `from` to `to` in dur frames while holding `look` (reveal / crane-down) */
+export const crane = (f: number, from: V3, to: V3, look: V3, o: Mov & { dur: number }): Key =>
+  flyPath(f, [from, to], { ...o, look });
+
 // ---------------- the film ----------------
 export type FilmData = {
   total: number;
@@ -66,6 +155,8 @@ export type Film = FilmData & {
   shotAt(f: number): ShotDef;
   layersAt(f: number): { id: number; alpha: number }[];
   camAt(id: number, f: number): Cam;
+  /** motion-blur exposure (frames) at f and the camera that long before; null = no blur (a cut inside the exposure) */
+  shutterAt(id: number, f: number): { dt: number; prev: Cam } | null;
   dofAt(f: number): { cInf: number; focus?: (f: number) => V3 };
 };
 
@@ -84,7 +175,7 @@ export const makeFilm = (d: FilmData): Film => {
     for (let i = 1; i < keys.length; i++) {
       const k = keys[i];
       if (f < k.f) break;
-      cur = k.cut ? full(k.s(f)) : mixCam(cur, full(k.s(f)), glide((f - k.f) / (k.dur ?? 24)));
+      cur = k.cut ? full(k.s(f)) : mixCam(cur, full(k.s(f)), (k.ease ?? glide)((f - k.f) / (k.dur ?? 24)), k.arc);
     }
     return cur;
   };
@@ -96,13 +187,26 @@ export const makeFilm = (d: FilmData): Film => {
     }
     return a;
   };
-  const camAt = (id: number, f: number): Cam => {
-    const c = run(d.cams[id], f), a = kickAt(f / FPS);
+  // kt = the frame whose kick shake applies (the blur's earlier camera keeps this frame's kick: shakes stay crisp)
+  const camKick = (id: number, f: number, kt: number): Cam => {
+    const c = run(d.cams[id], f), a = kickAt(kt / FPS);
     if (!a) return c;
     const v: V3 = [c.look[0] - c.pos[0], c.look[1] - c.pos[1], c.look[2] - c.pos[2]];
     const L = Math.hypot(...v), h = Math.hypot(v[0], v[2]) || 1;
     const m = (3 / 640) * Math.tan((c.fov * Math.PI) / 360) * L * a;
     return { ...c, look: [c.look[0] - (v[2] / h) * m, c.look[1] + 0.6 * m, c.look[2] + (v[0] / h) * m], roll: c.roll + a * 0.004 };
+  };
+  const camAt = (id: number, f: number) => camKick(id, f, f);
+  const shutterAt = (id: number, f: number) => {
+    const keys = d.cams[id];
+    let k = keys[0];
+    for (const q of keys) if (f >= q.f) k = q;
+    const dt = k.shutter ?? SHUTTER;
+    if (dt <= 0) return null;
+    for (const q of keys) if (q !== keys[0] && q.cut && q.f > f - dt && q.f <= f) return null;
+    const s = d.shots[id - 1];
+    if (s && f - dt < s.a) return null;
+    return { dt, prev: camKick(id, f - dt, f) };
   };
   const dofAt = (f: number) => {
     let i = 0; while (i + 1 < d.dof.length && f >= d.dof[i + 1].f) i++;
@@ -110,5 +214,5 @@ export const makeFilm = (d: FilmData): Film => {
     const k = cur.dur ? Math.min(1, (f - cur.f) / cur.dur) : 1;
     return { cInf: p.cInf + (cur.cInf - p.cInf) * k, focus: cur.focus };
   };
-  return { ...d, shotAt, layersAt, camAt, dofAt };
+  return { ...d, shotAt, layersAt, camAt, shutterAt, dofAt };
 };

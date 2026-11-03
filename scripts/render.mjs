@@ -4,7 +4,7 @@
 //   --res     output WIDTH of the 9:16 frame: 1080 (1080x1920), 1440 (1440x2560, default), 2160 (2160x3840 4K)
 //   progress  written every 2 s to <outdir>/render_progress.json (+ one log line per 5 %): rendered / encoded frames,
 //             fps, elapsed, ETA. Read that file to answer "how long?" instead of polling the process.
-// Run `source env.sh` first (keeps the ~1.3 GB bundles on this drive). Compositions are designed at 1080 wide, so
+// BRIDGE_ENTRY=src/sandboxes/<name>/index.tsx renders a sandbox instead of the main entry. Run `source env.sh` first (keeps the ~1.3 GB bundles on this drive). Compositions are designed at 1080 wide, so
 // the scale is exact (1, 4/3, 2) and every pixel parameter scales with it.
 import fs from "node:fs";
 import path from "node:path";
@@ -27,7 +27,7 @@ const silent = audio ? out.replace(/\.mp4$/, "_silent.mp4") : out;
 const browserExecutable = process.platform === "win32" ? "C:/Program Files/Google/Chrome/Application/chrome.exe" : null;
 const chromiumOptions = { gl: "angle" };
 const t0 = Date.now();
-const serveUrl = await bundle({ entryPoint: path.resolve("src/index.ts"), publicDir: path.resolve("public") });
+const serveUrl = await bundle({ entryPoint: path.resolve(process.env.BRIDGE_ENTRY || "src/index.ts"), publicDir: path.resolve("public") });
 const composition = await selectComposition({ serveUrl, id: comp, inputProps, browserExecutable, chromiumOptions });
 const scale = res / composition.width; // 1080-wide designs: 1, 4/3, 2 (exact in float for these widths)
 const total = frames ? Number(frames.split("-")[1]) - Number(frames.split("-")[0]) + 1 : composition.durationInFrames;

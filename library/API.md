@@ -24,11 +24,18 @@ Register it in `src/Root.tsx`: `<Composition id="X" component={MyShort} duration
   - `xfade[id]` = crossfade frames into shot id.
   - `kicks: [timeS, strength]` = 7-frame impact shakes.
   - `flashAt` = a 4-frame white flash.
-- **Camera keys** are `Key = { f, dur?, cut?, s: (f) => Framing }`: from frame f, glide (dur, default 24 f) or cut to `s(f)`.
+- **Camera keys** are `Key = { f, dur?, cut?, ease?, arc?, shutter?, s: (f) => Framing }`: from frame f, glide (dur, default 24 f, curve `ease`) or cut to `s(f)`. `arc` swings the view direction instead of sliding the look point (big pans). `shutter` = motion-blur exposure in frames from this key on (default `SHUTTER` .5, 0 = off).
   - `push(f, pos, look, { rate=.0025, punch?, n=35, fov=40, roll=0, cut?, dur? })`: the standard creeping dolly key. `punch` (~.006) is for punch words; every hold should creep.
   - `dolly(pos, look, k, {fov, roll})` and `zoom(pos, look, fov, k)` (zoom = the lens stays put, e.g. against a wall), with `pushK(f, f0, rate, punch?, n?)` as k.
   - `rolled(fn, roll)`, `at(p, dx, dy, dz)`, `glide`, `smooth`, `easeOut`, `clamp01`.
-  - Grammar: big reframes are cuts; glides 18-60 f; rolls 0.03-0.04 rad on emphasis.
+  - Moving-camera keys (reference study 2026-11-03; each blends in from the previous key over `blend` frames, or `cut`):
+    - `flyPath(f, pts, { dur, look?: V3 | V3[], ahead?, lift?, bank?, fov, roll, ease, blend, cut, shutter })`: drone fly-through along a smooth constant-speed spline. `look` = fixed point, a second path travelled in step, or omitted = look down the path. `bank` ~.5 rolls into turns.
+    - `follow(f, target(g) => V3, off, { lag=6, lookOff, fov, shutter=0 })`: trail a moving object (drip, thrown hook, walker); make the move motivated by what is moving. Sharp by default (`shutter` 0): the blur only sees camera motion, so a blurred follow ghosts the tracked card.
+    - `whip(f, to, n=8, shutter=.75)`: whip pan to a framing with `whipEase` + arc; follow with a `push` for the hold and a whoosh SFX.
+    - `orbit(f, center, { r, h, a0, a1, dur, lookUp })` (degrees, 0 = camera on +z), `crane(f, from, to, look, { dur })` (rise-up reveal / crane-down).
+    - `spline(pts)` → `u => V3` for your own paths (e.g. a prop's flight that a `follow` tracks).
+  - Grammar: the framing changes every 1.5-3 s (a move, not only cuts) and no hold sits on a creep alone for more than ~3 s; link places with motivated moves (follow the object, whip, fly-through) or 4-6 f crossfades; hard cuts are for punches. Glides 18-60 f; rolls 0.03-0.04 rad on emphasis, 0.08-0.15 rad dutch for chaos.
+  - Motion blur (`engine/blur.ts`, after the DOF) is automatic from the camera keys: creeps stay sharp (2 px dead zone), whips and fly-throughs smear. No blur across a `cut` or a shot start; kick shakes stay crisp. Stills A/B: inputProps `{ post: { blur: false } }`.
 - **DOF** `Dof = { f, dur?, cInf, focus? }`: cInf is the blur in px at 1080 wide.
   - Close-ups 12-16, medium shots 9-12, wide or establishing 0 (sharp).
   - `focus(f)` is a world point; the default is the camera look point.
@@ -97,7 +104,7 @@ Every builder takes `variant` (0 = original, 1-3 re-dress: wall / stone colours,
 - `build.ts`: `Batch` (`add(geo, mat, matrix?)`, `build(G)`), `boxGeo(min, max, tile)`, `quad`, `tri`, `V`, `lam(key, () => params)` (a cached two-tone material), `addVeg(b, kind, x, y, z, h, seed)` (`round|fat|tall|cone|bush|hedge`), `house(b, x, z, yaw, w, d, h, style)`.
 - `paint.ts`: HD textures `planksHD`, `beamHD`, `stoneHD(key, cols, mortar)`, `cobbleHD`, `grassHD`, `roofHD`, `facadeHD`, `cloudHD`; plus `ctex(key, w, h, draw)` for your own canvas texture and `rep`.
 - `lights.ts`: `LIGHTS` / `LOOK` for `day | golden`.
-- `ink.ts` (`NOINK` layer), `lensblur.ts`, `grade.ts`, `shade.ts`, `cardshade.ts`: the post and look internals.
+- `ink.ts` (`NOINK` layer), `lensblur.ts`, `blur.ts` (camera motion blur), `grade.ts`, `shade.ts`, `cardshade.ts`: the post and look internals.
 
 ## captions/, thumbnail/, audio/, music/
 - `captions/Captions.tsx`: `<Captions words keywords style? />`. **Speed style** (user's preferred, 2026-11-03): `style={{ plain: true, size: 0.05, keyScale: 1, upper: false, maxWords: 3, outline: "#000", keyColors: {phrase: colour} }}`: white text, black outline, no per-word highlight, only keywords coloured.

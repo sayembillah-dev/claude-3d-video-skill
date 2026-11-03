@@ -69,7 +69,7 @@ Read `CLAUDE.md`, this file and `library/README.md`. Then use AskUserQuestion, o
      - positions, story-motion functions;
      - `SHOTS` (id, frames, light, place, sun);
      - `XFADE` at place changes, `flashAt` after the hook;
-     - `CAMS` (`push()` keys: every hold creeps, cuts on big reframes);
+     - `CAMS` (`push()` keys for holds; `flyPath` / `follow` / `whip` / `orbit` / `crane` so the framing changes every 1.5-3 s; motivated moves link places, hard cuts only for punches);
      - `KICKS` on impacts, `DOF` per beat;
      - it ends with `FILM = makeFilm(...)`.
    - `cast.ts`: `stage(id, t, cam)` with `human` / `critter` / `card` / `burst`. Reactions land 0-3 frames before their word (`after()`).

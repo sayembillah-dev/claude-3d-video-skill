@@ -11,8 +11,13 @@ import { LIGHTS, LOOK, LightPreset } from "../engine/lights";
 import { TONE, CHAR, untone } from "../engine/shade";
 import { NOINK } from "../engine/ink";
 import { Pool, Actor, Fx, Stage, CamInfo, beginStage } from "./stage";
-import { FPS, Film, ShotDef } from "./camera";
+import { FPS, Film, ShotDef, Cam } from "./camera";
 
+/** put a three.js camera at a film framing (also used for the motion blur's earlier camera) */
+export const poseCam = (cam: THREE.PerspectiveCamera, c: Cam) => {
+  cam.position.set(...c.pos); cam.up.set(0, 1, 0); cam.lookAt(...c.look); cam.rotateZ(c.roll);
+  cam.fov = c.fov; cam.near = 0.1; cam.far = 1500; cam.updateProjectionMatrix(); cam.updateMatrixWorld();
+};
 export type Place = { build: (G: THREE.Group) => any; x?: number; z?: number };
 export type Production = {
   film: Film;
@@ -129,8 +134,7 @@ export class World {
   update(id: number, f: number, cam: THREE.PerspectiveCamera, scene: THREE.Scene) {
     const t = f / FPS, s = this.film.shots[id - 1], L = LIGHTS[s.light];
     const c = this.film.camAt(id, f);
-    cam.position.set(...c.pos); cam.up.set(0, 1, 0); cam.lookAt(...c.look); cam.rotateZ(c.roll);
-    cam.fov = c.fov; cam.near = 0.1; cam.far = 1500; cam.updateProjectionMatrix(); cam.updateMatrixWorld();
+    poseCam(cam, c);
     const focus = V(...c.look), dist = cam.position.distanceTo(focus);
     cam.layers.enable(NOINK);
     // ---- light rig ----

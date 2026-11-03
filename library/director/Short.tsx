@@ -1,5 +1,6 @@
 // Director: the composition every short renders through (post chain from the bridge short's look-match pass).
 //   InkPass (world ink lines, own pass) -> lens blur pre + main (thin-lens DOF from the film's dof table) ->
+//   camera motion blur (reprojected from the film's camera dt frames earlier, engine/blur.ts) ->
 //   [bloom (emissive only) + NEUTRAL tone mapping + colour grade], MSAA 4.
 // Ink runs before the DOF so lines blur with what they belong to; bloom after the DOF so glows defocus with their
 // source; the grade is display-referred, so it comes after tone mapping. Every pixel-sized parameter is specified at
@@ -13,15 +14,16 @@ import { ThreeCanvas } from "@remotion/three";
 import { useThree } from "@react-three/fiber";
 import { EffectComposer } from "@react-three/postprocessing";
 import { BlendFunction, BloomEffect, ToneMappingEffect, ToneMappingMode } from "postprocessing";
-import { World, Production } from "./world";
+import { World, Production, poseCam } from "./world";
+import { MotionBlurEffect } from "../engine/blur";
 import { InkPass, noInkFallback } from "../engine/ink";
 import { LensBlur, GrainEffect } from "../engine/lensblur";
 import { GradeEffect, GRADES, GRADE_STRENGTH, gradeFor } from "../engine/grade";
 import { Captions, Word, CaptionStyle } from "../captions/Captions";
 
 /** A/B switches for test stills only (Remotion inputProps `{ post: { ink: false, ... } }`); everything is on by default. */
-type PostToggles = { ink: boolean; lens: boolean; pre: boolean; bloom: boolean; grade: boolean; grain: boolean };
-const toggles = (): PostToggles => ({ ink: true, lens: true, pre: true, bloom: true, grade: true, grain: false, ...((getInputProps() as { post?: Partial<PostToggles> }).post ?? {}) });
+type PostToggles = { ink: boolean; lens: boolean; pre: boolean; blur: boolean; bloom: boolean; grade: boolean; grain: boolean };
+const toggles = (): PostToggles => ({ ink: true, lens: true, pre: true, blur: true, bloom: true, grade: true, grain: false, ...((getInputProps() as { post?: Partial<PostToggles> }).post ?? {}) });
 
 /** Bloom for emissive sources only (depth.md 6.4). Its MIP chain always starts at 540x960 (half of 1080x1920),
  *  whatever the output size, so the glow keeps the same size relative to the frame (e-fold ~30 px at 1080p,
@@ -35,6 +37,7 @@ const makeBloom = () => {
 };
 
 const fwd = new THREE.Vector3(), fpt = new THREE.Vector3();
+const prevCam = new THREE.PerspectiveCamera(), vpCur = new THREE.Matrix4(), vpPrev = new THREE.Matrix4();
 
 const Inner: React.FC<{ id: number; prod: Production }> = ({ id, prod }) => {
   const f = useCurrentFrame();
@@ -46,6 +49,7 @@ const Inner: React.FC<{ id: number; prod: Production }> = ({ id, prod }) => {
     ink: new InkPass(scene, camera as THREE.PerspectiveCamera),
     lens: new LensBlur({ maxCoC: 24, nearScale: 1.2 }),
     bloom: makeBloom(),
+    blur: new MotionBlurEffect(),
     tone: new ToneMappingEffect({ mode: ToneMappingMode.NEUTRAL }),
     grade: new GradeEffect(GRADES.day, GRADE_STRENGTH.day),
     grain: new GrainEffect({ amount: 0.025, cellPx: 1.5 }), // film grain, OFF by default (inputProps post.grain): the reference measures no grain and it quadruples the file size
@@ -57,6 +61,7 @@ const Inner: React.FC<{ id: number; prod: Production }> = ({ id, prod }) => {
       {on.ink ? <primitive object={fx.ink} dispose={null} /> : null}
       {on.lens && on.pre ? <primitive object={fx.lens.pre} dispose={null} /> : null}
       {on.lens ? <primitive object={fx.lens.main} dispose={null} /> : null}
+      {on.blur ? <primitive object={fx.blur} dispose={null} /> : null}
       {on.bloom ? <primitive object={fx.bloom} dispose={null} /> : null}
       <primitive object={fx.tone} dispose={null} />
       {on.grade ? <primitive object={fx.grade} dispose={null} /> : null}
@@ -72,6 +77,14 @@ const Inner: React.FC<{ id: number; prod: Production }> = ({ id, prod }) => {
   if (d.focus) fpt.set(...d.focus(f)); else fpt.copy(target);
   fx.lens.focus = Math.max(0.3, fpt.sub(cam.position).dot(fwd));
   fx.lens.cInf = d.cInf;
+  // motion blur: this frame's view-projection against the film camera `dt` frames earlier (pure function of the frame)
+  const sh = prod.film.shutterAt(id, f);
+  if (sh) {
+    prevCam.aspect = cam.aspect; poseCam(prevCam, sh.prev);
+    vpCur.multiplyMatrices(cam.projectionMatrix, cam.matrixWorldInverse);
+    vpPrev.multiplyMatrices(prevCam.projectionMatrix, prevCam.matrixWorldInverse);
+    fx.blur.set(vpCur, vpPrev);
+  } else fx.blur.set(null);
   gradeFor(fx.grade, prod.film.shots[id - 1].light);
   fx.grain.seed = f; // deterministic per frame
   return (
