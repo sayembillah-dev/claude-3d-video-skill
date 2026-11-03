@@ -33,3 +33,6 @@ library/music/*.wav
 # macOS / exFAT junk
 ._*
 .DS_Store
+
+# private reference videos (style study)
+training_data/

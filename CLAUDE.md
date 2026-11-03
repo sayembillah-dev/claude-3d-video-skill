@@ -32,7 +32,7 @@ Remotion + three.js project for cartoon 3D story shorts. The skill lives in `.cl
 
 ## Keep it organized (strict)
 - Never create loose files in the project root.
-  - Allowed root items: `src/ library/ scripts/ audio/ public/ projects/ out/ ledger/ tmp/ .claude/ .git/` and the platform-specific `node_modules/ .venv/`.
+  - Allowed root items: `src/ library/ scripts/ audio/ public/ projects/ out/ ledger/ tmp/ training_data/ .claude/ .git/` and the platform-specific `node_modules/ .venv/`. `training_data/` holds private reference videos and is git-ignored.
   - Allowed config files: `package.json`, `package-lock.json`, `tsconfig.json`, `requirements.txt`, `env.sh`, `setup.sh`, `tidy.sh`, `CLAUDE.md`, `.gitignore`.
 - Git commits and PRs: **no Claude co-author or contributor lines** (no `Co-Authored-By: Claude`, no "Generated with Claude Code"). The user is the only author.
 - Git versions only what production and reuse need (see `.gitignore`): renders, wav mixes and stems, installs, scratch and the private reference frames stay out. After adding a new kind of file, check it lands on the right side of `.gitignore`.
