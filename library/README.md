@@ -8,6 +8,8 @@ keep working because they import the same files. Check with `npx tsc --noEmit` a
 ## Catalog
 | Path | What it is | Used by |
 |---|---|---|
+| `API.md` | **One-page map of everything below. Read it instead of the source** | every video |
+| `director/` | Shared runtime: `camera.ts` (makeFilm, camera keys, DOF, kicks), `stage.ts` (human / critter / card / fx helpers, card pool), `world.ts` (places, sky, sun, fog), `Short.tsx` (post chain, crossfades, flash, captions). A video only writes data + staging | animal-court |
 | `engine/` | The cartoon-3D look (from the bridge short, 4 verifier rounds): `toon.ts` (Pen drawing API, bean-head humans, 14 faces, fx cards), `paint.ts` (HD painted textures), `shade.ts` (two-tone shading), `lights.ts` (day / golden presets), `cardshade.ts` (lit character cards), `ink.ts` (outline pass), `lensblur.ts` (DOF), `grade.ts` (colour grade), `build.ts` (Batch, boxes, houses, cartoon trees `addVeg`) | animal-court |
 | `cast/critters.ts` | Animals in the toon style: `monkey` (crested macaque; arms down / camera / reach / shrug / up; sit; walk), `hen` (5 colours), `rat`, `cat` (3 colours). Props: `camera`, `tripod`, `paperStack`, `dock`, `chair` | animal-court |
 | `cast/outfits.ts` | Human roles: photographer, modern lawyer, 3 robed judges, old-European judge and advocate | animal-court |
@@ -25,11 +27,11 @@ Project tools live in `scripts/` (not here): `render.mjs` (resolution + progress
 (AI cost ledger), `cleanup.sh` (free disk).
 
 ## Using it in a new video
-1. Copy `src/videos/animal-court/{Court.tsx,story.ts,cast.ts,world.ts}` as the skeleton and rename it. Those are
-   the only story files; everything else is imported from `library/`.
+1. Copy `src/videos/animal-court/{story.ts,cast.ts,index.tsx}` as the skeleton and rename it. Those are the only
+   story files; everything else is imported from `library/` (see `API.md`).
 2. Build the world from `sets/` (or add a new set builder there if the place is generic: a kitchen, a lab, a beach).
 3. Staging in `cast.ts` uses `cast/critters.ts` and `cast/outfits.ts`, plus `bodyFront` townsfolk from `engine/toon.ts`.
-4. Captions: `<Captions words={WORDS} keywords={...} />` as the last layer of the main composition.
+4. `index.tsx`: `makeShort(PRODUCTION, { words, keywords })` adds the post chain and captions.
 
 ## Promoting new assets (Claude does this at the end of every project)
 After delivery, Claude moves anything **reusable and neutral** that the project created into `library/`. That covers
