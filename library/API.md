@@ -22,8 +22,12 @@ Register it in `src/Root.tsx`: `<Composition id="X" component={MyShort} duration
   - `ShotDef = { id, a, b, light: "day"|"golden"|"storm"|"dusk", set: placeKey, sunAz?, sunEl?, lightTo?, rays? }`: frames `a..b`. The sun is camera-relative degrees: az 0 = backlight, 90 = screen right, 180 = behind the camera.
     - `lightTo: { light, a, b }`: blend sky, fog, ambient, sun colour, clouds and grade to another preset between frames a..b (storm rolls in, day turns to dusk). The sun direction and shadows stay the shot's.
     - `rays: { n?=5, k?=.6, at?: V3, spread?=10, len?=40 }`: god-ray shafts along the shot's sun (default anchor on the ground between camera and look point). Best with a high side sun (sunEl 30-45) in storm or golden.
-- `makeFilm({ total, shots, xfade?, cams, kicks?, dof, flashAt? })` → `Film`.
-  - `xfade[id]` = crossfade frames into shot id.
+- `makeFilm({ total, shots, xfade?, cams, kicks?, dof, flashAt?, speedLines? })` → `Film`.
+  - `xfade[id]` = transition into shot id: frames (plain dissolve) or `{ n, kind }`. Kinds:
+    - `"dissolve"` (4-6 f): the default link between shots; keep hard cuts for punches.
+    - `"ripple"` (~18 f): concentric water rings over both shots (soup to sea, memory, dream).
+    - `"double"` (~24 f): both shots held at half, a double exposure (a face over the place it remembers).
+  - `speedLines: [{ a, b, k?=1, cx?=.5, cy?=.45 }]`: anime radial lines over frames a..b (screen overlay, 4-frame ramps). Use on whips, rushes and shocks.
   - `kicks: [timeS, strength]` = 7-frame impact shakes.
   - `flashAt` = a 4-frame white flash.
 - **Camera keys** are `Key = { f, dur?, cut?, ease?, arc?, shutter?, s: (f) => Framing }`: from frame f, glide (dur, default 24 f, curve `ease`) or cut to `s(f)`. `arc` swings the view direction instead of sliding the look point (big pans). `shutter` = motion-blur exposure in frames from this key on (default `SHUTTER` .5, 0 = off).
@@ -55,6 +59,15 @@ Register it in `src/Root.tsx`: `<Composition id="X" component={MyShort} duration
   - `puff(out, t, t0, x, y, z, w)`: dust puff.
   - `rain(out, t, cam, { n=220, area=9, depth=16, h=10, speed=14, slant=.18, len=.9 })`: world-anchored rain streaks in front of the camera (parallax on moves). Pair with storm light.
   - `birds(out, t, cx, cy, cz, { n=5, r=6, size=.5, speed=.35 })`: ink-V flock circling a point; keep it in open sky (size ~.8 at 15-20 m).
+- **Effects kit** (`director/fx.ts`; head-anchored helpers take the head centre, ≈ y + 1.55 for a standing human):
+  - `steam(out, cam, t, t0, x, y, z, { dur=1.4, w=.32, col })`: puffs out of both ears (anger).
+  - `sweat(out, cam, t, t0, x, y, z, { dur=1.5, side=1, n=2, w=.13 })`: drops sliding off the temple (nerves).
+  - `flush(outfit, okey, k, col="#b05ad6")` → `{ o, key }`: face colour shift for `human()` (fury purple, red, sick green).
+  - `glow(out, t, x, y, z, { w=1, h?, col="#ffb347", k=1, pulse=0 })`: soft heat glow (hot rail, lantern, forge).
+  - `smoke(out, t, t0, x, y, z, { dur=3, w=1, col, rate=4, rise=1.2, drift=[.3, 0] })`: rising cartoon smoke column.
+  - `foam(out, t, x, y, z, { w=1.2, seed, col })`: flat foam patch on water.
+  - `explode(out, t, t0, x, y, z, { w=3 })`: flash star, fireball, debris and smoke; pair with a kick, `flashAt` and SFX.
+  - `buildUp(pieces, k, { overlap=2, from: "scale"|"drop" })`: time-lapse assembly in `pose()`; build each piece as its own object and return them as a handle.
 - Timing:
   - `after(t, wordStart)`: true from 2 f before the word.
   - `lidAt(t, i)`: blinks.
@@ -71,7 +84,7 @@ Register it in `src/Root.tsx`: `<Composition id="X" component={MyShort} duration
   - Every place is built once and shown only during its shots.
   - `handles[key]` is whatever `build` returned (for toggles and animation in `pose`).
 - `makeShort(prod, { words?, keywords?, captionStyle?, background? })` → the composition.
-  - The post chain: ink → DOF → bloom → tone map → grade, with crossfades, the flash and captions.
+  - The post chain: ink → DOF → motion blur → bloom → tone map → grade, with transitions (`director/transitions.tsx`), speed lines, the flash and captions.
   - inputProps `{ captions: false }` renders a clean master.
 
 ## sets/sets.ts (every builder: local coordinates, ground y = 0, place it with `x` in the production)
