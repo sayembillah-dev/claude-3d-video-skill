@@ -5,7 +5,7 @@ for the one function instead of reading the whole file. Paths are from the proje
 `../../../library/...`.
 
 ## How a video is built (the whole contract)
-A video folder `src/videos/<name>/` has 3-4 files (copy `src/videos/animal-court/` as the skeleton):
+A video folder `src/videos/<name>/` has 3-4 files (copy the neutral `src/videos/_template/` as the skeleton; finished videos are technique references only):
 
 | File | What you write | Size |
 |---|---|---|
@@ -71,6 +71,8 @@ Every builder takes `variant` (0 = original, 1-3 re-dress: wall / stone colours,
 | `courtroom(G, { witness?, crates?, variant? })` → `{ tables, crates, flags }` | witness box pos, crate positions | room x ±9, z −12..9. Bench front z −8.9 (top 1.5 m), judges stand at z −10.1, y .55. Counsel tables z −3.1..−4.1 at x ±1.3..3.9 (top .8). Bar rail z −.5, gallery z 1.2-7 |
 | `jungle(G, { rock?, variant? })` | rock under a character | dirt clearing x ±3.5, z −2.5..3.5. Trees ring r 9-30 (kept off z > −3 within x ±9). Bushes z −3..−5 |
 | `courthouse(G, { variant? })` + `courthouseStepY(z)` | — | 10 steps from z −12 (y 0) to −17 (y 2.5), columns at z −18.4, door at z −21. Plaza z −12..40, x ±30 |
+| `lab(G, { variant? })` | — | room x ±7, z −9..9, walls 4.6 m, long window on the back wall, benches at z −8.8..−7.4 and islands at x ±4.6 |
+| `microWorld(G, { variant? })` | — | open pink stage, ring of pastel cell blobs from r 28; keep scenes within x ±6, z −9..8 |
 | `townSquare(G, { variant? })` | — | square x ±30. Houses at z −14 and x ±13. Judge platform z −7.7..−6.1 (top .45), table z −6.5..−5.9 (top 1.27). Low wall x 2.6..4.8, z −2.4..−1.6 (top .9) |
 
 ## cast/ (drawings) and engine/toon.ts
@@ -93,7 +95,7 @@ Every builder takes `variant` (0 = original, 1-3 re-dress: wall / stone colours,
 - `ink.ts` (`NOINK` layer), `lensblur.ts`, `grade.ts`, `shade.ts`, `cardshade.ts`: the post and look internals.
 
 ## captions/, thumbnail/, audio/, music/
-- `captions/Captions.tsx`: `<Captions words keywords style? />`.
+- `captions/Captions.tsx`: `<Captions words keywords style? />`. **Speed style** (user's preferred, 2026-11-03): `style={{ plain: true, size: 0.05, keyScale: 1, upper: false, maxWords: 3, outline: "#000", keyColors: {phrase: colour} }}`: white text, black outline, no per-word highlight, only keywords coloured.
   - Defaults: 6.2 % of the width, keywords 1.4x, block centre at 79 % of the height. Don't go bigger or higher unless asked.
   - Keywords come from `projects/<name>/captions.json`.
 - `captions/CaptionedVideo.tsx`: captions over a finished mp4 in `public/_render/`.
@@ -103,7 +105,7 @@ Every builder takes `variant` (0 = original, 1-3 re-dress: wall / stone colours,
   - `audio/instruments.py`: `brass`, `glock`, `vibes`, `musicbox`, `pluck`, `fife`, `snare`, `cymbal`, `timpani`, `brush`, `pad`, `triangle`, `whistle`.
   - `audio/sfx_gen.py`: `whoosh`, `creak`, `clink`, `rattle`, `boot`, `stroll_step`, `hammer_hit`, `splash_big`, `bubbles`, `water_bed`, `breeze`, `bird_chirps`, `crickets`, `babble`, `applause`, `hurrah`, `oof`, `whoa`, `flag_flutter`, `swing_squeak`.
   - `audio/sfx_more.py`: `pop`, `shutter`, `flash_whine`, `hoot`, `cluck`, `bawk`, `squeak`, `meow`, `thump`, `bell`, `sad_trombone`, `room`.
-  - Skeleton for a new soundtrack: `projects/animal-court/audio/court_sound.py`. Copy it and change the cue list and `build_music()`.
+  - Skeleton for a new soundtrack: `projects/_template/audio/sound_template.py`. Copy it and change the cue list and `build_music()`.
 - `music/README.md`: the track catalog (mood, key, BPM, sections). Reuse a track or write a new score.
 
 ## Scripts (run after `source env.sh`)

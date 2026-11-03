@@ -2,6 +2,7 @@ import React from "react";
 import { Composition } from "remotion";
 import { BridgeShort, BRIDGE_FRAMES } from "./videos/bridge/Bridge";
 import { AnimalCourtShort, COURT_FRAMES } from "./videos/animal-court";
+import { DnaDriveShort, DNA_FRAMES } from "./videos/dna-drive";
 import { CaptionedVideo } from "../library/captions/CaptionedVideo";
 import { Thumbnail } from "../library/thumbnail/Thumbnail";
 import COURT_WORDS from "../projects/animal-court/voice/words.json";
@@ -11,6 +12,7 @@ export const Root: React.FC = () => (
   <>
     <Composition id="BridgeShort" component={BridgeShort} durationInFrames={BRIDGE_FRAMES} fps={30} width={1080} height={1920} />
     <Composition id="AnimalCourt" component={AnimalCourtShort} durationInFrames={COURT_FRAMES} fps={30} width={1080} height={1920} />
+    <Composition id="DnaDrive" component={DnaDriveShort} durationInFrames={DNA_FRAMES} fps={30} width={1080} height={1920} />
     {/* captions burned onto the finished animal-court render (public/_render/animal-court.mp4, temporary) */}
     <Composition id="AnimalCourtCaptioned" component={CaptionedVideo} durationInFrames={COURT_FRAMES} fps={30} width={1080} height={1920}
       defaultProps={{ src: "_render/animal-court.mp4", words: COURT_WORDS, keywords: COURT_CAP.keywords }} />

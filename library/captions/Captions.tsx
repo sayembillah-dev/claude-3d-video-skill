@@ -19,8 +19,10 @@ export type CaptionStyle = {
   /** most words per group */ maxWords?: number;
   /** most characters per group */ maxChars?: number;
   upper?: boolean;
+  /** plain "speed" captions: no per-word highlight or pop, every word shown whole; only keywords get a colour */ plain?: boolean;
+  /** colour per keyword phrase (same text as in keywords, any case); unlisted keywords use `accent` */ keyColors?: Record<string, string>;
 };
-const DEF: Required<CaptionStyle> = { accent: "#FFD84A", color: "#FFFFFF", outline: "#14101c", size: 0.062, keyScale: 1.4, y: 0.79, maxWords: 3, maxChars: 16, upper: true };
+const DEF: Required<CaptionStyle> = { accent: "#FFD84A", color: "#FFFFFF", outline: "#14101c", size: 0.062, keyScale: 1.4, y: 0.79, maxWords: 3, maxChars: 16, upper: true, plain: false, keyColors: {} };
 const FONT = "CaptionSans";
 
 let fontP: Promise<void> | null = null;
@@ -36,15 +38,16 @@ const norm = (w: string) => w.toLowerCase().replace(/[^a-z0-9']/g, "");
 /** display form: drop trailing commas / full stops / colons, keep ? and ! */
 const show = (w: string) => w.replace(/[,.;:]+$/g, "").replace(/^["']|["']$/g, "");
 
-type Group = { words: (Word & { key: boolean })[]; a: number; b: number };
+type Group = { words: (Word & { key: boolean; col?: string })[]; a: number; b: number };
 /** split the word list into short caption groups: break on punctuation (incl. commas), pauses > 0.35 s, size limits;
  *  a keyword phrase is never split across two groups */
 export const groupWords = (words: Word[], keywords: string[], s: Required<CaptionStyle>): Group[] => {
   const phrases = keywords.map((k) => k.split(/\s+/).map(norm).filter(Boolean)).filter((p) => p.length);
-  const isKey = words.map(() => false), phraseEnd = words.map(() => -1);
+  const isKey = words.map(() => false), phraseEnd = words.map(() => -1), keyCol: (string | undefined)[] = words.map(() => undefined);
+  const colOf = new Map(Object.entries(s.keyColors).map(([k, v]) => [k.split(/\s+/).map(norm).filter(Boolean).join(" "), v]));
   for (let i = 0; i < words.length; i++) for (const p of phrases) {
     if (p.every((w, k) => i + k < words.length && norm(words[i + k].word) === w)) {
-      for (let k = 0; k < p.length; k++) { isKey[i + k] = true; phraseEnd[i + k] = i + p.length - 1; }
+      for (let k = 0; k < p.length; k++) { isKey[i + k] = true; phraseEnd[i + k] = i + p.length - 1; keyCol[i + k] = colOf.get(p.join(" ")); }
     }
   }
   const out: Group[] = [];
@@ -57,7 +60,7 @@ export const groupWords = (words: Word[], keywords: string[], s: Required<Captio
     const brk = !cur || (!inPhrase && (/[.?!:,;]$/.test(prev.word) || gap > 0.35 || cur.words.length >= s.maxWords || chars > s.maxChars
       || (isKey[i] && phraseEnd[i] - i + 1 + cur.words.length > s.maxWords)));
     if (brk) { cur = { words: [], a: w.start, b: w.end }; out.push(cur); }
-    cur!.words.push({ ...w, key: isKey[i] });
+    cur!.words.push({ ...w, key: isKey[i], col: keyCol[i] });
     cur!.b = w.end;
   });
   // each group stays up until the next starts (max 0.6 s after its last word)
@@ -70,14 +73,14 @@ export const Captions: React.FC<{ words: Word[]; keywords?: string[]; style?: Ca
   const f = useCurrentFrame(), { fps, width, height } = useVideoConfig();
   const [handle] = useState(() => delayRender("caption font"));
   useEffect(() => { loadFont().then(() => continueRender(handle)); }, [handle]);
-  const groups = useMemo(() => groupWords(words, keywords, s), [words, keywords, s.maxWords, s.maxChars]);
+  const groups = useMemo(() => groupWords(words, keywords, s), [words, keywords, s.maxWords, s.maxChars, s.keyColors]);
   const t = f / fps - offset;
   const g = groups.find((x) => t >= x.a && t < x.b);
   if (!g) return null;
   const fs = s.size * width, age = (t - g.a) * fps;
-  const enter = interpolate(age, [0, 5], [0, 1], { extrapolateRight: "clamp", easing: Easing.out(Easing.back(1.6)) });
+  const enter = s.plain ? 1 : interpolate(age, [0, 5], [0, 1], { extrapolateRight: "clamp", easing: Easing.out(Easing.back(1.6)) });
   const fade = interpolate(age, [0, 2], [0, 1], { extrapolateRight: "clamp" });
-  const ol = 0.13 * fs;
+  const ol = (s.plain ? 0.2 : 0.13) * fs;
   return (
     <AbsoluteFill style={{ pointerEvents: "none" }}>
       <div style={{
@@ -86,10 +89,10 @@ export const Captions: React.FC<{ words: Word[]; keywords?: string[]; style?: Ca
         columnGap: 0.44 * fs, rowGap: 0.02 * fs, fontFamily: `${FONT}, sans-serif`, fontWeight: 800, lineHeight: 1.08, textAlign: "center",
       }}>
         {g.words.map((w, i) => {
-          const active = t >= w.start - 0.03 && (t < w.end + 0.05 || i === g.words.length - 1);
+          const active = !s.plain && t >= w.start - 0.03 && (t < w.end + 0.05 || i === g.words.length - 1);
           const pop = active ? interpolate((t - w.start) * fps, [0, 3, 7], [1.0, 1.12, 1.06], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }) : 1;
           const size = fs * (w.key ? s.keyScale : 1);
-          const col = active || w.key ? s.accent : s.color;
+          const col = s.plain ? (w.key ? w.col ?? s.accent : s.color) : active || w.key ? s.accent : s.color;
           const txt = s.upper ? show(w.word).toUpperCase() : show(w.word);
           return (
             <span key={i} style={{

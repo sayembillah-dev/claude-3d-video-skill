@@ -19,7 +19,7 @@ Remotion + three.js project for cartoon 3D story shorts. The skill lives in `.cl
   - Turn off unrelated connectors for the session. Details: the skill's "Token budget" section.
 - Variety: before planning a video, run `.venv/bin/python scripts/variety.py recent` and avoid repeating its sets, variants, music or palette.
 - User rules:
-  - Captions ON (library/captions, Montserrat, keyword highlights): small and low (6.2 % of the width, keywords 1.4x, centre at 79 % of the height) so they never block the visuals. No other text in the 3D scene.
+  - Captions ON (library/captions, Montserrat): since 2026-11-03 the default is the plain speed style: small (5 % of the width), white with a black outline, 2-3 whole words at a time, no per-word highlight, only keywords coloured (`plain: true`, `keyColors`). Low (centre at 79 % of the height) so they never block the visuals. No other text in the 3D scene.
   - English only.
   - Resolution is asked at intake (default 1440x2560).
   - Every fact has a source. Disputed facts get flagged to the user.

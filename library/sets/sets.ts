@@ -202,3 +202,62 @@ export function townSquare(G: THREE.Group, o: Variant = {}) {
   b.add(boxGeo(V(MX + 2.6, 0, -2.4), V(MX + 4.8, 0.9, -1.6), 1.5), lam("wallStone", () => ({ map: stoneHD("wallStone") })));
   b.build(G);
 }
+
+// ---------------- science lab + micro world (first built for the DNA short) ----------------
+//   lab        : tiled science lab 14 x 18 m: mint walls with a long window, benches with glassware, shelves, a floor of
+//                checker tiles. Back wall at z = -9, camera side +z. variant re-dresses wall + bench colours.
+//   microWorld : an open pink "inside the body" stage: soft floor, a ring of big pastel blobs (cells) in the distance.
+const LABWALL = ["#cfe8dc", "#d8e4f2", "#f1e0c8", "#e4d6ee"], BENCH = ["#6a8fa8", "#8a6a9a", "#5f9a7a", "#b07a5a"];
+const tileTex = () => ctex("labTile", 256, 256, (g) => {
+  for (let i = 0; i < 4; i++) for (let j = 0; j < 4; j++) { g.fillStyle = (i + j) % 2 ? "#e9edf0" : "#c9d4dc"; g.fillRect(i * 64, j * 64, 64, 64); }
+  g.strokeStyle = "rgba(60,70,90,.25)"; g.lineWidth = 2; for (let k = 0; k <= 4; k++) { g.beginPath(); g.moveTo(k * 64, 0); g.lineTo(k * 64, 256); g.moveTo(0, k * 64); g.lineTo(256, k * 64); g.stroke(); }
+});
+export function lab(G: THREE.Group, o: Variant = {}) {
+  const vi = (o.variant ?? 0) % LABWALL.length, b = new Batch();
+  const wall = lam("labWall" + vi, () => ({ color: LABWALL[vi] })), bench = lam("labBench" + vi, () => ({ color: BENCH[vi] }));
+  const top = lam("labTop", () => ({ color: "#2f3a44" })), steel = lam("labSteel", () => ({ color: "#b9c2ca" }));
+  b.add(up(-7, 7, -9, 9, 2), lam("labFloor", () => ({ map: tileTex() })));
+  b.add(boxGeo(V(-7, 0, -9.4), V(7, 4.6, -9)), wall);
+  b.add(boxGeo(V(-7.4, 0, -9.4), V(-7, 4.6, 9)), wall);
+  b.add(boxGeo(V(7, 0, -9.4), V(7.4, 4.6, 9)), wall);
+  b.add(boxGeo(V(-7, 0, -9.02), V(7, 0.18, -8.9)), steel);                          // skirting
+  b.add(boxGeo(V(-5, 1.8, -9.02), V(5, 3.8, -8.95)), lam("labSky", () => ({ color: "#bfe3f7" })));  // long window
+  for (const x of [-5, -1.7, 1.7, 5]) b.add(boxGeo(V(x - 0.05, 1.75, -8.98), V(x + 0.05, 3.85, -8.9)), steel);
+  b.add(boxGeo(V(-5.05, 1.75, -8.98), V(5.05, 1.85, -8.9)), steel); b.add(boxGeo(V(-5.05, 3.75, -8.98), V(5.05, 3.85, -8.9)), steel);
+  // back benches with a dark top and jars on top
+  for (const [x0, x1] of [[-6.8, -2.6], [2.6, 6.8]]) {
+    b.add(boxGeo(V(x0, 0, -8.8), V(x1, 0.86, -7.4), 1.5), bench);
+    b.add(boxGeo(V(x0 - 0.05, 0.86, -8.85), V(x1 + 0.05, 0.94, -7.35)), top);
+    for (let x = x0 + 0.5; x < x1; x += 0.9) {
+      const h = 0.25 + ((x * 7) % 3) * 0.1, c = ["#e8738a", "#6cc2a4", "#f2c14e", "#79a6e6"][Math.abs(Math.floor(x * 3)) % 4];
+      b.add(new THREE.CylinderGeometry(0.15, 0.17, h, 14).translate(x, 0.94 + h / 2, -8.2), lam("jar" + c, () => ({ color: c })));
+    }
+  }
+  // wall shelves
+  for (const y of [2.2, 3.1]) for (const s of [-1, 1]) b.add(boxGeo(V(s < 0 ? -7 : 6.6, y, -7.5), V(s < 0 ? -6.6 : 7, y + 0.06, 8)), steel);
+  // island benches in the middle, low enough to see over (0.86 m)
+  for (const x of [-4.6, 4.6]) {
+    b.add(boxGeo(V(x - 0.8, 0, -1.4), V(x + 0.8, 0.86, 1.4), 1.5), bench);
+    b.add(boxGeo(V(x - 0.85, 0.86, -1.45), V(x + 0.85, 0.94, 1.45)), top);
+    for (let k = 0; k < 3; k++) b.add(new THREE.CylinderGeometry(0.1, 0.1, 0.34, 12).translate(x - 0.45 + k * 0.45, 1.11, 0), lam("flask" + k, () => ({ color: ["#79d0b0", "#f08f9d", "#ffd36b"][k] })));
+  }
+  b.build(G);
+}
+
+const MICRO = [["#f4b6c8", "#ffd8e2"], ["#b9d7f4", "#dcecff"], ["#d7c4f1", "#ece2ff"], ["#f6cfa6", "#ffe8cf"]];
+export function microWorld(G: THREE.Group, o: Variant = {}) {
+  const vi = (o.variant ?? 0) % MICRO.length, [c0, c1] = MICRO[vi], b = new Batch();
+  b.add(up(-300, 300, -300, 300, 6), lam("microFloor" + vi, () => ({ color: c0 })));
+  b.add(up(-6, 6, -9, 8, 3, 0.012), lam("microMat" + vi, () => ({ color: c1 })));
+  for (let i = 0; i < 46; i++) {
+    const a = (i / 46) * Math.PI * 2 + Math.sin(i * 5.3) * 0.08, r = 28 + (i % 4) * 7 + Math.sin(i * 2.1) * 3;
+    const x = Math.cos(a) * r, z = Math.sin(a) * r;
+    if (z > -2 && Math.abs(x) < 12) continue;
+    const rad = 3 + (i % 5) * 1.2, col = ["#ef8fb0", "#f6b27a", "#9fd3a3", "#a9a0e8", "#f4d06f"][i % 5];
+    const s = new THREE.SphereGeometry(rad, 18, 12); s.scale(1, 0.8, 1);
+    b.add(s, lam("blob" + col, () => ({ color: col })), new THREE.Matrix4().makeTranslation(x, rad * 0.55, z));
+    const n = new THREE.SphereGeometry(rad * 0.38, 12, 8);
+    b.add(n, lam("nuc" + col, () => ({ color: "#6a4a8a" })), new THREE.Matrix4().makeTranslation(x * 0.985, rad * 0.62, z * 0.985 + (z < 0 ? rad * 0.55 : -rad * 0.55)));
+  }
+  b.build(G);
+}

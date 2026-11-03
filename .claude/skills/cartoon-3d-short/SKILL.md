@@ -64,7 +64,7 @@ Read `CLAUDE.md`, this file and `library/README.md`. Then use AskUserQuestion, o
    - It uses local faster-whisper, maps the heard words onto the script words, and writes `voice/voice.wav` (48 kHz) and `voice/words.json`.
    - It prints line starts in frames and lists any words to hand-fix. Everything is timed to `words.json`.
 4. **Build the video from the library.** **Read `library/API.md` (one page), not the source.**
-   - Copy the skeleton `src/videos/animal-court/{story.ts,cast.ts,index.tsx}` to `src/videos/<name>/`, then register it in `src/Root.tsx`.
+   - Copy the neutral template `src/videos/_template/{story.ts,cast.ts,index.tsx}` (+ stub `projects/_template/`) to `src/videos/<name>/`; plan places, cast and camera from the script's own visuals, and open finished videos only to see how one technique was done, then register it in `src/Root.tsx`.
    - `story.ts` is data:
      - positions, story-motion functions;
      - `SHOTS` (id, frames, light, place, sun);
@@ -76,7 +76,7 @@ Read `CLAUDE.md`, this file and `library/README.md`. Then use AskUserQuestion, o
    - `index.tsx`: the places (set builders + a `variant` the variety log hasn't used lately), `pose()` toggles, `makeShort()`.
    - A new place, animal, costume or prop that another topic could use goes straight into `library/` (sets / cast) with a `variant` option. Story-only drawings go in the video's `props.ts`.
    - Engine, look and post code lives in `library/engine` + `library/director`. Change it only with a verifier pass, and re-check that older videos are pixel-identical.
-5. **Sound.** Copy `projects/animal-court/audio/court_sound.py` → `projects/<name>/audio/<name>_sound.py`.
+5. **Sound.** Copy `projects/_template/audio/sound_template.py` → `projects/<name>/audio/<name>_sound.py`.
    - Change the cue list (times from `words.json` and the picture constants) and `build_music()`, or reuse a track from `library/music/`.
    - Mix rule: music +3 dB, SFX −6 dB, voice unchanged, master −15 LUFS / −1.2 dBTP.
    - Lock the picture timing first. Any later timing change means re-running the sound.
