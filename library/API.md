@@ -161,7 +161,7 @@ Every builder takes `variant` (0 = original, 1-3 re-dress: wall / stone colours,
 - `node scripts/bridge-stills.mjs <prefix> <frames> 0.5` with `COMP=<id>`: look-check stills.
 - `node scripts/render.mjs <id> <out.mp4> --res 1080|1440|2160 --audio mix.wav`: progress and ETA in `render_progress.json`.
 - `.venv/bin/python scripts/align_words.py <name>`: `voice.mp3` → `words.json`.
-- `.venv/bin/python scripts/short_qa.py <mp4> <outdir> <shots.json>`: frame QA.
+- `.venv/bin/python scripts/short_qa.py <mp4> <outdir> <shots.json>`: frame QA; the report opens with the motion gate (PASS needs >= 60 % moving frames and no still stretch over 3 s).
 - `.venv/bin/python scripts/cost_log.py start|finish ...`: the cost ledger.
 - `.venv/bin/python scripts/variety.py recent|log ...`: the variety log.
 - `bash scripts/cleanup.sh <name> [--safe|--all]`: free disk.

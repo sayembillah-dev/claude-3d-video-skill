@@ -31,7 +31,7 @@ User rules that apply:
 ## Intake (always first, before any building)
 Read `CLAUDE.md`, this file and `library/README.md`. Then use AskUserQuestion, one decision per question, with clear options:
 1. **Cost baseline.** Read the weekly plan % with the usage tool, then run `.venv/bin/python scripts/cost_log.py start <name> --weekly <pct>`.
-2. **Duration.** 30-45 s / 55-70 s (recommended, the proven formula) / 75-90 s. Word budget = seconds x 3.7.
+2. **Duration.** 30-45 s / 55-65 s (recommended; both reference shorts run 65 s) / 75-90 s. Word budget = seconds x 3.7.
 3. **Topic.** The user's own topic or 3 suggestions. Then **tailor**: research the facts with sources (web), pick the surprising, visual cause-and-effect, and offer 2-3 angles or hooks. Flag weak or disputed facts.
 4. **Script.** Follow the beat formula below, inside the word budget. Show it, revise until approved. Write `projects/<name>/SCRIPT.md` (facts + sources at the top).
 5. **Voice handoff.** Write `projects/<name>/VOICEOVER.txt` (spoken lines only, one sentence per line).
@@ -50,16 +50,18 @@ Read `CLAUDE.md`, this file and `library/README.md`. Then use AskUserQuestion, o
 ## Pipeline
 1. **Topic and facts.** Pick one surprising true story with a physical cause and effect (it should be visual), plus a simple everyday analogy that explains it.
    - Write the facts with their source at the top of `SCRIPT.md`.
-2. **Script** (~3.7 words/s, 55-70 s). Beat formula from the bridge short:
+2. **Script** (~3.7 words/s, 55-65 s). Beat formula from the bridge short, with the reference-study rules (2026-11-03):
    - **Hook:** the absurd fact in one line ("Seventy-four soldiers knocked down an iron bridge just by walking across it.").
+     The first frame already shows a threat or an action in progress (a train bearing down, oil already pouring), never a character standing in a room.
    - **Setting:** year, place, pride.
    - **Action:** escalation over three or four beats, each a little bigger.
    - **Snap:** the moment it breaks.
    - **Deadpan double line:** "Luckily ... / Unluckily ...".
    - **Explanation:** one physics idea through an everyday analogy (the kid on a swing).
    - **Consequence:** the rule it created.
-   - **Callback twist:** the ending.
+   - **Callback twist:** the ending, landed as a big physical payoff on screen (rails buckle into an explosion, a wave smashes the ship), not a talking head.
    - Never describe on screen what the viewer already sees.
+   - Show the mechanism, don't just say it: rails glowing as they expand, the oil slick trailing the ship, the soup bowl standing in for the sea.
 3. **Voice.** When the user's `voice.mp3` arrives, run `source env.sh && .venv/bin/python scripts/align_words.py <name>`.
    - It uses local faster-whisper, maps the heard words onto the script words, and writes `voice/voice.wav` (48 kHz) and `voice/words.json`.
    - It prints line starts in frames and lists any words to hand-fix. Everything is timed to `words.json`.
@@ -73,6 +75,7 @@ Read `CLAUDE.md`, this file and `library/README.md`. Then use AskUserQuestion, o
      - effects kit (`director/fx.ts`): show emotion and physics as cartoon effects (steam, sweat, flush, smoke, glow, explode, `buildUp` time-lapses) and `speedLines` on rushes;
      - `CAMS` (`push()` keys for holds; `flyPath` / `follow` / `whip` / `orbit` / `crane` so the framing changes every 1.5-3 s; motivated moves link places, hard cuts only for punches);
      - `KICKS` on impacts, `DOF` per beat;
+     - depth: every shot has at least 3 layers (foreground shape or dressing, subject, and a background or `backdrop`);
      - light arcs and density (reference study 2026-11-03): let the light change with the story (`lightTo` storm / dusk, `rays` for reveals), and dress every set (`scatter`, `backdrop`, `rain`, `birds`) so no frame shows bare ground or empty sky;
      - it ends with `FILM = makeFilm(...)`.
    - `cast.ts`: `stage(id, t, cam)` with `human` / `critter` / `card` / `burst`. Reactions land 0-3 frames before their word (`after()`).
@@ -94,6 +97,7 @@ Read `CLAUDE.md`, this file and `library/README.md`. Then use AskUserQuestion, o
     - Read that file to answer "how long?" and give the ETA up front. It muxes the audio (`-map 0:v:0 -map 1:a:0`) itself.
     - Captions on an already rendered video: copy it to `public/_render/` and render a `CaptionedVideo` composition. This takes minutes, not a 3D re-render.
     - QA: `.venv/bin/python scripts/short_qa.py final.mp4 out/<name>/qa shots.json` checks every frame for black, white, frozen and pop frames, plus loudness.
+      Its first line is the **motion gate**: it must PASS (>= 60 % moving frames, no still stretch over 3 s; the references measure 64-82 %). On FAIL, add camera moves to the listed stretches and re-render them before delivery.
     - Open its contact sheets only where it flags something. Pops on caption group changes are expected.
 8. **Deliver.** SendUserFile the final mp4 and write `out/<name>/NOTES.md`.
 9. **Publish kit** (`out/<name>/PUBLISH.md`):
