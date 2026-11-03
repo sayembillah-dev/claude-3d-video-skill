@@ -1,8 +1,9 @@
 // Production captions for vertical shorts, driven by the voice's word timings (words.json from align_words.py).
 // Style: Montserrat ExtraBold, upper case, 1-3 words per line group, a dark rounded outline + soft drop shadow, the word
 // being spoken pops (scale + accent colour), chosen KEYWORDS are drawn bigger in the accent colour so the key facts land.
-// Placed low (block centre at 79 % of the height, just above the ~18 % the YouTube UI covers, clear of the right-hand
-// buttons) and kept small (6.2 % of the width; keywords 1.4x) so the picture stays the star.
+// Placed in the YouTube Shorts safe zone (since 2026-11-03: block centre at 70 % of the height, about 530 px above the
+// bottom of a 1920 frame, clear of the title / channel / description overlay that covers the bottom ~300-450 px, and
+// 16 % in from the right edge, clear of the like / comment / share buttons) and kept small (6.2 % of the width; keywords 1.4x) so the picture stays the star.
 // Every size is a fraction of the frame width, so 1080, 1440 and 2160 wide renders look identical.
 // The font ships in public/fonts (OFL), so captions render the same on any machine without system fonts.
 import React, { useEffect, useMemo, useState } from "react";
@@ -22,7 +23,7 @@ export type CaptionStyle = {
   /** plain "speed" captions: no per-word highlight or pop, every word shown whole; only keywords get a colour */ plain?: boolean;
   /** colour per keyword phrase (same text as in keywords, any case); unlisted keywords use `accent` */ keyColors?: Record<string, string>;
 };
-const DEF: Required<CaptionStyle> = { accent: "#FFD84A", color: "#FFFFFF", outline: "#14101c", size: 0.062, keyScale: 1.4, y: 0.79, maxWords: 3, maxChars: 16, upper: true, plain: false, keyColors: {} };
+const DEF: Required<CaptionStyle> = { accent: "#FFD84A", color: "#FFFFFF", outline: "#14101c", size: 0.062, keyScale: 1.4, y: 0.70, maxWords: 3, maxChars: 16, upper: true, plain: false, keyColors: {} };
 const FONT = "CaptionSans";
 
 let fontP: Promise<void> | null = null;
@@ -84,7 +85,7 @@ export const Captions: React.FC<{ words: Word[]; keywords?: string[]; style?: Ca
   return (
     <AbsoluteFill style={{ pointerEvents: "none" }}>
       <div style={{
-        position: "absolute", left: 0.08 * width, right: 0.14 * width, top: s.y * height, transform: `translate(0, -50%) scale(${0.86 + 0.14 * enter})`,
+        position: "absolute", left: 0.08 * width, right: 0.16 * width, top: s.y * height, transform: `translate(0, -50%) scale(${0.86 + 0.14 * enter})`,
         transformOrigin: "50% 50%", opacity: fade, display: "flex", flexWrap: "wrap", justifyContent: "center", alignItems: "baseline",
         columnGap: 0.44 * fs, rowGap: 0.02 * fs, fontFamily: `${FONT}, sans-serif`, fontWeight: 800, lineHeight: 1.08, textAlign: "center",
       }}>

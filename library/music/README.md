@@ -2,7 +2,8 @@
 
 Every track is the **clean** score: no ducking under a voice and no story hits, loudness-normalised to **-16 LUFS
 integrated**, true peak ≤ -1 dBTP, 48 kHz stereo. The `.wav` is the master (24-bit); use the `.mp3` (320k) for quick previews.
-When reusing a track, the mix script ducks it under the voice and sets its level (house rule: music +3 dB). Cut on bar lines
+House default since 2026-11-03: **no background music** (SFX only). Use a track only when the user asks for a bed: set
+`MUSIC_DB` in the sound script (e.g. -12 for a quiet bed, never above -8); the script ducks it under the voice. Cut on bar lines
 (one bar = 60/BPM x 4 s).
 
 | File | Mood | Key / tempo | Length | Sections (s) | Made for | Generator |

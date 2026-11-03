@@ -151,7 +151,7 @@ Every builder takes `variant` (0 = original, 1-3 re-dress: wall / stone colours,
 
 ## captions/, thumbnail/, audio/, music/
 - `captions/Captions.tsx`: `<Captions words keywords style? />`. **Speed style** (user's preferred, 2026-11-03): `style={{ plain: true, size: 0.05, keyScale: 1, upper: false, maxWords: 3, outline: "#000", keyColors: {phrase: colour} }}`: white text, black outline, no per-word highlight, only keywords coloured.
-  - Defaults: 6.2 % of the width, keywords 1.4x, block centre at 79 % of the height. Don't go bigger or higher unless asked.
+  - Defaults: 6.2 % of the width, keywords 1.4x, block centre at 70 % of the height, right margin 16 %: inside the YouTube Shorts safe zone (bottom ~300-450 px of a 1920 frame are covered by the title and channel overlay, the right ~100-170 px by the buttons). Don't move them lower or wider.
   - Keywords come from `projects/<name>/captions.json`.
 - `captions/CaptionedVideo.tsx`: captions over a finished mp4 in `public/_render/`.
 - `thumbnail/Thumbnail.tsx`: `{ image, lines, accent }`, for a 1080x1920 or 1280x720 composition.

@@ -19,8 +19,10 @@ Remotion + three.js project for cartoon 3D story shorts. The skill lives in `.cl
   - Turn off unrelated connectors for the session. Details: the skill's "Token budget" section.
 - Variety: before planning a video, run `.venv/bin/python scripts/variety.py recent` and avoid repeating its sets, variants, music or palette.
 - User rules:
-  - Captions ON (library/captions, Montserrat): since 2026-11-03 the default is the plain speed style: small (5 % of the width), white with a black outline, 2-3 whole words at a time, no per-word highlight, only keywords coloured (`plain: true`, `keyColors`). Low (centre at 79 % of the height) so they never block the visuals. No floating labels or overlay text in the 3D scene; in-world text props are allowed (since 2026-11-03: calendars, newspaper headlines, banners, signs, labels on objects), short, English, drawn as part of the object and kept clear of the caption band.
+  - Captions ON (library/captions, Montserrat): since 2026-11-03 the default is the plain speed style: small (5 % of the width), white with a black outline, 2-3 whole words at a time, no per-word highlight, only keywords coloured (`plain: true`, `keyColors`). Placed in the YouTube Shorts safe zone (centre at 70 % of the height, clear of the bottom title/channel overlay and the right-hand buttons) so the YouTube UI never covers them and they never block the visuals. No floating labels or overlay text in the 3D scene; in-world text props are allowed (since 2026-11-03: calendars, newspaper headlines, banners, signs, labels on objects), short, English, drawn as part of the object and kept clear of the caption band.
   - English only.
+  - Sound (since 2026-11-03): SFX only, no background music by default (BGM distracted viewers). A quiet bed only when the user asks for one.
+  - Pacing (since 2026-11-03): calm enough to follow. One idea per shot, held 3-5 s; plan the visual flow (`SHOTPLAN.md`) and get it approved before building.
   - Resolution is asked at intake (default 1440x2560).
   - Every fact has a source. Disputed facts get flagged to the user.
 - After delivery, always:

@@ -1,6 +1,8 @@
 # TEMPLATE soundtrack script: copy to projects/<name>/audio/<name>_sound.py. Original sound only, synthesized with library/audio
 # (dsp / instruments / sfx_gen / sfx_more). Fill build_sfx() cues and build_music() (or reuse a library/music track).
-# Mix: voice unchanged, music +3 dB, SFX -6 dB on the house balance, master -15 LUFS / -1.2 dBTP, ducked under the voice.
+# Mix: voice unchanged, SFX -6 dB on the house balance, master -15 LUFS / -1.2 dBTP. No background music by default
+# (since 2026-11-03 the user found BGM distracting): MUSIC_DB = None. Only when the user asks for a bed, set MUSIC_DB to a
+# level relative to the old +3 dB balance (e.g. -12.0 = a quiet bed), ducked under the voice.
 # Run: .venv/bin/python projects/<name>/audio/<name>_sound.py   (writes mix.wav, stems and cues.md here)
 import json, os, sys
 import numpy as np
@@ -34,6 +36,7 @@ def build_sfx():
     return S
 
 
+MUSIC_DB = None  # None = SFX only (house default). A number turns on a quiet, ducked bed; never above -8.0.
 # ---------------------------------------------------------------- music (original): replace with a mood that fits, or load a track from library/music
 BPM = 100
 Q = 60 / BPM
@@ -97,9 +100,12 @@ def main():
     V = st(v)
     words = json.load(open(os.path.join(ROOT, "voice", "words.json")))
     Lv = integrated(V)
-    M = build_music() * dbg(duck(words))[None, :]
     S = build_sfx()
-    M = M * dbg(Lv - 10.5 - integrated(M) + 3.0)
+    if MUSIC_DB is None:
+        M = np.zeros_like(S)
+    else:
+        M = build_music() * dbg(duck(words))[None, :]
+        M = M * dbg(Lv - 10.5 - integrated(M) + 3.0 + MUSIC_DB)
     S = S * dbg(Lv - 13.0 - integrated(S) - 6.0)
     mix = V + M + S
     g = dbg(-15.0 - integrated(mix))
@@ -111,7 +117,7 @@ def main():
     rep = ["# soundtrack cue sheet", "",
            f"- mix.wav: 48 kHz stereo 24-bit, {N} samples = {DUR:.3f} s",
            f"- integrated {integrated(out):.1f} LUFS, true peak {true_peak(out):.1f} dBTP, max limiter reduction {-20*np.log10(gr.min()):.2f} dB",
-           f"- stems: voice {integrated(V):.1f} / music {integrated(M):.1f} / sfx {integrated(S):.1f} LUFS", "", "## Cues", ""]
+           f"- stems: voice {integrated(V):.1f} / music " + ("off" if MUSIC_DB is None else f"{integrated(M):.1f}") + f" / sfx {integrated(S):.1f} LUFS", "", "## Cues", ""]
     rep += [f"- {t:6.2f} s  {w}" for t, w in sorted(cues)]
     open(os.path.join(HERE, "cues.md"), "w").write("\n".join(rep) + "\n")
     print("\n".join(rep[:6]))

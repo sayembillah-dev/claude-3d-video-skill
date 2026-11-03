@@ -80,12 +80,16 @@ still, run_start = [], None
 for i, m in enumerate(list(moving) + [True]):
     if not m and run_start is None: run_start = i
     elif m and run_start is not None:
-        if i - run_start > 90: still.append((run_start + 1, i))
+        if i - run_start > 120: still.append((run_start + 1, i))
         run_start = None
 share = moving.mean() * 100
 verdict = "FAIL" if share < 55 or still else "WARN" if share < 65 else "PASS"
-R.insert(0, f"MOTION GATE {verdict}: {share:.0f}% fresh frames (fail < 55, warn < 65; references 76-79), {len(cuts)} cuts; still stretches > 3 s: "
+R.insert(0, f"MOTION GATE {verdict}: {share:.0f}% fresh frames (fail < 55, warn < 65; references 76-79), {len(cuts)} cuts; still stretches > 4 s: "
          + (", ".join(f"f{a}-{b} ({(b - a) / 30:.1f} s)" for a, b in still) or "none"))
+# pacing (2026-11-03: the user found the teleport short too rapid, 2.4 s between cuts): viewers need 3-5 s per idea to
+# follow it, so an average under 3 s between cuts is flagged. Planned transitions count as cuts here too.
+gap = n / 30 / (len(cuts) + 1)
+R.insert(1, f"PACING {'WARN too rapid' if gap < 3.0 else 'OK'}: {len(cuts)} cuts, one every {gap:.1f} s on average (target 3-5 s, references 4.8 s)")
 
 R.append("\nPER SHOT  (luma mean / std / p2 / p98 / saturation mean, medians over the shot)")
 for s in shots or [{"id": 0, "a": 0, "b": n}]:
