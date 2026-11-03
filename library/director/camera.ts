@@ -15,7 +15,10 @@ export type Key = { f: number; dur?: number; cut?: boolean; ease?: (u: number) =
 /** a shot: frames a..b in place `set`, lit by `light`; sunAz/sunEl override the light preset (camera-relative degrees).
  *  lightTo: the light changes to `light` between absolute frames a..b (smoothstep), e.g. a storm rolling in */
 export type ShotDef = { id: number; a: number; b: number; light: Light; set: string; sunAz?: number; sunEl?: number;
-  lightTo?: { light: Light; a: number; b: number } };
+  lightTo?: { light: Light; a: number; b: number };
+  /** god rays: n shafts (default 5) falling along this shot's sun around `at` (default: on the ground halfway from the first camera to its look point),
+   *  k = brightness 0..1 (default .6), spread = metres across (default 10), len = shaft length in m (default 40) */
+  rays?: { n?: number; k?: number; at?: V3; spread?: number; len?: number } };
 /** lens per beat: cInf = blur-disc radius (px at 1080 wide) for infinity, 0 = sharp; focus = world point (else look) */
 export type Dof = { f: number; dur?: number; cInf: number; focus?: (f: number) => V3 };
 

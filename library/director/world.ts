@@ -40,6 +40,17 @@ const haloTex = () => ctex("sunHalo", 256, 256, (g) => {
   }
   g.putImageData(im, 0, 0);
 });
+/** a god-ray shaft: soft across, quick fade-in at the top (y = 1), long fade toward the ground (y = 0) */
+const shaftTex = () => ctex("godShaft", 64, 256, (g) => {
+  const im = g.createImageData(64, 256);
+  for (let y = 0; y < 256; y++) for (let x = 0; x < 64; x++) {
+    const u = (x - 31.5) / 32, v = 1 - y / 255; // v = 1 at the top of the canvas
+    const across = Math.exp(-((u / 0.45) ** 2)), along = Math.min(1, (1 - v) / 0.12) * Math.pow(v, 0.7);
+    const i = (y * 64 + x) * 4; im.data[i] = im.data[i + 1] = im.data[i + 2] = 255; im.data[i + 3] = Math.round(255 * across * along);
+  }
+  g.putImageData(im, 0, 0);
+});
+const RAYS_MAX = 8;
 export class World {
   root = new THREE.Group();
   private pool = new Pool();
@@ -51,6 +62,8 @@ export class World {
   private sunDisc: THREE.Sprite; private sunHalo: THREE.Sprite;
   private sunCache = new Map<number, THREE.Vector3>();
   private cA = new THREE.Color(); private cB = new THREE.Color();
+  private rays: THREE.Mesh[] = [];
+  private rayAt = new Map<number, THREE.Vector3>();
   private cloudMaps = {} as Record<LightName, THREE.Texture[]>;
   private clouds: THREE.Mesh[] = [];
   private sets: Record<string, THREE.Group> = {};
@@ -99,6 +112,14 @@ export class World {
       m.layers.set(NOINK);
       this.clouds.push(m); R.add(m);
     }
+    // god rays (ShotDef.rays): additive soft shafts, no ink, no fog, never brighter than the bloom threshold
+    const rayMap = shaftTex();
+    for (let i = 0; i < RAYS_MAX; i++) {
+      const m = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), new THREE.MeshBasicMaterial({ map: rayMap, transparent: true, depthWrite: false,
+        fog: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide, toneMapped: true }));
+      m.visible = false; m.frustumCulled = false; m.renderOrder = 4; m.layers.set(NOINK);
+      this.rays.push(m); R.add(m);
+    }
     for (const [name, p] of Object.entries(prod.places)) {
       const G = new THREE.Group();
       G.position.set(p.x ?? 0, 0, p.z ?? 0);
@@ -127,6 +148,38 @@ export class World {
     v = new THREE.Vector3(hx * Math.cos(el), Math.sin(el), hz * Math.cos(el)).normalize();
     this.sunCache.set(id, v);
     return v;
+  }
+
+  /** shafts lie along the sun direction, spread across it, each turned about its own axis to face the lens */
+  private poseRays(id: number, s: ShotDef, sunDir: THREE.Vector3, col: string, cam: THREE.PerspectiveCamera) {
+    const o = s.rays, n = o ? Math.min(RAYS_MAX, o.n ?? 5) : 0;
+    for (let i = n; i < RAYS_MAX; i++) this.rays[i].visible = false;
+    if (!o) return;
+    let at = this.rayAt.get(id);
+    if (!at) {
+      // default: on the ground halfway from the shot's first camera to its look point, so shafts cross the open space
+      const c0 = this.film.camAt(id, s.a);
+      at = o.at ? V(...o.at) : V((c0.pos[0] + c0.look[0]) / 2, 1, (c0.pos[2] + c0.look[2]) / 2);
+      this.rayAt.set(id, at);
+    }
+    const len = o.len ?? 40, spread = o.spread ?? 10, k = o.k ?? 0.6;
+    const side = V(0, 1, 0).cross(sunDir).normalize(), fwd = new THREE.Vector3().crossVectors(sunDir, side).normalize();
+    for (let i = 0; i < n; i++) {
+      const m = this.rays[i], h1 = ((i * 0.618034) % 1), h2 = ((i * 0.414214 + 0.3) % 1);
+      const lat = (n > 1 ? i / (n - 1) - 0.5 : 0) * spread + (h1 - 0.5) * spread * 0.25, dep = (h2 - 0.5) * spread * 0.5;
+      // the shaft's lower end sits on the ground near `at`; it rises toward the sun
+      const foot = at.clone().addScaledVector(side, lat).addScaledVector(fwd, dep); foot.y = at.y - 1;
+      const mid = foot.clone().addScaledVector(sunDir, len / 2);
+      m.position.copy(mid);
+      const toCam = cam.position.clone().sub(mid), nrm = toCam.addScaledVector(sunDir, -toCam.dot(sunDir)).normalize();
+      const xAx = new THREE.Vector3().crossVectors(sunDir, nrm).normalize();
+      m.matrixAutoUpdate = true;
+      m.quaternion.setFromRotationMatrix(new THREE.Matrix4().makeBasis(xAx, sunDir, nrm));
+      m.scale.set(2.4 + 3.6 * h2, len, 1);
+      const mat = m.material as THREE.MeshBasicMaterial;
+      mat.color.set(col).multiplyScalar(k * (0.35 + 0.25 * h1));
+      m.visible = true;
+    }
   }
 
   private actor(i: number) { while (this.actors.length <= i) this.actors.push(new Actor(this.root)); return this.actors[i]; }
@@ -180,6 +233,7 @@ export class World {
       if (lt.k > 0) { this.cA.set(LOOK[lt.A].cloud.lit); this.cB.set(LOOK[lt.B].cloud.lit); mat.color.setRGB(1.1 * (1 + (this.cB.r / this.cA.r - 1) * lt.k), 1.1 * (1 + (this.cB.g / this.cA.g - 1) * lt.k), 1.1 * (1 + (this.cB.b / this.cA.b - 1) * lt.k)); }
       else mat.color.setRGB(1.1, 1.1, 1.1);
     }
+    this.poseRays(id, s, sunDir, L.sunCol, cam);
     // ---- which place, which furniture ----
     for (const [k, g] of Object.entries(this.sets)) g.visible = k === s.set;
     this.prod.pose?.(id, f, t, this.handles);
