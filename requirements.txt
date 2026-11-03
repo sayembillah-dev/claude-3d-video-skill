@@ -1,0 +1,5 @@
+# Python tools for the shorts pipeline (installed into ./.venv by setup.sh)
+numpy>=2.0
+scipy>=1.13
+pillow>=10.0
+faster-whisper>=1.0

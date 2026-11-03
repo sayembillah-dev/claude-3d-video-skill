@@ -1,0 +1,35 @@
+# Shorts Studio: only what production and reuse need is versioned. Everything ignored here is either rebuilt by
+# setup.sh / the scripts, or a render output that lives on the SSD archive.
+
+# platform-specific installs (rebuilt by `bash setup.sh`)
+node_modules/
+.venv/
+
+# scratch and Remotion temp bundles
+tmp/
+public/_render/
+
+# render outputs (the SSD is the archive): videos, stills, QA images, progress files
+*.mp4
+out/_tests/
+out/**/stills/
+out/**/qa/*
+!out/**/qa/report.md
+out/**/render_progress.json
+
+# regenerable audio: mixes / stems (rebuilt by the project's sound script), 48 kHz voice copy (rebuilt from voice.mp3),
+# library music masters (the .mp3 is kept; the .wav is re-exported with build_music(clean=True))
+projects/**/audio/*.wav
+projects/**/voice/voice.wav
+library/music/*.wav
+
+# private style-study media: never upload or share (skill rule)
+.claude/skills/cartoon-3d-short/references/frames/
+.claude/skills/cartoon-3d-short/references/sheets/
+
+# per-machine Claude settings
+.claude/settings.local.json
+
+# macOS / exFAT junk
+._*
+.DS_Store

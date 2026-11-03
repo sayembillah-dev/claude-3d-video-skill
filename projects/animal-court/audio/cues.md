@@ -1,0 +1,88 @@
+# What If Animals Could Sue Humans - soundtrack cue sheet
+
+All sound is original: synthesized in numpy/scipy by `court_sound.py` with the bridge kit (`dsp.py`, `instruments.py`, `sfx_gen.py`).
+Voice = `voice/voice.wav` (ElevenLabs, from the user), gain only.
+
+- mix.wav: 48 kHz stereo 24-bit, 3331200 samples = 69.400 s
+- integrated -15.1 LUFS, true peak -1.2 dBTP, max limiter reduction 3.10 dB
+- stems: voice -15.3 / music -22.8 / sfx -34.3 LUFS
+
+## Cues
+
+-   0.00 s  bed C
+-   0.55 s  flash charge
+-   1.15 s  shutter (selfie)
+-   3.88 s  flash whoosh to the jungle
+-   4.23 s  bed J
+-   7.87 s  monkey pads
+-   8.11 s  monkey pads
+-   8.35 s  monkey pads
+-   8.59 s  monkey pads
+-   8.83 s  monkey pads
+-   9.73 s  shutter (tripod)
+-  10.55 s  monkey hoots
+-  11.17 s  bed C
+-  15.17 s  cut whoosh (the man)
+-  15.87 s  cut whoosh (the monkey)
+-  17.03 s  bed E
+-  17.05 s  steps
+-  17.41 s  steps
+-  17.77 s  steps
+-  18.13 s  steps
+-  18.49 s  steps
+-  18.85 s  steps
+-  19.21 s  steps
+-  19.27 s  crane up whoosh
+-  19.57 s  steps
+-  19.93 s  steps
+-  20.29 s  steps
+-  20.65 s  steps
+-  21.01 s  steps
+-  21.37 s  steps
+-  21.73 s  steps
+-  22.09 s  steps
+-  22.83 s  bed C
+-  24.10 s  GAVEL on 'no'
+-  24.10 s  gavel room tail
+-  27.07 s  bed E
+-  27.55 s  ding (Luckily)
+-  30.86 s  sad trombone (Unluckily)
+-  30.87 s  bed E
+-  34.03 s  bed C
+-  37.18 s  pop
+-  37.31 s  pop
+-  37.45 s  pop
+-  38.01 s  pop
+-  38.95 s  pop
+-  39.18 s  pop
+-  39.41 s  pop
+-  40.80 s  push whoosh
+-  42.55 s  church bell 1519
+-  42.63 s  bed M
+-  47.55 s  rat squeaks (sued some rats)
+-  47.66 s  rat squeaks (sued some rats)
+-  47.77 s  rat squeaks (sued some rats)
+-  50.55 s  meow (cats)
+-  50.86 s  rats squeal
+-  50.94 s  rats squeal
+-  51.00 s  second meow
+-  51.02 s  rats squeal
+-  51.10 s  rats squeal
+-  51.18 s  rats squeal
+-  51.62 s  hero hen clucks
+-  51.67 s  bed E
+-  51.89 s  hero hen clucks
+-  52.16 s  hero hen clucks
+-  52.43 s  hero hen clucks
+-  52.70 s  hero hen clucks
+-  52.97 s  hero hen clucks
+-  53.15 s  hen class action crowd
+-  53.20 s  bawk (Chickens alone)
+-  55.13 s  crane out whoosh
+-  58.73 s  bed C
+-  60.00 s  paper thump
+-  60.44 s  paper thump
+-  60.82 s  paper thump
+-  61.60 s  bed J
+-  66.25 s  monkey shrug hoot
+-  67.90 s  pull-out whoosh

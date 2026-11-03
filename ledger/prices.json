@@ -1,0 +1,13 @@
+{
+  "_note": "Editable price table used by scripts/cost_log.py for API-equivalent estimates. Claude plan users (Pro/Max/Ultra) are not billed per token: the real cost is the weekly-limit % used; the USD column is what the same work would cost on the pay-as-you-go API.",
+  "claude": {
+    "_source": "Anthropic API list prices per 1M tokens (claude-api reference, cached 2026-10-06); cache_write_5m = 1.25 x input",
+    "claude-opus-5-5":   {"input": 4.0, "output": 20.0, "cache_write_5m": 5.0, "cache_read": 0.20},
+    "claude-sonnet-5-5": {"input": 2.0, "output": 10.0, "cache_write_5m": 2.5, "cache_read": 0.20},
+    "claude-haiku-5-5":  {"input": 0.10, "output": 0.50, "cache_write_5m": 0.125, "cache_read": 0.01},
+    "claude-fable-5-1":  {"input": 10.0, "output": 50.0, "cache_write_5m": 12.5, "cache_read": 0.25}
+  },
+  "plan": {"_note": "monthly subscription price, used to turn weekly-% into a share of the bill; set yours", "name": "Ultra", "usd_per_month": null},
+  "elevenlabs": {"_note": "VERIFY against your ElevenLabs plan: credits per character depend on the model, USD per credit on the plan", "credits_per_char": 1.0, "usd_per_1k_credits": 0.22},
+  "local": {"_note": "renders run on your own machine: no AI cost; electricity ignored", "usd_per_render_hour": 0.0}
+}
