@@ -31,12 +31,18 @@ Remotion + three.js project for cartoon 3D story shorts. The skill lives in `.cl
   - promote reusable assets to `library/`;
   - cleanup offer via `scripts/cleanup.sh <name>` (delete only on the user's yes);
   - `bash tidy.sh`.
+  - version tag: commit, then tag and push (see Versioning).
 
 ## Keep it organized (strict)
 - Never create loose files in the project root.
   - Allowed root items: `src/ library/ scripts/ audio/ public/ projects/ out/ ledger/ tmp/ training_data/ .claude/ .git/` and the platform-specific `node_modules/ .venv/`. `training_data/` holds private reference videos and is git-ignored.
   - Allowed config files: `package.json`, `package-lock.json`, `tsconfig.json`, `requirements.txt`, `env.sh`, `setup.sh`, `tidy.sh`, `CLAUDE.md`, `.gitignore`.
 - Git commits and PRs: **no Claude co-author or contributor lines** (no `Co-Authored-By: Claude`, no "Generated with Claude Code"). The user is the only author.
+- Versioning: annotated semver tags on `main`, always pushed with the commits (`git push origin main --tags`). Check `git tag -l -n1` for the latest.
+  - **patch** `vX.Y.Z+1`: fixes and doc corrections only.
+  - **minor** `vX.Y+1.0`: a delivered video, new library features, or a workflow or skill rule change.
+  - **major** `vX+1.0.0`: a change that breaks older videos (they no longer render the same).
+  - Tag message: one line naming what the version adds (e.g. `v1.3.0: teleport short, no-orbit rule, SFX-only sound`). Tag only when the user approves the push.
 - Git versions only what production and reuse need (see `.gitignore`): renders, wav mixes and stems, installs, scratch and the private reference frames stay out. After adding a new kind of file, check it lands on the right side of `.gitignore`.
 - `library/` holds shared, neutral, reusable assets: engine, cast, sets, captions, thumbnail, audio kit. Videos import from it; never copy it into a video folder. Catalog and promotion rules: `library/README.md`.
 - `public/fonts/` holds the bundled fonts (OFL). `public/_render/` holds temporary render inputs; clean them after use.
