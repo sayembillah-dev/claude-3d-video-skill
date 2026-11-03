@@ -7,7 +7,7 @@
 import * as THREE from "three";
 import { V } from "../engine/build";
 import { ctex, cloudHD } from "../engine/paint";
-import { LIGHTS, LOOK, LightPreset } from "../engine/lights";
+import { LIGHTS, LOOK, LightPreset, LightName, LIGHT_NAMES, LOW_SUN } from "../engine/lights";
 import { TONE, CHAR, untone } from "../engine/shade";
 import { NOINK } from "../engine/ink";
 import { Pool, Actor, Fx, Stage, CamInfo, beginStage } from "./stage";
@@ -50,7 +50,7 @@ export class World {
   private fog = new THREE.Fog("#bccbec", 25, 420);
   private sunDisc: THREE.Sprite; private sunHalo: THREE.Sprite;
   private sunCache = new Map<number, THREE.Vector3>();
-  private cloudMaps: Record<"day" | "golden", THREE.Texture[]>;
+  private cloudMaps = {} as Record<LightName, THREE.Texture[]>;
   private clouds: THREE.Mesh[] = [];
   private sets: Record<string, THREE.Group> = {};
   /** whatever each place builder returned (groups / meshes the video's pose() toggles or animates) */
@@ -89,7 +89,7 @@ export class World {
     this.sun.castShadow = true;
     this.sun.shadow.mapSize.set(4096, 4096);
     R.add(this.hemi, this.sun, this.sun.target);
-    this.cloudMaps = { day: [0, 1, 2, 3].map((k) => cloudHD(k, LOOK.day.cloud)), golden: [0, 1, 2, 3].map((k) => cloudHD(k, LOOK.golden.cloud)) };
+    for (const n of LIGHT_NAMES) this.cloudMaps[n] = [0, 1, 2, 3].map((k) => cloudHD(k, LOOK[n].cloud));
     for (let i = 0; i < 9; i++) {
       const a = (i / 9) * Math.PI * 2 + 0.3, d = 620 + (i % 3) * 60;
       const m = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), new THREE.MeshBasicMaterial({ map: this.cloudMaps.day[i % 4], color: new THREE.Color(1.1, 1.1, 1.1), transparent: true, depthWrite: false, fog: false }));
@@ -142,7 +142,7 @@ export class World {
     this.hemi.color.set(L.sky); this.hemi.groundColor.set(L.ground); this.hemi.intensity = L.hemiI;
     this.sun.color.set(L.sunCol); this.sun.intensity = L.sunI;
     let Rr = THREE.MathUtils.clamp(dist * 1.15 + 7, 12, 95);
-    if (s.light === "golden") Rr = Math.max(Rr, 24);
+    if (LOW_SUN[s.light]) Rr = Math.max(Rr, 24);
     this.sun.position.copy(focus).addScaledVector(sunDir, 220); this.sun.target.position.copy(focus);
     const sc = this.sun.shadow.camera;
     sc.left = -Rr; sc.right = Rr; sc.top = Rr; sc.bottom = -Rr; sc.near = 20; sc.far = 480; sc.updateProjectionMatrix();
@@ -159,7 +159,7 @@ export class World {
     this.sky.position.copy(cam.position);
     untone(L.fog, this.fog.color); this.fog.near = L.fogNear; this.fog.far = L.fogFar;
     scene.fog = this.fog; scene.background = null;
-    const showSun = s.light === "golden";
+    const showSun = LOW_SUN[s.light];
     this.sunDisc.visible = this.sunHalo.visible = showSun;
     if (showSun) {
       this.sunDisc.position.copy(cam.position).addScaledVector(sunDir, 900);

@@ -9,6 +9,7 @@ import * as THREE from "three";
 import { Pen, bodyFront, townsfolk, fxBurst, fxShadow, fxContact, fxPuff, Outfit, FrontOpts, SideOpts, bodySide } from "../engine/toon";
 import { monkey, hen, rat, cat, CritterOpts } from "../cast/critters";
 import { NOINK } from "../engine/ink";
+import type { LightName } from "../engine/lights";
 import { cardShade, blobMaterial, CARD_K } from "../engine/cardshade";
 
 export const FPS = 30;
@@ -128,7 +129,7 @@ export const tier = (d: number): [number, number, number] =>
 // ---------------- light ----------------
 const SUN = new THREE.Vector3(0.5, 0.75, -0.4).normalize();
 const tmp = new THREE.Vector3();
-let LNAME: "day" | "golden" = "day";
+let LNAME: LightName = "day";
 const sunOf = (root: THREE.Object3D) => {
   let s: THREE.DirectionalLight | null = null;
   root.traverse((o) => { if (!s && o instanceof THREE.DirectionalLight && o.castShadow) s = o; });
@@ -197,7 +198,7 @@ export const person = (cam: CamInfo, who: Who, x: number, y: number, z: number, 
 /** ground shadow under a standing / sitting card (review rounds 2-4), multiply, blue-violet: a TIGHT contact pool right under
  *  the feet (~.5 on screen at the core) so nobody floats, plus by day (cards cast no real shadow) a lighter soft tail
  *  stretched AWAY from the sun, length ~1.6 m / tan(sun elevation), capped. Golden: world.ts casts real card shadows. */
-const CONTACT: Record<"day" | "golden", [number, number, number]> = { day: [0.2, 0.21, 0.33], golden: [0.24, 0.2, 0.33] };
+const CONTACT: Record<LightName, [number, number, number]> = { day: [0.2, 0.21, 0.33], golden: [0.24, 0.2, 0.33], storm: [0.22, 0.22, 0.4], dusk: [0.24, 0.2, 0.36] };
 const TAIL: [number, number, number] = [0.42, 0.44, 0.62];
 const toSrgb = (v: number) => { const c = clamp01(v); return c <= 0.0031308 ? 12.92 * c : 1.055 * c ** (1 / 2.4) - 0.055; };
 const hexOf = (c: [number, number, number], k: number) => "#" + c.map((v) => Math.round(255 * toSrgb(1 - (1 - v) * k)).toString(16).padStart(2, "0")).join("");
@@ -253,7 +254,7 @@ export const puff = (out: Stage, t: number, t0: number, x: number, y: number, z:
 export const after = (t: number, ts: number) => t >= ts - LEAD;
 
 /** start a frame's staging: the shot's light preset and the sun as seen from this camera */
-export const beginStage = (light: "day" | "golden", cam: CamInfo) => { LNAME = light; findSun(cam, SUN); };
+export const beginStage = (light: LightName, cam: CamInfo) => { LNAME = light; findSun(cam, SUN); };
 /** hammer / gavel pose for strikes at times `hits` (s): 0 = raised, 1 = struck (4 f wind-up, 7 f hold, 1 f strike) */
 export const strikeK = (t: number, hits: number[]) => {
   let k = 1;

@@ -12,7 +12,13 @@ export type LightPreset = {
   sunCol: string; sunI: number; sky: string; ground: string; hemiI: number;         // three lights (unpatched mats only)
   bias: number; normalBias: number;
 };
-export const LIGHTS: Record<"day" | "golden", LightPreset> = {
+/** every light a shot can use: day / golden (bridge study), storm (saturated ultramarine, from the 2026-11-03 reference
+ *  study: sky #1d2991 -> #4444c1 at the horizon, water ~#3a5ad8, heavy blue fog), dusk (blue hour after sunset) */
+export type LightName = "day" | "golden" | "storm" | "dusk";
+export const LIGHT_NAMES: LightName[] = ["day", "golden", "storm", "dusk"];
+/** lights whose sun is low: real card shadows, a wider shadow camera, the sun disc + halo on screen */
+export const LOW_SUN: Record<LightName, boolean> = { day: false, golden: true, storm: false, dusk: true };
+export const LIGHTS: Record<LightName, LightPreset> = {
   day: {
     az: 75, el: 48,
     lit: [1.58, 1.5, 1.33], shade: [0.3, 0.29, 0.36], lift: [0.05, 0.06, 0.11], lambert: 0.35, sideK: 0.84, term: 0.2,
@@ -31,6 +37,24 @@ export const LIGHTS: Record<"day" | "golden", LightPreset> = {
     sunCol: "#ffab5e", sunI: 5.5, sky: "#d8b0b8", ground: "#8a6a60", hemiI: 0.5,
     bias: -0.0006, normalBias: 0.03,
   },
+  storm: {
+    az: 60, el: 40,
+    lit: [0.46, 0.56, 1.38], shade: [0.26, 0.31, 0.88], lift: [0.03, 0.04, 0.2], lambert: 0.25, sideK: 0.9, term: 0.3,
+    charTint: [0.74, 0.8, 1.08], charShade: 0.88, charGrad: 0.08, bodyGrad: 0.2, sideTint: [0.86, 0.88, 1.0],
+    blob: [0.6, 0.6, 0.82], actorShadow: false,
+    top: "#18217d", hor: "#5a5ec8", skyCurve: [0.0, 0.5, 0.6], fog: "#5a5ec8", fogNear: 10, fogFar: 170, sunDisc: "#000000",
+    sunCol: "#c8d0ff", sunI: 1.6, sky: "#8a90e0", ground: "#3a3f80", hemiI: 0.8,
+    bias: -0.00025, normalBias: 0.015,
+  },
+  dusk: {
+    az: 10, el: 4,
+    lit: [0.82, 0.46, 0.52], shade: [0.1, 0.11, 0.3], lift: [0.04, 0.05, 0.17], lambert: 0.35, sideK: 0.82, term: 0.07,
+    charTint: [0.92, 0.75, 0.8], charShade: 0.88, charGrad: 0.1, bodyGrad: 0.25, sideTint: [0.82, 0.8, 0.96],
+    blob: [0.72, 0.7, 0.9], actorShadow: true,
+    top: "#1f2a66", hor: "#f0a37c", skyCurve: [0.05, 0.6, 1.0], fog: "#b58aa6", fogNear: 40, fogFar: 320, sunDisc: "#ff9f8a",
+    sunCol: "#ff9a7a", sunI: 3.2, sky: "#9a8ac8", ground: "#4a3f6a", hemiI: 0.55,
+    bias: -0.0006, normalBias: 0.03,
+  },
 };
 
 /** world-only look per light (sky stops by elevation in degrees, river colours, cloud palette). All colours are
@@ -42,7 +66,7 @@ export type WorldLook = {
   sat: number;                                                // shade.ts uSat: world albedo saturation (1 = as painted)
   cloud: { lit: string; mid: string; shade: string };
 };
-export const LOOK: Record<"day" | "golden", WorldLook> = {
+export const LOOK: Record<LightName, WorldLook> = {
   day: {
     // depth.md 2.2: horizon #9fb6e6 just above the skyline, upper sky #5e93d9 at ~20 deg (grade: frame top #5997e2)
     sky: { c: ["#b8d0ec", "#9cbfea", "#6a9fe0", "#4f8cdb", "#3373cc"], e: [0, 3, 8, 16, 40] },
@@ -58,6 +82,20 @@ export const LOOK: Record<"day" | "golden", WorldLook> = {
     water: { near: "#1e3a6e", mid: "#355f96", far: "#d4a48e", crest: "#d9a088", trough: "#16294f", glint: "#ffe2b0", shade: [0.42, 0.46, 0.72] },
     cloud: { lit: "#ffd2a8", mid: "#f2a08f", shade: "#a98fc4" },
     bounce: [0.04, 0.02, 0.0],
+    sat: 1.1,
+  },
+  storm: {
+    sky: { c: ["#5a5ec8", "#4a4fbf", "#3a40ae", "#283296", "#18217d"], e: [0, 3, 8, 16, 40] },
+    water: { near: "#3a5ad8", mid: "#2f47c0", far: "#5a5ec8", crest: "#bcd0ff", trough: "#1c2a8a", glint: "#e8f0ff", shade: [0.5, 0.55, 0.85] },
+    cloud: { lit: "#8f93d8", mid: "#5f63b8", shade: "#3b3f8f" },
+    bounce: [0, 0, 0.03],
+    sat: 1.12,
+  },
+  dusk: {
+    sky: { c: ["#f0a37c", "#d98f90", "#9a7cb0", "#4f5aa0", "#1f2a66"], e: [0, 3, 9, 18, 40] },
+    water: { near: "#26386e", mid: "#3d4f8e", far: "#d49a9a", crest: "#e0a8a0", trough: "#18224f", glint: "#ffd8c0", shade: [0.42, 0.44, 0.72] },
+    cloud: { lit: "#ffc2a0", mid: "#c88ab0", shade: "#5d5a9e" },
+    bounce: [0.03, 0.01, 0.02],
     sat: 1.1,
   },
 };

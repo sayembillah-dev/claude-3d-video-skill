@@ -14,6 +14,7 @@
 // `amount` blends the whole grade (0 = bypass) so it can be dialled back once lighting/albedo work brightens the render.
 import { Effect, BlendFunction } from "postprocessing";
 import { Uniform, Vector3, Vector2 } from "three";
+import type { LightName } from "./lights";
 
 const frag = /* glsl */ `
 uniform float gradeKy[7];
@@ -166,13 +167,27 @@ export const GRADE_GOLDEN2: GradeParams = {
   tintS: [0.02, 0.002], tintM: [0, 0], tintH: [-0.012, 0.006],
   vig: [0.2, 0.4],
 };
-export const GRADES: Record<"day" | "golden", GradeParams> = { day: GRADE_DAY2, golden: GRADE_GOLDEN2 };
+// storm: darker mids, blue shadows and mids, saturated, heavy vignette (reference storm frames). dusk: soft S, violet
+// shadows, warm rose highlights.
+export const GRADE_STORM: GradeParams = {
+  ky: [0, 0.085, 0.24, 0.52, 0.78, 0.92, 1],
+  sat: [1.05, 1.15, 1.1],
+  tintS: [0.03, 0.006], tintM: [0.012, 0], tintH: [0, 0],
+  vig: [0.26, 0.38],
+};
+export const GRADE_DUSK: GradeParams = {
+  ky: [0, 0.08, 0.235, 0.51, 0.78, 0.92, 1],
+  sat: [1.0, 1.1, 1.1],
+  tintS: [0.025, 0.006], tintM: [0, 0], tintH: [-0.01, 0.008],
+  vig: [0.22, 0.4],
+};
+export const GRADES: Record<LightName, GradeParams> = { day: GRADE_DAY2, golden: GRADE_GOLDEN2, storm: GRADE_STORM, dusk: GRADE_DUSK };
 /** One strength (0..1, the effect's `amount`) per preset, set against the NEW world (bridge_world, 2026-10-31): full-strength
  *  presets overshot (day median Y' .59-.67 vs target .571, golden .58 vs .52); day 0.65 / golden 0.45 land at
  *  .54-.62 / ~.52. Re-fit the presets (grade.md 5.C) after the merge and raise these again. */
-export const GRADE_STRENGTH: Record<"day" | "golden", number> = { day: 1, golden: 1 };
+export const GRADE_STRENGTH: Record<LightName, number> = { day: 1, golden: 1, storm: 1, dusk: 1 };
 /** Apply the preset of a light to the effect (only touches uniforms when the light changes). */
-export function gradeFor(fx: GradeEffect, light: "day" | "golden") {
+export function gradeFor(fx: GradeEffect, light: LightName) {
   const tag = fx as unknown as { _light?: string };
   if (tag._light !== light) { fx.set(GRADES[light]); tag._light = light; }
   fx.amount = GRADE_STRENGTH[light];

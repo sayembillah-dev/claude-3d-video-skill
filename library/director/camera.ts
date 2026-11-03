@@ -3,8 +3,9 @@
 // 7-frame kicks that flip sign every frame (no hand-held float), DOF switches on cuts or ramps with a glide.
 // A video only writes DATA: shots, camera keys, kick times, a DOF table. makeFilm() turns them into the functions
 // the world and the composition need.
+import type { LightName } from "../engine/lights";
 export type V3 = [number, number, number];
-export type Light = "day" | "golden";
+export type Light = LightName;
 export type Cam = { pos: V3; look: V3; fov: number; roll: number };
 export type Framing = Partial<Cam> & { pos: V3; look: V3 };
 /** a camera key: from frame f, glide (dur frames, default 24) or cut to framing s(f).
