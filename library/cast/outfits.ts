@@ -13,3 +13,6 @@ export const MLAW: Outfit = { jacket: "#4f3d6b", pants: "#33293f", boots: INK, h
 export const OFFICE: Outfit = { jacket: "#2f8f9d", pants: "#3b3f52", boots: "#5a3b2a", hat: "hair", hair: "#3a2a20", skin: SKINS[1], buttons: "#f1efe6" };
 export const GUIDE: Outfit = { jacket: "#8a2f4f", pants: "#2b2f3d", boots: INK, hat: "cap", cap: "#5a1f36", skin: SKINS[3], buttons: "#e8c45a" };
 export const SCIENTIST: Outfit = { jacket: "#f2f4f6", pants: "#5b6b8a", boots: "#3a3446", hat: "hair", hair: "#b8b0a8", skin: SKINS[2], buttons: "#9fb0c4" };
+// first made for "teleport": a commuter in a mustard jacket (hero) and a tweedy philosopher
+export const COMMUTER: Outfit = { jacket: "#e8a33a", pants: "#3b4a7a", boots: "#4a3020", hat: "hair", hair: "#b8572a", skin: SKINS[0], buttons: "#3b4a7a" };
+export const PHILOSOPHER: Outfit = { jacket: "#7a5a3a", pants: "#4a3f36", boots: INK, hat: "hair", hair: "#d9d4cc", skin: SKINS[0], moustache: "#d9d4cc", build: "stout" };

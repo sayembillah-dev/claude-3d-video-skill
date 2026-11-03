@@ -1,5 +1,5 @@
 # More synthesized one-shots for the shared sound kit (first made for the animal-court short): pop, camera shutter,
-# flash whine, monkey hoot, hen cluck / bawk, rat squeak, cat meow, paper thump, church bell, sad trombone, room tone.
+# flash whine, monkey hoot, hen cluck / bawk, rat squeak, cat meow, paper thump, church bell, sad trombone, room tone; teleport: zap, hum, boom, ticks, grind, beeps.
 # All original numpy/scipy synthesis, mono unless noted; 48 kHz (dsp.SR).
 import numpy as np
 from scipy import signal
@@ -114,3 +114,53 @@ def room(dur, r, level=1.0):
     return st(lp(colored(ns(dur), r, 1.2), 500, 2) * level)
 
 
+
+
+# ---- first made for the teleport short: sci-fi / comic one-shots (zap, hum, boom, ticks, grind, beeps)
+def zap(r, up=True, dur=0.45):
+    """teleport zap: a fast sine sweep with a buzzy tremolo and a sparkle tail"""
+    n = ns(dur); t = np.arange(n) / SR
+    f = (300 * (8 ** (t / dur))) if up else (2400 * (0.125 ** (t / dur)))
+    ph = 2 * np.pi * np.cumsum(f) / SR
+    x = np.sin(ph) * (0.6 + 0.4 * np.sign(np.sin(2 * np.pi * 38 * t))) + 0.25 * np.sin(3 * ph)
+    env = np.minimum(1, t / 0.01) * np.exp(-t / (dur * 0.45))
+    sp = np.random.default_rng(int(r.integers(1 << 30))).standard_normal(n) * np.exp(-t / 0.08) * 0.2
+    return (x * env + sp * env) * 0.6
+
+def hum(dur, r, f0=110):
+    """scanner hum: detuned saws with a slow wobble, rising in pitch"""
+    n = ns(dur); t = np.arange(n) / SR
+    f = f0 * (1 + 0.6 * t / dur)
+    x = sum(signal.sawtooth(2 * np.pi * np.cumsum(f * d) / SR) for d in (1.0, 1.007, 2.003)) / 3
+    x = signal.sosfilt(signal.butter(2, 1800, "lp", fs=SR, output="sos"), x)
+    return x * (0.6 + 0.4 * np.sin(2 * np.pi * 6 * t)) * np.minimum(1, t / 0.3) * np.minimum(1, (dur - t) / 0.15)
+
+def boom(r, big=1.0, dur=2.6):
+    """cartoon explosion: low thump + noise blast decaying through a closing low-pass"""
+    n = ns(dur); t = np.arange(n) / SR
+    low = np.sin(2 * np.pi * np.cumsum(55 * np.exp(-t / 0.35) + 30) / SR) * np.exp(-t / (0.5 * big))
+    no = r.standard_normal(n) * np.exp(-t / (0.35 * big))
+    no = signal.sosfilt(signal.butter(2, 900, "lp", fs=SR, output="sos"), no) * 1.4
+    return (low + no) * np.minimum(1, t / 0.004)
+
+def ticks(dur, r, rate=12.0):
+    """a clock ticking very fast"""
+    S = np.zeros(ns(dur)); k = 0
+    while k / rate < dur - 0.05:
+        c = G.clink(r, 2200 if k % 2 else 1700, 0.04); i = ns(k / rate); S[i:i + len(c)] += c[: len(S) - i]; k += 1
+    return S
+
+def grind(dur, r, jam=False):
+    """shredder / fax motor: a buzzing motor tone plus paper crunch"""
+    n = ns(dur); t = np.arange(n) / SR
+    f = 95 * (1 - (0.35 * t / dur if jam else 0))
+    m = signal.square(2 * np.pi * np.cumsum(f) / SR) * 0.3
+    crunch = G.rattle(dur, r, density=40 if not jam else 18, heavy=jam)[:n]
+    crunch = np.pad(crunch, (0, n - len(crunch)))
+    return (m + crunch) * np.minimum(1, t / 0.03) * np.minimum(1, (dur - t) / 0.05)
+
+def beeps(r, n=3, f=1400, gap=0.16):
+    S = np.zeros(ns(gap * n + 0.2)); t = np.arange(ns(0.09)) / SR
+    for k in range(n):
+        b = np.sin(2 * np.pi * f * t) * np.minimum(1, t / 0.004) * np.minimum(1, (0.09 - t) / 0.01); i = ns(k * gap); S[i:i + len(b)] += b
+    return S * 0.5

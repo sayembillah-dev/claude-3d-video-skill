@@ -51,7 +51,9 @@ Register it in `src/Root.tsx`: `<Composition id="X" component={MyShort} duration
 - `Stage = { places: Place[], fx: FxPlace[] }`. Start `stage()` with `const out: Stage = { places: [], fx: [] }`.
 - `human(cam, out, i, outfit, okey, x, y, z, frontOpts, t, shadow=true)`: a bean-head person.
   - `i` is a unique id (it seeds the blinks).
-  - `frontOpts`: `{ mode: "stand"|"stroll"|"march"|"sit", expr, facing: -1|0|1, phase, wave, prop: ["hammer", k] }`.
+  - `frontOpts`: `{ mode: "stand"|"stroll"|"march"|"sit", expr, facing: -1|0|1, phase, wave, headTilt, prop }`.
+    - `prop`: `["hammer", k]`, `"icecream"`, `"shako"`, `"mug"` (coffee at the chest), `"sip"` (mug at the mouth) or `"hand"` (sipping from an empty hand).
+  - Camera rule for props built from several cards (e.g. a booth = back card + person + front card): no orbits. Keep the camera within about ±10° of the front, because circling slides the cards apart.
 - `critter(cam, out, "monkey"|"hen"|"rat"|"cat", i, x, y, z, t, { expr, arms, phase, sit, v, flash, mirror, shadow, scale })`.
   - Default sizes come from `SIZE`: monkey .45, hen .25, rat .14, cat .23 (card scale; 1 = 2.16 m).
 - `card(cam, out, key, x, y, z, scale, (p, light) => draw(p), { mirror, shadow })`: any 600x1000 drawing, soles at y = 975.
@@ -128,7 +130,11 @@ Every builder takes `variant` (0 = original, 1-3 re-dress: wall / stone colours,
   - Animals: `monkey`, `hen`, `rat`, `cat`, drawn through `critter()`.
   - Props: `camera(p, cx, cy, k, flash)`, `tripod(p, flash)`, `paperStack(p)`, `dock(p)`, `chair(p)` (use with `card()`).
   - Colours: `FUR`, `FACE`.
-- `outfits.ts`: `PHOTOG`, `LAWYER`, `JUDGE[0..2]`, `MJ` (old-European judge), `MLAW` (advocate), `OFFICE`, `GUIDE`, `SCIENTIST`.
+- `outfits.ts`: `PHOTOG`, `LAWYER`, `JUDGE[0..2]`, `MJ` (old-European judge), `MLAW` (advocate), `OFFICE`, `GUIDE`, `SCIENTIST`, `COMMUTER` (shirt and tie), `PHILOSOPHER` (grey hair, brown jacket).
+- `travel.ts` (sci-fi travel props):
+  - Booth in two cards so a human stands inside: `boothBack(p, v)` behind, `boothFront(p, v, scan, glow)` in front (`v` 0-2 colour, `scan` 0..1 laser line or -1 off, `glow` 0..1).
+  - `fax(p, page)`, `shredder(p, k, jam)`, `satellite(p)`, `dish(p)`, `car(p, col)`, `plane(p, col)`, `door(p, open, col)` (a free-standing border door, `open` 0..1).
+  - `atom(p, ph, col)` (spinning orbit phase), `bomb(p, spark)`, `atomBin(p)` (a bin of loose atoms).
 - `science.ts`: `dna`, `cell({ file, glow, split, fit })` (use `fit: true` for a split that stays inside the card), `usb`, `hardDrive`, `driveTower`, `tube`, `paperclip`, `clapper`, `monitor`, `pyramid`, `coins`, `clock`, `phone`, `priceTag`, `photo`, `fridge`, `sandwich`, `sparkle`, `redX`, `lens`.
   - In `engine/toon.ts`: `townsfolk(v)`, `soldier(v)`, `KID`, `PARENT`, `OFFICER`, `RIFLEMAN`.
 - Outfit fields: `{ jacket, pants, boots, hat?: "cap"|"hair"|"tophat"|"bonnet"|"shako"|"shako_tall", cap?, hair?, skin?, moustache?, build?: "adult"|"stout"|"kid", buttons?, belt? }`.
@@ -153,7 +159,7 @@ Every builder takes `variant` (0 = original, 1-3 re-dress: wall / stone colours,
   - `audio/dsp.py`: filters, loudness (`integrated`, `true_peak`, `norm_to`), `place`, `pan`, `st`, reverb, wav i/o.
   - `audio/instruments.py`: `brass`, `glock`, `vibes`, `musicbox`, `pluck`, `fife`, `snare`, `cymbal`, `timpani`, `brush`, `pad`, `triangle`, `whistle`.
   - `audio/sfx_gen.py`: `whoosh`, `creak`, `clink`, `rattle`, `boot`, `stroll_step`, `hammer_hit`, `splash_big`, `bubbles`, `water_bed`, `breeze`, `bird_chirps`, `crickets`, `babble`, `applause`, `hurrah`, `oof`, `whoa`, `flag_flutter`, `swing_squeak`.
-  - `audio/sfx_more.py`: `pop`, `shutter`, `flash_whine`, `hoot`, `cluck`, `bawk`, `squeak`, `meow`, `thump`, `bell`, `sad_trombone`, `room`.
+  - `audio/sfx_more.py`: `pop`, `shutter`, `flash_whine`, `hoot`, `cluck`, `bawk`, `squeak`, `meow`, `thump`, `bell`, `sad_trombone`, `room`, `zap(r, up, dur)` (teleport zap, rising or falling), `hum(dur, r, f0)`, `boom(r, big, dur)`, `ticks(dur, r, rate)` (clock), `grind(dur, r, jam)` (shredder), `beeps(r, n, f, gap)`.
   - Skeleton for a new soundtrack: `projects/_template/audio/sound_template.py`. Copy it and change the cue list and `build_music()`.
 - `music/README.md`: the track catalog (mood, key, BPM, sections). Reuse a track or write a new score.
 

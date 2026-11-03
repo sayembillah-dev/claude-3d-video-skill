@@ -1,0 +1,1394 @@
+[
+{
+"word": "Every",
+"start": 0.0,
+"end": 0.35,
+"line": 0
+},
+{
+"word": "morning,",
+"start": 0.35,
+"end": 0.7,
+"line": 0
+},
+{
+"word": "Dave",
+"start": 0.92,
+"end": 1.06,
+"line": 0
+},
+{
+"word": "steps",
+"start": 1.06,
+"end": 1.36,
+"line": 0
+},
+{
+"word": "into",
+"start": 1.36,
+"end": 1.58,
+"line": 0
+},
+{
+"word": "a",
+"start": 1.58,
+"end": 1.76,
+"line": 0
+},
+{
+"word": "booth,",
+"start": 1.76,
+"end": 2.06,
+"line": 0
+},
+{
+"word": "gets",
+"start": 2.18,
+"end": 2.42,
+"line": 0
+},
+{
+"word": "scanned,",
+"start": 2.42,
+"end": 2.72,
+"line": 0
+},
+{
+"word": "and",
+"start": 2.96,
+"end": 3.059,
+"line": 0
+},
+{
+"word": "is",
+"start": 3.059,
+"end": 3.18,
+"line": 0
+},
+{
+"word": "wiped",
+"start": 3.18,
+"end": 3.36,
+"line": 0
+},
+{
+"word": "out.",
+"start": 3.36,
+"end": 3.78,
+"line": 0
+},
+{
+"word": "Two",
+"start": 4.0,
+"end": 4.16,
+"line": 1
+},
+{
+"word": "seconds",
+"start": 4.16,
+"end": 4.44,
+"line": 1
+},
+{
+"word": "later,",
+"start": 4.44,
+"end": 4.82,
+"line": 1
+},
+{
+"word": "a",
+"start": 4.98,
+"end": 5.08,
+"line": 1
+},
+{
+"word": "copy",
+"start": 5.08,
+"end": 5.3,
+"line": 1
+},
+{
+"word": "of",
+"start": 5.3,
+"end": 5.48,
+"line": 1
+},
+{
+"word": "him",
+"start": 5.48,
+"end": 5.68,
+"line": 1
+},
+{
+"word": "walks",
+"start": 5.68,
+"end": 5.88,
+"line": 1
+},
+{
+"word": "out",
+"start": 5.88,
+"end": 6.12,
+"line": 1
+},
+{
+"word": "in",
+"start": 6.12,
+"end": 6.26,
+"line": 1
+},
+{
+"word": "Tokyo.",
+"start": 6.26,
+"end": 6.54,
+"line": 1
+},
+{
+"word": "In",
+"start": 6.96,
+"end": 7.12,
+"line": 2
+},
+{
+"word": "1997,",
+"start": 7.12,
+"end": 7.88,
+"line": 2
+},
+{
+"word": "physicists",
+"start": 8.42,
+"end": 8.64,
+"line": 2
+},
+{
+"word": "in",
+"start": 8.64,
+"end": 9.02,
+"line": 2
+},
+{
+"word": "Austria",
+"start": 9.02,
+"end": 9.38,
+"line": 2
+},
+{
+"word": "teleported",
+"start": 9.38,
+"end": 9.94,
+"line": 2
+},
+{
+"word": "the",
+"start": 9.94,
+"end": 10.24,
+"line": 2
+},
+{
+"word": "state",
+"start": 10.24,
+"end": 10.42,
+"line": 2
+},
+{
+"word": "of",
+"start": 10.42,
+"end": 10.7,
+"line": 2
+},
+{
+"word": "a",
+"start": 10.7,
+"end": 10.86,
+"line": 2
+},
+{
+"word": "single",
+"start": 10.86,
+"end": 11.16,
+"line": 2
+},
+{
+"word": "particle",
+"start": 11.16,
+"end": 11.5,
+"line": 2
+},
+{
+"word": "of",
+"start": 11.5,
+"end": 11.74,
+"line": 2
+},
+{
+"word": "light.",
+"start": 11.74,
+"end": 12.04,
+"line": 2
+},
+{
+"word": "In",
+"start": 12.32,
+"end": 12.54,
+"line": 3
+},
+{
+"word": "2017,",
+"start": 12.54,
+"end": 13.14,
+"line": 3
+},
+{
+"word": "a",
+"start": 13.48,
+"end": 13.66,
+"line": 3
+},
+{
+"word": "Chinese",
+"start": 13.66,
+"end": 14.02,
+"line": 3
+},
+{
+"word": "satellite",
+"start": 14.02,
+"end": 14.34,
+"line": 3
+},
+{
+"word": "did",
+"start": 14.34,
+"end": 14.62,
+"line": 3
+},
+{
+"word": "it",
+"start": 14.62,
+"end": 14.8,
+"line": 3
+},
+{
+"word": "over",
+"start": 14.8,
+"end": 15.12,
+"line": 3
+},
+{
+"word": "fourteen",
+"start": 15.12,
+"end": 15.47,
+"line": 3
+},
+{
+"word": "hundred",
+"start": 15.47,
+"end": 15.82,
+"line": 3
+},
+{
+"word": "kilometres.",
+"start": 15.82,
+"end": 16.17,
+"line": 3
+},
+{
+"word": "But",
+"start": 16.88,
+"end": 17.16,
+"line": 4
+},
+{
+"word": "only",
+"start": 17.16,
+"end": 17.48,
+"line": 4
+},
+{
+"word": "information",
+"start": 17.48,
+"end": 18.06,
+"line": 4
+},
+{
+"word": "travels,",
+"start": 18.06,
+"end": 18.5,
+"line": 4
+},
+{
+"word": "and",
+"start": 18.8,
+"end": 18.96,
+"line": 4
+},
+{
+"word": "the",
+"start": 18.96,
+"end": 19.1,
+"line": 4
+},
+{
+"word": "original",
+"start": 19.1,
+"end": 19.42,
+"line": 4
+},
+{
+"word": "is",
+"start": 19.42,
+"end": 19.84,
+"line": 4
+},
+{
+"word": "destroyed",
+"start": 19.84,
+"end": 20.18,
+"line": 4
+},
+{
+"word": "every",
+"start": 20.18,
+"end": 20.64,
+"line": 4
+},
+{
+"word": "single",
+"start": 20.64,
+"end": 20.92,
+"line": 4
+},
+{
+"word": "time.",
+"start": 20.92,
+"end": 21.26,
+"line": 4
+},
+{
+"word": "So,",
+"start": 21.62,
+"end": 21.88,
+"line": 5
+},
+{
+"word": "step",
+"start": 22.32,
+"end": 22.36,
+"line": 5
+},
+{
+"word": "one:",
+"start": 22.36,
+"end": 22.72,
+"line": 5
+},
+{
+"word": "scan",
+"start": 23.04,
+"end": 23.36,
+"line": 5
+},
+{
+"word": "Dave's",
+"start": 23.36,
+"end": 24.04,
+"line": 5
+},
+{
+"word": "seven",
+"start": 24.04,
+"end": 24.22,
+"line": 5
+},
+{
+"word": "billion",
+"start": 24.22,
+"end": 24.82,
+"line": 5
+},
+{
+"word": "billion",
+"start": 24.82,
+"end": 25.34,
+"line": 5
+},
+{
+"word": "billion",
+"start": 25.34,
+"end": 25.66,
+"line": 5
+},
+{
+"word": "atoms.",
+"start": 25.66,
+"end": 26.0,
+"line": 5
+},
+{
+"word": "Step",
+"start": 26.5,
+"end": 26.68,
+"line": 6
+},
+{
+"word": "two:",
+"start": 26.68,
+"end": 27.08,
+"line": 6
+},
+{
+"word": "send",
+"start": 27.38,
+"end": 27.6,
+"line": 6
+},
+{
+"word": "him.",
+"start": 27.6,
+"end": 27.82,
+"line": 6
+},
+{
+"word": "One",
+"start": 27.82,
+"end": 28.42,
+"line": 7
+},
+{
+"word": "student",
+"start": 28.42,
+"end": 28.76,
+"line": 7
+},
+{
+"word": "study",
+"start": 28.76,
+"end": 29.02,
+"line": 7
+},
+{
+"word": "put",
+"start": 29.02,
+"end": 29.32,
+"line": 7
+},
+{
+"word": "Dave",
+"start": 29.32,
+"end": 29.5,
+"line": 7
+},
+{
+"word": "at",
+"start": 29.5,
+"end": 29.74,
+"line": 7
+},
+{
+"word": "two",
+"start": 29.74,
+"end": 29.98,
+"line": 7
+},
+{
+"word": "point",
+"start": 29.98,
+"end": 30.196,
+"line": 7
+},
+{
+"word": "six",
+"start": 30.196,
+"end": 30.46,
+"line": 7
+},
+{
+"word": "times",
+"start": 30.46,
+"end": 30.76,
+"line": 7
+},
+{
+"word": "ten",
+"start": 30.76,
+"end": 31.1,
+"line": 7
+},
+{
+"word": "to",
+"start": 31.1,
+"end": 31.3,
+"line": 7
+},
+{
+"word": "the",
+"start": 31.3,
+"end": 31.46,
+"line": 7
+},
+{
+"word": "forty-two",
+"start": 31.46,
+"end": 31.81,
+"line": 7
+},
+{
+"word": "bits.",
+"start": 31.86,
+"end": 32.44,
+"line": 7
+},
+{
+"word": "On",
+"start": 32.74,
+"end": 32.84,
+"line": 8
+},
+{
+"word": "a",
+"start": 32.84,
+"end": 33.0,
+"line": 8
+},
+{
+"word": "fast",
+"start": 33.0,
+"end": 33.26,
+"line": 8
+},
+{
+"word": "link,",
+"start": 33.26,
+"end": 33.54,
+"line": 8
+},
+{
+"word": "that",
+"start": 33.72,
+"end": 33.94,
+"line": 8
+},
+{
+"word": "upload",
+"start": 33.94,
+"end": 34.18,
+"line": 8
+},
+{
+"word": "takes",
+"start": 34.18,
+"end": 34.66,
+"line": 8
+},
+{
+"word": "three",
+"start": 34.66,
+"end": 35.01,
+"line": 8
+},
+{
+"word": "hundred",
+"start": 35.01,
+"end": 35.36,
+"line": 8
+},
+{
+"word": "fifty",
+"start": 35.36,
+"end": 35.71,
+"line": 8
+},
+{
+"word": "thousand",
+"start": 35.71,
+"end": 36.0,
+"line": 8
+},
+{
+"word": "times",
+"start": 36.0,
+"end": 36.38,
+"line": 8
+},
+{
+"word": "the",
+"start": 36.38,
+"end": 36.54,
+"line": 8
+},
+{
+"word": "age",
+"start": 36.54,
+"end": 36.68,
+"line": 8
+},
+{
+"word": "of",
+"start": 36.68,
+"end": 36.82,
+"line": 8
+},
+{
+"word": "the",
+"start": 36.82,
+"end": 37.08,
+"line": 8
+},
+{
+"word": "universe.",
+"start": 37.08,
+"end": 37.42,
+"line": 8
+},
+{
+"word": "Step",
+"start": 38.12,
+"end": 38.318,
+"line": 9
+},
+{
+"word": "three:",
+"start": 38.318,
+"end": 38.56,
+"line": 9
+},
+{
+"word": "build",
+"start": 38.76,
+"end": 39.02,
+"line": 9
+},
+{
+"word": "him",
+"start": 39.02,
+"end": 39.26,
+"line": 9
+},
+{
+"word": "from",
+"start": 39.26,
+"end": 39.58,
+"line": 9
+},
+{
+"word": "pure",
+"start": 39.58,
+"end": 39.88,
+"line": 9
+},
+{
+"word": "energy.",
+"start": 39.88,
+"end": 40.32,
+"line": 9
+},
+{
+"word": "That",
+"start": 40.66,
+"end": 40.88,
+"line": 10
+},
+{
+"word": "costs",
+"start": 40.88,
+"end": 41.14,
+"line": 10
+},
+{
+"word": "about",
+"start": 41.14,
+"end": 41.56,
+"line": 10
+},
+{
+"word": "fifteen",
+"start": 41.56,
+"end": 41.91,
+"line": 10
+},
+{
+"word": "hundred",
+"start": 41.91,
+"end": 42.18,
+"line": 10
+},
+{
+"word": "megatons,",
+"start": 42.18,
+"end": 42.76,
+"line": 10
+},
+{
+"word": "thirty",
+"start": 43.18,
+"end": 43.4,
+"line": 10
+},
+{
+"word": "times",
+"start": 43.4,
+"end": 43.82,
+"line": 10
+},
+{
+"word": "the",
+"start": 43.82,
+"end": 44.04,
+"line": 10
+},
+{
+"word": "biggest",
+"start": 44.04,
+"end": 44.28,
+"line": 10
+},
+{
+"word": "bomb",
+"start": 44.28,
+"end": 44.6,
+"line": 10
+},
+{
+"word": "ever",
+"start": 44.6,
+"end": 44.9,
+"line": 10
+},
+{
+"word": "tested.",
+"start": 44.9,
+"end": 45.28,
+"line": 10
+},
+{
+"word": "Luckily,",
+"start": 46.1,
+"end": 46.1,
+"line": 11
+},
+{
+"word": "the",
+"start": 46.3,
+"end": 46.42,
+"line": 11
+},
+{
+"word": "booth",
+"start": 46.42,
+"end": 46.58,
+"line": 11
+},
+{
+"word": "can",
+"start": 46.58,
+"end": 46.74,
+"line": 11
+},
+{
+"word": "use",
+"start": 46.74,
+"end": 47.02,
+"line": 11
+},
+{
+"word": "spare",
+"start": 47.02,
+"end": 47.28,
+"line": 11
+},
+{
+"word": "atoms",
+"start": 47.28,
+"end": 47.6,
+"line": 11
+},
+{
+"word": "instead.",
+"start": 47.6,
+"end": 48.12,
+"line": 11
+},
+{
+"word": "Unluckily,",
+"start": 48.62,
+"end": 49.14,
+"line": 12
+},
+{
+"word": "Tokyo",
+"start": 49.3,
+"end": 49.56,
+"line": 12
+},
+{
+"word": "Dave",
+"start": 49.56,
+"end": 49.94,
+"line": 12
+},
+{
+"word": "then",
+"start": 49.94,
+"end": 50.28,
+"line": 12
+},
+{
+"word": "contains",
+"start": 50.28,
+"end": 50.58,
+"line": 12
+},
+{
+"word": "zero",
+"start": 50.58,
+"end": 51.1,
+"line": 12
+},
+{
+"word": "atoms",
+"start": 51.1,
+"end": 51.34,
+"line": 12
+},
+{
+"word": "of",
+"start": 51.34,
+"end": 51.6,
+"line": 12
+},
+{
+"word": "the",
+"start": 51.6,
+"end": 51.68,
+"line": 12
+},
+{
+"word": "old",
+"start": 51.68,
+"end": 51.94,
+"line": 12
+},
+{
+"word": "Dave.",
+"start": 51.94,
+"end": 52.18,
+"line": 12
+},
+{
+"word": "It's",
+"start": 52.56,
+"end": 52.8,
+"line": 13
+},
+{
+"word": "a",
+"start": 52.8,
+"end": 52.9,
+"line": 13
+},
+{
+"word": "fax:",
+"start": 52.9,
+"end": 53.22,
+"line": 13
+},
+{
+"word": "a",
+"start": 53.58,
+"end": 53.74,
+"line": 13
+},
+{
+"word": "fresh",
+"start": 53.74,
+"end": 53.96,
+"line": 13
+},
+{
+"word": "page",
+"start": 53.96,
+"end": 54.24,
+"line": 13
+},
+{
+"word": "prints",
+"start": 54.24,
+"end": 54.5,
+"line": 13
+},
+{
+"word": "in",
+"start": 54.5,
+"end": 54.7,
+"line": 13
+},
+{
+"word": "Tokyo,",
+"start": 54.7,
+"end": 54.96,
+"line": 13
+},
+{
+"word": "while",
+"start": 54.96,
+"end": 55.3,
+"line": 13
+},
+{
+"word": "the",
+"start": 55.3,
+"end": 55.64,
+"line": 13
+},
+{
+"word": "original",
+"start": 55.64,
+"end": 55.8,
+"line": 13
+},
+{
+"word": "goes",
+"start": 55.8,
+"end": 56.16,
+"line": 13
+},
+{
+"word": "through",
+"start": 56.16,
+"end": 56.38,
+"line": 13
+},
+{
+"word": "the",
+"start": 56.38,
+"end": 56.54,
+"line": 13
+},
+{
+"word": "shredder.",
+"start": 56.54,
+"end": 56.88,
+"line": 13
+},
+{
+"word": "Philosopher",
+"start": 56.88,
+"end": 57.76,
+"line": 14
+},
+{
+"word": "Derek",
+"start": 57.76,
+"end": 58.14,
+"line": 14
+},
+{
+"word": "Parfit",
+"start": 58.14,
+"end": 58.52,
+"line": 14
+},
+{
+"word": "asked",
+"start": 58.52,
+"end": 58.84,
+"line": 14
+},
+{
+"word": "in",
+"start": 58.84,
+"end": 59.24,
+"line": 14
+},
+{
+"word": "1984",
+"start": 59.24,
+"end": 59.72,
+"line": 14
+},
+{
+"word": "whether",
+"start": 59.72,
+"end": 60.14,
+"line": 14
+},
+{
+"word": "that",
+"start": 60.14,
+"end": 60.56,
+"line": 14
+},
+{
+"word": "copy",
+"start": 60.56,
+"end": 60.84,
+"line": 14
+},
+{
+"word": "is",
+"start": 60.84,
+"end": 61.18,
+"line": 14
+},
+{
+"word": "really",
+"start": 61.18,
+"end": 61.56,
+"line": 14
+},
+{
+"word": "you.",
+"start": 61.56,
+"end": 62.0,
+"line": 14
+},
+{
+"word": "The",
+"start": 62.24,
+"end": 62.38,
+"line": 15
+},
+{
+"word": "copy",
+"start": 62.38,
+"end": 62.7,
+"line": 15
+},
+{
+"word": "remembers",
+"start": 62.7,
+"end": 63.1,
+"line": 15
+},
+{
+"word": "everything.",
+"start": 63.1,
+"end": 63.72,
+"line": 15
+},
+{
+"word": "The",
+"start": 64.06,
+"end": 64.22,
+"line": 15
+},
+{
+"word": "original",
+"start": 64.22,
+"end": 64.62,
+"line": 15
+},
+{
+"word": "just",
+"start": 64.62,
+"end": 65.1,
+"line": 15
+},
+{
+"word": "stops.",
+"start": 65.1,
+"end": 65.44,
+"line": 15
+},
+{
+"word": "Still,",
+"start": 65.96,
+"end": 66.28,
+"line": 16
+},
+{
+"word": "say",
+"start": 66.56,
+"end": 66.72,
+"line": 16
+},
+{
+"word": "it",
+"start": 66.72,
+"end": 66.86,
+"line": 16
+},
+{
+"word": "works.",
+"start": 66.86,
+"end": 67.22,
+"line": 16
+},
+{
+"word": "People",
+"start": 67.62,
+"end": 67.8,
+"line": 17
+},
+{
+"word": "have",
+"start": 67.8,
+"end": 68.08,
+"line": 17
+},
+{
+"word": "always",
+"start": 68.08,
+"end": 68.36,
+"line": 17
+},
+{
+"word": "spent",
+"start": 68.36,
+"end": 68.6,
+"line": 17
+},
+{
+"word": "about",
+"start": 68.6,
+"end": 68.82,
+"line": 17
+},
+{
+"word": "an",
+"start": 68.82,
+"end": 69.06,
+"line": 17
+},
+{
+"word": "hour",
+"start": 69.06,
+"end": 69.22,
+"line": 17
+},
+{
+"word": "a",
+"start": 69.22,
+"end": 69.4,
+"line": 17
+},
+{
+"word": "day",
+"start": 69.4,
+"end": 69.58,
+"line": 17
+},
+{
+"word": "travelling,",
+"start": 69.58,
+"end": 69.93,
+"line": 17
+},
+{
+"word": "so",
+"start": 70.34,
+"end": 70.6,
+"line": 17
+},
+{
+"word": "faster",
+"start": 70.6,
+"end": 70.96,
+"line": 17
+},
+{
+"word": "rides",
+"start": 70.96,
+"end": 71.3,
+"line": 17
+},
+{
+"word": "just",
+"start": 71.3,
+"end": 71.66,
+"line": 17
+},
+{
+"word": "stretched",
+"start": 71.66,
+"end": 71.92,
+"line": 17
+},
+{
+"word": "cities.",
+"start": 71.92,
+"end": 72.38,
+"line": 17
+},
+{
+"word": "With",
+"start": 72.78,
+"end": 73.0,
+"line": 18
+},
+{
+"word": "booths,",
+"start": 73.0,
+"end": 73.38,
+"line": 18
+},
+{
+"word": "that",
+"start": 73.76,
+"end": 73.88,
+"line": 18
+},
+{
+"word": "hour",
+"start": 73.88,
+"end": 74.18,
+"line": 18
+},
+{
+"word": "reaches",
+"start": 74.18,
+"end": 74.44,
+"line": 18
+},
+{
+"word": "the",
+"start": 74.44,
+"end": 74.8,
+"line": 18
+},
+{
+"word": "whole",
+"start": 74.8,
+"end": 75.1,
+"line": 18
+},
+{
+"word": "planet.",
+"start": 75.1,
+"end": 75.48,
+"line": 18
+},
+{
+"word": "Traffic",
+"start": 76.22,
+"end": 76.472,
+"line": 19
+},
+{
+"word": "vanishes,",
+"start": 76.472,
+"end": 76.78,
+"line": 19
+},
+{
+"word": "airports",
+"start": 77.14,
+"end": 77.4,
+"line": 19
+},
+{
+"word": "empty,",
+"start": 77.4,
+"end": 77.82,
+"line": 19
+},
+{
+"word": "and",
+"start": 78.08,
+"end": 78.28,
+"line": 19
+},
+{
+"word": "a",
+"start": 78.28,
+"end": 78.38,
+"line": 19
+},
+{
+"word": "border",
+"start": 78.38,
+"end": 78.66,
+"line": 19
+},
+{
+"word": "becomes",
+"start": 78.66,
+"end": 79.1,
+"line": 19
+},
+{
+"word": "a",
+"start": 79.1,
+"end": 79.3,
+"line": 19
+},
+{
+"word": "door.",
+"start": 79.3,
+"end": 79.58,
+"line": 19
+},
+{
+"word": "Then",
+"start": 79.96,
+"end": 80.16,
+"line": 20
+},
+{
+"word": "one",
+"start": 80.16,
+"end": 80.34,
+"line": 20
+},
+{
+"word": "morning,",
+"start": 80.34,
+"end": 80.56,
+"line": 20
+},
+{
+"word": "the",
+"start": 80.92,
+"end": 81.06,
+"line": 20
+},
+{
+"word": "shredder",
+"start": 81.06,
+"end": 81.42,
+"line": 20
+},
+{
+"word": "jams,",
+"start": 81.42,
+"end": 81.84,
+"line": 20
+},
+{
+"word": "and",
+"start": 82.06,
+"end": 82.22,
+"line": 20
+},
+{
+"word": "the",
+"start": 82.22,
+"end": 82.38,
+"line": 20
+},
+{
+"word": "booth",
+"start": 82.38,
+"end": 82.58,
+"line": 20
+},
+{
+"word": "keeps",
+"start": 82.58,
+"end": 83.06,
+"line": 20
+},
+{
+"word": "hitting",
+"start": 83.06,
+"end": 83.36,
+"line": 20
+},
+{
+"word": "print.",
+"start": 83.36,
+"end": 83.68,
+"line": 20
+}
+]

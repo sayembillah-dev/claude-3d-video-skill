@@ -1,0 +1,182 @@
+# soundtrack cue sheet
+
+- mix.wav: 48 kHz stereo 24-bit, 4224000 samples = 88.000 s
+- integrated -15.2 LUFS, true peak -1.2 dBTP, max limiter reduction 4.64 dB
+- stems: voice -15.4 / music -22.9 / sfx -34.3 LUFS
+
+## Cues
+
+-   0.00 s  flat room tone
+-   0.00 s  scanner hum
+-   3.12 s  wiped out zap
+-   3.20 s  puff
+-   3.75 s  cut whoosh
+-   4.00 s  Tokyo street murmur
+-   4.20 s  Tokyo booth charges
+-   5.05 s  arrival zap
+-   5.90 s  steps
+-   6.22 s  steps
+-   6.54 s  steps
+-   6.86 s  steps
+-  10.10 s  photon flies
+-  11.80 s  photon lands (ding)
+-  12.10 s  ripple whoosh
+-  12.30 s  mountain wind
+-  13.70 s  uplink beeps
+-  14.20 s  beam whine
+-  17.40 s  bit blips
+-  17.80 s  bit blips
+-  18.20 s  bit blips
+-  18.60 s  bit blips
+-  19.00 s  bit blips
+-  19.40 s  bit blips
+-  19.82 s  photon pops
+-  19.84 s  destroyed thump
+-  21.60 s  flat room tone
+-  21.70 s  scanner hum
+-  23.90 s  atom pops
+-  24.04 s  atom pops
+-  24.18 s  atom pops
+-  24.32 s  atom pops
+-  24.46 s  atom pops
+-  24.60 s  atom pops
+-  24.74 s  atom pops
+-  24.88 s  atom pops
+-  25.02 s  atom pops
+-  25.16 s  atom pops
+-  25.30 s  atom pops
+-  25.44 s  atom pops
+-  25.58 s  atom pops
+-  25.72 s  atom pops
+-  26.40 s  whip
+-  26.50 s  flat room tone
+-  27.60 s  upload start beeps
+-  32.90 s  clock spinning
+-  36.90 s  sad error beeps
+-  38.10 s  storm wind
+-  38.80 s  energy charges
+-  42.16 s  BOOM megatons
+-  44.30 s  bomb field
+-  44.51 s  bomb field
+-  44.57 s  bomb field
+-  44.72 s  bomb field
+-  44.78 s  bomb field
+-  44.84 s  bomb field
+-  44.99 s  bomb field
+-  45.05 s  bomb field
+-  45.11 s  bomb field
+-  45.26 s  bomb field
+-  46.10 s  Tokyo street murmur
+-  46.40 s  atoms hop
+-  46.49 s  atoms hop
+-  46.58 s  atoms hop
+-  46.67 s  atoms hop
+-  46.76 s  atoms hop
+-  46.85 s  atoms hop
+-  46.94 s  atoms hop
+-  47.03 s  atoms hop
+-  47.12 s  atoms hop
+-  47.21 s  atoms hop
+-  47.55 s  Dave rebuilt zap
+-  50.60 s  zero atoms trombone
+-  52.60 s  flat room tone
+-  53.00 s  fax handshake
+-  53.50 s  fax prints
+-  55.60 s  shredder chews
+-  61.25 s  whip
+-  65.05 s  original stops
+-  66.00 s  square birds
+-  68.20 s  commuter zaps
+-  69.00 s  clock
+-  69.10 s  commuter zaps
+-  70.00 s  commuter zaps
+-  70.50 s  crane up wind
+-  70.90 s  commuter zaps
+-  71.80 s  commuter zaps
+-  72.70 s  commuter zaps
+-  73.90 s  booths sprout
+-  74.02 s  booths sprout
+-  74.14 s  booths sprout
+-  74.26 s  booths sprout
+-  74.38 s  booths sprout
+-  74.50 s  booths sprout
+-  74.62 s  booths sprout
+-  74.74 s  booths sprout
+-  74.86 s  booths sprout
+-  74.98 s  booths sprout
+-  75.10 s  booths sprout
+-  75.22 s  booths sprout
+-  75.34 s  booths sprout
+-  75.46 s  booths sprout
+-  75.58 s  booths sprout
+-  75.70 s  booths sprout
+-  76.00 s  
+-  76.20 s  Tokyo street murmur
+-  76.20 s  car blinks out
+-  76.36 s  car blinks out
+-  76.52 s  car blinks out
+-  76.68 s  car blinks out
+-  76.84 s  car blinks out
+-  77.40 s  plane blinks out
+-  79.10 s  door creak
+-  79.30 s  door ding
+-  80.00 s  square birds
+-  80.20 s  shredder chews
+-  81.40 s  shredder jams
+-  81.42 s  jam clunk
+-  82.27 s  Dave printed
+-  82.38 s  Dave printed
+-  82.48 s  Dave printed
+-  82.59 s  Dave printed
+-  82.70 s  Dave printed
+-  82.80 s  Dave printed
+-  82.91 s  Dave printed
+-  83.02 s  Dave printed
+-  83.12 s  Dave printed
+-  83.23 s  Dave printed
+-  83.34 s  Dave printed
+-  83.44 s  Dave printed
+-  83.55 s  Dave printed
+-  83.60 s  Dave crowd chatter
+-  83.66 s  Dave printed
+-  83.76 s  Dave printed
+-  83.87 s  Dave printed
+-  83.98 s  Dave printed
+-  84.08 s  Dave printed
+-  84.19 s  Dave printed
+-  84.30 s  Dave printed
+-  84.40 s  Dave printed
+-  84.51 s  Dave printed
+-  84.62 s  Dave printed
+-  84.72 s  Dave printed
+-  84.83 s  Dave printed
+-  84.94 s  Dave printed
+-  85.04 s  Dave printed
+-  85.15 s  Dave printed
+-  85.26 s  Dave printed
+-  85.36 s  Dave printed
+-  85.47 s  Dave printed
+-  85.58 s  Dave printed
+-  85.68 s  Dave printed
+-  85.79 s  Dave printed
+-  85.90 s  Dave printed
+-  86.00 s  Dave printed
+-  86.11 s  Dave printed
+-  86.22 s  Dave printed
+-  86.32 s  Dave printed
+-  86.43 s  Dave printed
+-  86.54 s  Dave printed
+-  86.64 s  Dave printed
+-  86.75 s  Dave printed
+-  86.86 s  Dave printed
+-  86.96 s  Dave printed
+-  87.07 s  Dave printed
+-  87.18 s  Dave printed
+-  87.28 s  Dave printed
+-  87.39 s  Dave printed
+-  87.50 s  Dave printed
+-  87.60 s  Dave printed
+-  87.71 s  Dave printed
+-  87.82 s  Dave printed
+-  87.92 s  Dave printed
+-  88.03 s  Dave printed

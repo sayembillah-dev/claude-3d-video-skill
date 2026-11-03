@@ -424,7 +424,8 @@ const hatOn = (p: Pen, o: Outfit, hp: P2[], H: Blob, cx: number, hc: number, lig
 // ---------------- bodies ----------------
 export type Arms = [P2[], P2[]];
 /** held prop; for the hammer the number is the strike 0 (raised) .. 1 (struck) */
-export type Prop = null | "icecream" | "shako" | ["hammer", number];
+/** "mug" = a coffee mug held at the chest, "sip" = the mug raised to the mouth, "hand" = the same sip with an empty hand */
+export type Prop = null | "icecream" | "shako" | "mug" | "sip" | "hand" | ["hammer", number];
 
 const BUILD: Record<Build, { a: number; torso: number; legs: number; tw: number }> = {
   adult: { a: 118, torso: 1.1, legs: 1.4, tw: 0.8 },
@@ -520,7 +521,10 @@ export const bodyFront = (p: Pen, o: Outfit, opts: FrontOpts) => {
     } else if (wave !== undefined) {
       const S = sh(1);
       arms.push({ pts: [S, [tcx + 1.1 * T.a + 10 * u + 3 * u * wave, S[1] - 0.22 * HH], [tcx + 1.18 * T.a + 16 * u + 12 * u * wave, S[1] - 0.6 * HH]], front: false });
-    } else if (prop === "icecream") {
+    } else if (prop === "sip" || prop === "hand") {
+      const S = sh(1);
+      arms.push({ pts: [S, [tcx + 1.05 * T.a + 4 * u, S[1] + 0.3 * HH], [tcx + 0.42 * T.a, S[1] - 0.2 * HH]], front: true });
+    } else if (prop === "icecream" || prop === "mug") {
       const S = sh(1);
       arms.push({ pts: [S, [tcx + 1.05 * T.a + 4 * u, S[1] + 0.45 * HH], [tcx + 0.5 * T.a, S[1] + 0.4 * HH]], front: true });
     } else if (Array.isArray(prop)) {
@@ -573,7 +577,14 @@ export const bodyFront = (p: Pen, o: Outfit, opts: FrontOpts) => {
   for (const a of arms) if (a.front) {
     drawArm(a);
     const [hx, hy] = a.pts[2];
-    if (prop === "icecream") {
+    if (prop === "mug" || prop === "sip") {
+      p.stroke([[hx + 9 * u, hy - 12 * u], [hx + 17 * u, hy - 10 * u], [hx + 17 * u, hy - 1 * u], [hx + 9 * u, hy + 1 * u]], 3.2 * u, INK);
+      p.poly([[hx - 10 * u, hy - 16 * u], [hx + 10 * u, hy - 16 * u], [hx + 9 * u, hy + 7 * u], [hx - 9 * u, hy + 7 * u]], "#f2efe6", 2.2 * u);
+      p.poly([[hx - 9 * u, hy - 9 * u], [hx + 9 * u, hy - 9 * u], [hx + 9 * u, hy - 4 * u], [hx - 9 * u, hy - 4 * u]], "#d9534f", 0);
+      p.dot(hx, hy, 5.5 * u);
+    } else if (prop === "hand") {
+      p.dot(hx, hy, 5.5 * u);
+    } else if (prop === "icecream") {
       p.poly([[hx - 8 * u, hy - 12 * u], [hx + 8 * u, hy - 12 * u], [hx, hy + 7 * u]], "#e0a35a", 1.8 * u);
       p.ell(hx, hy - 19 * u, 11 * u, 10 * u, "#f7c6d9", 2.2 * u);
       p.dot(hx, hy, 5.5 * u);
