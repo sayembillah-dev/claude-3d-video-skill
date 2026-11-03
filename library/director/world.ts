@@ -7,7 +7,7 @@
 import * as THREE from "three";
 import { V } from "../engine/build";
 import { ctex, cloudHD } from "../engine/paint";
-import { LIGHTS, LOOK, LightPreset, LightName, LIGHT_NAMES, LOW_SUN } from "../engine/lights";
+import { LIGHTS, LOOK, LightPreset, LightName, LIGHT_NAMES, LOW_SUN, mixLight, mixLook } from "../engine/lights";
 import { TONE, CHAR, untone } from "../engine/shade";
 import { NOINK } from "../engine/ink";
 import { Pool, Actor, Fx, Stage, CamInfo, beginStage } from "./stage";
@@ -50,6 +50,7 @@ export class World {
   private fog = new THREE.Fog("#bccbec", 25, 420);
   private sunDisc: THREE.Sprite; private sunHalo: THREE.Sprite;
   private sunCache = new Map<number, THREE.Vector3>();
+  private cA = new THREE.Color(); private cB = new THREE.Color();
   private cloudMaps = {} as Record<LightName, THREE.Texture[]>;
   private clouds: THREE.Mesh[] = [];
   private sets: Record<string, THREE.Group> = {};
@@ -132,13 +133,13 @@ export class World {
   private fx(i: number) { while (this.fxs.length <= i) this.fxs.push(new Fx(this.root)); return this.fxs[i]; }
 
   update(id: number, f: number, cam: THREE.PerspectiveCamera, scene: THREE.Scene) {
-    const t = f / FPS, s = this.film.shots[id - 1], L = LIGHTS[s.light];
+    const t = f / FPS, s = this.film.shots[id - 1], lt = this.film.lightAt(id, f), L = mixLight(lt.A, lt.B, lt.k);
     const c = this.film.camAt(id, f);
     poseCam(cam, c);
     const focus = V(...c.look), dist = cam.position.distanceTo(focus);
     cam.layers.enable(NOINK);
     // ---- light rig ----
-    const K = LOOK[s.light], sunDir = this.shotSun(id, s, L);
+    const K = mixLook(lt.A, lt.B, lt.k), sunDir = this.shotSun(id, s, LIGHTS[s.light]);
     this.hemi.color.set(L.sky); this.hemi.groundColor.set(L.ground); this.hemi.intensity = L.hemiI;
     this.sun.color.set(L.sunCol); this.sun.intensity = L.sunI;
     let Rr = THREE.MathUtils.clamp(dist * 1.15 + 7, 12, 95);
@@ -159,26 +160,32 @@ export class World {
     this.sky.position.copy(cam.position);
     untone(L.fog, this.fog.color); this.fog.near = L.fogNear; this.fog.far = L.fogFar;
     scene.fog = this.fog; scene.background = null;
-    const showSun = LOW_SUN[s.light];
+    // sun disc + halo fade across an in-shot light change (low-sun lights show them)
+    const sunA = (LOW_SUN[lt.A] ? 1 : 0) + ((LOW_SUN[lt.B] ? 1 : 0) - (LOW_SUN[lt.A] ? 1 : 0)) * lt.k, showSun = sunA > 0;
     this.sunDisc.visible = this.sunHalo.visible = showSun;
+    const discMat = this.sunDisc.material as THREE.SpriteMaterial;
+    discMat.transparent = sunA < 1; discMat.opacity = sunA;
     if (showSun) {
       this.sunDisc.position.copy(cam.position).addScaledVector(sunDir, 900);
       this.sunDisc.scale.setScalar(2 * 900 * Math.tan(THREE.MathUtils.degToRad(1.7)));
       this.sunHalo.position.copy(this.sunDisc.position); this.sunHalo.scale.setScalar(2 * 900 * Math.tan(THREE.MathUtils.degToRad(24)));
-      (this.sunHalo.material as THREE.SpriteMaterial).color.set(L.sunDisc).multiplyScalar(1.3);
+      (this.sunHalo.material as THREE.SpriteMaterial).color.set(L.sunDisc).multiplyScalar(1.3 * sunA);
     }
     for (let i = 0; i < this.clouds.length; i++) {
       const m = this.clouds[i], mat = m.material as THREE.MeshBasicMaterial;
       m.position.x = (this.prod.places[s.set]?.x ?? 0) + Math.cos((i / 9) * Math.PI * 2 + 0.3) * (620 + (i % 3) * 60);
       m.lookAt(cam.position.x, m.position.y, cam.position.z);
       mat.map = this.cloudMaps[s.light][i % 4];
+      // clouds keep the start light's painting; an in-shot change tints them toward the new light's lit colour
+      if (lt.k > 0) { this.cA.set(LOOK[lt.A].cloud.lit); this.cB.set(LOOK[lt.B].cloud.lit); mat.color.setRGB(1.1 * (1 + (this.cB.r / this.cA.r - 1) * lt.k), 1.1 * (1 + (this.cB.g / this.cA.g - 1) * lt.k), 1.1 * (1 + (this.cB.b / this.cA.b - 1) * lt.k)); }
+      else mat.color.setRGB(1.1, 1.1, 1.1);
     }
     // ---- which place, which furniture ----
     for (const [k, g] of Object.entries(this.sets)) g.visible = k === s.set;
     this.prod.pose?.(id, f, t, this.handles);
     // ---- cast + effects ----
     const right = V(0, 0, 0).setFromMatrixColumn(cam.matrixWorld, 0);
-    beginStage(s.light, { pos: cam.position, right });
+    beginStage(lt.k < 0.5 ? lt.A : lt.B, { pos: cam.position, right });
     const st = this.prod.stage(id, t, { pos: cam.position, right });
     this.frustum.setFromProjectionMatrix(this.m4.multiplyMatrices(cam.projectionMatrix, cam.matrixWorldInverse));
     let ai = 0;

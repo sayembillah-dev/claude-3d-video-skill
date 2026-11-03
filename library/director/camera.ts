@@ -12,8 +12,10 @@ export type Framing = Partial<Cam> & { pos: V3; look: V3 };
  *  ease replaces the glide curve; arc swings the view direction (slerp) instead of sliding the look point, which keeps
  *  big pans from swerving; shutter = motion-blur exposure in frames from this key on (default SHUTTER, 0 = off) */
 export type Key = { f: number; dur?: number; cut?: boolean; ease?: (u: number) => number; arc?: boolean; shutter?: number; s: (f: number) => Framing };
-/** a shot: frames a..b in place `set`, lit by `light`; sunAz/sunEl override the light preset (camera-relative degrees) */
-export type ShotDef = { id: number; a: number; b: number; light: Light; set: string; sunAz?: number; sunEl?: number };
+/** a shot: frames a..b in place `set`, lit by `light`; sunAz/sunEl override the light preset (camera-relative degrees).
+ *  lightTo: the light changes to `light` between absolute frames a..b (smoothstep), e.g. a storm rolling in */
+export type ShotDef = { id: number; a: number; b: number; light: Light; set: string; sunAz?: number; sunEl?: number;
+  lightTo?: { light: Light; a: number; b: number } };
 /** lens per beat: cInf = blur-disc radius (px at 1080 wide) for infinity, 0 = sharp; focus = world point (else look) */
 export type Dof = { f: number; dur?: number; cInf: number; focus?: (f: number) => V3 };
 
@@ -159,6 +161,8 @@ export type Film = FilmData & {
   /** motion-blur exposure (frames) at f and the camera that long before; null = no blur (a cut inside the exposure) */
   shutterAt(id: number, f: number): { dt: number; prev: Cam } | null;
   dofAt(f: number): { cInf: number; focus?: (f: number) => V3 };
+  /** the shot's light at f: from A toward B by k (k = 0 without a lightTo) */
+  lightAt(id: number, f: number): { A: Light; B: Light; k: number };
 };
 
 export const makeFilm = (d: FilmData): Film => {
@@ -215,5 +219,10 @@ export const makeFilm = (d: FilmData): Film => {
     const k = cur.dur ? Math.min(1, (f - cur.f) / cur.dur) : 1;
     return { cInf: p.cInf + (cur.cInf - p.cInf) * k, focus: cur.focus };
   };
-  return { ...d, shotAt, layersAt, camAt, shutterAt, dofAt };
+  const lightAt = (id: number, f: number) => {
+    const s = d.shots[id - 1], to = s.lightTo;
+    if (!to) return { A: s.light, B: s.light, k: 0 };
+    return { A: s.light, B: to.light, k: smooth((f - to.a) / Math.max(1, to.b - to.a)) };
+  };
+  return { ...d, shotAt, layersAt, camAt, shutterAt, dofAt, lightAt };
 };

@@ -99,3 +99,20 @@ export const LOOK: Record<LightName, WorldLook> = {
     sat: 1.1,
   },
 };
+
+// ---------------- in-shot light change (storm rolling in, sun going down) ----------------
+// Only colours and intensities blend. The sun direction stays frozen per shot (world.ts uses the start preset's az/el),
+// and the fields that cannot blend come from the start light: actorShadow (card shadows would pop), bias / normalBias.
+const hex = (c: string) => [1, 3, 5].map((i) => parseInt(c.slice(i, i + 2), 16));
+const mixHex = (a: string, b: string, k: number) => "#" + hex(a).map((v, i) => Math.round(v + (hex(b)[i] - v) * k).toString(16).padStart(2, "0")).join("");
+const KEEP = new Set(["az", "el", "actorShadow", "bias", "normalBias"]);
+const mixAny = (a: any, b: any, k: number, key = ""): any => {
+  if (KEEP.has(key)) return a;
+  if (typeof a === "number") return a + (b - a) * k;
+  if (typeof a === "string") return a.startsWith("#") && a.length === 7 ? mixHex(a, b, k) : a;
+  if (Array.isArray(a)) return a.map((v, i) => mixAny(v, b[i], k));
+  if (a && typeof a === "object") { const o: any = {}; for (const kk of Object.keys(a)) o[kk] = mixAny(a[kk], b[kk], k, kk); return o; }
+  return a;
+};
+export const mixLight = (a: LightName, b: LightName, k: number): LightPreset => (k <= 0 ? LIGHTS[a] : mixAny(LIGHTS[a], LIGHTS[b], k));
+export const mixLook = (a: LightName, b: LightName, k: number): WorldLook => (k <= 0 ? LOOK[a] : mixAny(LOOK[a], LOOK[b], k));

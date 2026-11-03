@@ -18,7 +18,7 @@ import { World, Production, poseCam } from "./world";
 import { MotionBlurEffect } from "../engine/blur";
 import { InkPass, noInkFallback } from "../engine/ink";
 import { LensBlur, GrainEffect } from "../engine/lensblur";
-import { GradeEffect, GRADES, GRADE_STRENGTH, gradeFor } from "../engine/grade";
+import { GradeEffect, GRADES, GRADE_STRENGTH, gradeMix } from "../engine/grade";
 import { Captions, Word, CaptionStyle } from "../captions/Captions";
 
 /** A/B switches for test stills only (Remotion inputProps `{ post: { ink: false, ... } }`); everything is on by default. */
@@ -85,7 +85,8 @@ const Inner: React.FC<{ id: number; prod: Production }> = ({ id, prod }) => {
     vpPrev.multiplyMatrices(prevCam.projectionMatrix, prevCam.matrixWorldInverse);
     fx.blur.set(vpCur, vpPrev);
   } else fx.blur.set(null);
-  gradeFor(fx.grade, prod.film.shots[id - 1].light);
+  const lt = prod.film.lightAt(id, f);
+  gradeMix(fx.grade, lt.A, lt.B, lt.k);
   fx.grain.seed = f; // deterministic per frame
   return (
     <>

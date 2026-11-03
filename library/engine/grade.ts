@@ -186,6 +186,13 @@ export const GRADES: Record<LightName, GradeParams> = { day: GRADE_DAY2, golden:
  *  presets overshot (day median Y' .59-.67 vs target .571, golden .58 vs .52); day 0.65 / golden 0.45 land at
  *  .54-.62 / ~.52. Re-fit the presets (grade.md 5.C) after the merge and raise these again. */
 export const GRADE_STRENGTH: Record<LightName, number> = { day: 1, golden: 1, storm: 1, dusk: 1 };
+/** Blend two lights' grades (an in-shot light change); k = 0 is exactly gradeFor(a). */
+export function gradeMix(fx: GradeEffect, a: LightName, b: LightName, k: number) {
+  if (k <= 0) return gradeFor(fx, a);
+  fx.set(GRADES[a], GRADES[b], k);
+  (fx as unknown as { _light?: string })._light = undefined;
+  fx.amount = GRADE_STRENGTH[a] + (GRADE_STRENGTH[b] - GRADE_STRENGTH[a]) * k;
+}
 /** Apply the preset of a light to the effect (only touches uniforms when the light changes). */
 export function gradeFor(fx: GradeEffect, light: LightName) {
   const tag = fx as unknown as { _light?: string };
