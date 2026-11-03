@@ -39,6 +39,7 @@ Register it in `src/Root.tsx`: `<Composition id="X" component={MyShort} duration
     - `follow(f, target(g) => V3, off, { lag=6, lookOff, fov, shutter=0 })`: trail a moving object (drip, thrown hook, walker); make the move motivated by what is moving. Sharp by default (`shutter` 0): the blur only sees camera motion, so a blurred follow ghosts the tracked card.
     - `whip(f, to, n=8, shutter=.75)`: whip pan to a framing with `whipEase` + arc; follow with a `push` for the hold and a whoosh SFX.
     - `orbit(f, center, { r, h, a0, a1, dur, lookUp })` (degrees, 0 = camera on +z), `crane(f, from, to, look, { dur })` (rise-up reveal / crane-down).
+    - `closeUp(f, head, { fill=.45, dir=[0, .12, 1], fov=32, rate=0, punch, roll, cut, dur })`: frame a head (centre ≈ feet + 1.5) so it fills `fill` of the frame height (.35 close-up, .5-.6 extreme). Pair with a shallow DOF beat.
     - `spline(pts)` → `u => V3` for your own paths (e.g. a prop's flight that a `follow` tracks).
   - Grammar: the framing changes every 1.5-3 s (a move, not only cuts) and no hold sits on a creep alone for more than ~3 s; link places with motivated moves (follow the object, whip, fly-through) or 4-6 f crossfades; hard cuts are for punches. Glides 18-60 f; rolls 0.03-0.04 rad on emphasis, 0.08-0.15 rad dutch for chaos.
   - Motion blur (`engine/blur.ts`, after the DOF) is automatic from the camera keys: creeps stay sharp (2 px dead zone), whips and fly-throughs smear. No blur across a `cut` or a shot start; kick shakes stay crisp. Stills A/B: inputProps `{ post: { blur: false } }`.
@@ -59,7 +60,7 @@ Register it in `src/Root.tsx`: `<Composition id="X" component={MyShort} duration
   - `puff(out, t, t0, x, y, z, w)`: dust puff.
   - `rain(out, t, cam, { n=220, area=9, depth=16, h=10, speed=14, slant=.18, len=.9 })`: world-anchored rain streaks in front of the camera (parallax on moves). Pair with storm light.
   - `birds(out, t, cx, cy, cz, { n=5, r=6, size=.5, speed=.35 })`: ink-V flock circling a point; keep it in open sky (size ~.8 at 15-20 m).
-- **Effects kit** (`director/fx.ts`; head-anchored helpers take the head centre, ≈ y + 1.55 for a standing human):
+- **Effects kit** (`director/fx.ts`; head-anchored helpers take the head centre, ≈ y + 1.5 for a standing human):
   - `steam(out, cam, t, t0, x, y, z, { dur=1.4, w=.32, col })`: puffs out of both ears (anger).
   - `sweat(out, cam, t, t0, x, y, z, { dur=1.5, side=1, n=2, w=.13 })`: drops sliding off the temple (nerves).
   - `flush(outfit, okey, k, col="#b05ad6")` → `{ o, key }`: face colour shift for `human()` (fury purple, red, sick green).
@@ -68,6 +69,12 @@ Register it in `src/Root.tsx`: `<Composition id="X" component={MyShort} duration
   - `foam(out, t, x, y, z, { w=1.2, seed, col })`: flat foam patch on water.
   - `explode(out, t, t0, x, y, z, { w=3 })`: flash star, fireball, debris and smoke; pair with a kick, `flashAt` and SFX.
   - `buildUp(pieces, k, { overlap=2, from: "scale"|"drop" })`: time-lapse assembly in `pose()`; build each piece as its own object and return them as a handle.
+  - `textCard(out, kind, opts, x, y, z, w, rot=0)`: a text prop held up or thrust at the lens (camera-facing, unlit; see props below).
+- **People** (`director/people.ts`; uses the full `cam` that `stage()` receives):
+  - `screenAt(cam, sx, sy, d)`: world point at frame fraction (sx, sy) (0..1, y down) and depth d.
+  - `foreground(cam, out, "shoulder"|"leaves"|"post", { side="left", d=1.1, cover, col, hair, sy })`: a near shape at the frame edge for depth; focus the DOF behind it.
+  - `leanIn(cam, out, i, outfit, okey, t, { edge: "left"|"right"|"top", k=1, d=1.8, fo, scale })`: a character breaking into the frame, tilted; animate `k` 0 → 1 to slide in.
+  - `crowd(cam, out, t, { x, z, y?, n=5, rows, spacing=.75, seed, i0=20, outfits?, expr?, fo, shadow })`: 3-6 townsfolk in jittered rows.
 - Timing:
   - `after(t, wordStart)`: true from 2 f before the word.
   - `lidAt(t, i)`: blinks.
@@ -93,6 +100,15 @@ Every builder takes `variant` (0 = original, 1-3 re-dress: wall / stone colours,
 **Dressing** (`sets/dress.ts`, call inside a place's `build(G)` after the set):
 - `scatter(G, { x: [x0, x1], z: [z0, z1], n, kinds?: ("pebble"|"rock"|"tuft"|"flower")[], avoid?: [x, z, r][], y?: (x, z) => h, seed?, stones?, greens?, flowers? })`: ground clutter, kept off `avoid` circles (stand and walk spots). Pebbles have no ink.
 - `backdrop(G, { kind?: "hills"|"mesas"|"peaks", r=130, n=16, h=22, color?, band?, gap?: [deg0, deg1], seed? })`: a far ring for depth; keep `r` inside the light's fog far (storm 170).
+
+**Text props** (`sets/props.ts`; allowed since 2026-11-03: short, English, part of the object, readable >= 1 s, out of the caption band; a stated fact needs a source):
+- `textBoard(G, kind, { text, top?, circle?, color?, ink?, x, y, z, w, yaw?, depth?, posts? })`: a fixed board in a place (shaded, inked). Kinds:
+  - `calendar` (`top` = month band, `text` = big line, `circle` = day cell 1-28);
+  - `newspaper` (`top` = masthead, `text` = headline);
+  - `banner` (cloth with bunting; `color`);
+  - `sign` (wooden plank; `posts: true` stands it on the ground);
+  - `label` (small paper label for a jar or crate).
+- `drawProp(g, kind, opts, W, H)` paints one on any canvas; `makeShort` waits for the prop font (Montserrat) before building places.
 
 | Builder | Options | Layout facts (local) |
 |---|---|---|

@@ -69,6 +69,7 @@ Read `CLAUDE.md`, this file and `library/README.md`. Then use AskUserQuestion, o
      - positions, story-motion functions;
      - `SHOTS` (id, frames, light, place, sun);
      - `XFADE` links shots: 4-6 f dissolves by default, `ripple` / `double` for water, memory or time jumps; hard cuts only for punches; `flashAt` after the hook;
+     - people (`director/people.ts`, `closeUp`): mix scale hard (extreme close-ups where faces fill half the frame, tiny figures in wides), put a foreground shape in some shots, let characters `leanIn` from the edges, and use `crowd`s of 3-5 instead of one figure in an empty set; carry facts on text props (`sets/props.ts`) when a calendar, headline or sign says it faster than narration;
      - effects kit (`director/fx.ts`): show emotion and physics as cartoon effects (steam, sweat, flush, smoke, glow, explode, `buildUp` time-lapses) and `speedLines` on rushes;
      - `CAMS` (`push()` keys for holds; `flyPath` / `follow` / `whip` / `orbit` / `crane` so the framing changes every 1.5-3 s; motivated moves link places, hard cuts only for punches);
      - `KICKS` on impacts, `DOF` per beat;
