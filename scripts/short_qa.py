@@ -1,7 +1,7 @@
 # Frame-by-frame QA of a rendered vertical short (every frame at 30 fps): specs, loudness, per-frame luma / saturation /
 # motion, black-white-frozen-pop detection (ignoring planned flashes and crossfades), per-shot colour stats and 2 s
 # contact sheets (60 frames each, frame numbers burned in for the reviewer only).
-# The report opens with the MOTION GATE line (PASS / WARN / FAIL); fix a FAIL with camera moves before delivery.
+# The report opens with the MOTION GATE line (PASS / WARN / FAIL); fix a FAIL with cuts, action or a push, never an orbit.
 # Usage: python scripts/short_qa.py <video.mp4> <outdir> [shots.json]
 #   shots.json: [{"id":1,"a":0,"b":130}, ...] plus optional {"flash":[130,134], "xfade":[[1131,1137], ...]}
 import json, os, subprocess, sys
@@ -58,11 +58,24 @@ for i in range(len(diff)):
 R.append(f"FRAMES {n}; black {black[:20]}; unplanned white {white[:20]}; frozen spans >=12f {frozen[:20]}")
 R.append(f"POPS (unplanned frame-diff spikes > 3x local median): {pops[:40]}")
 R.append(f"MOTION mean diff {diff.mean():.2f}; frames with diff<0.3 (held): {int((diff < 0.3).sum())} ({(diff < 0.3).mean() * 100:.0f}%)")
-# motion gate (reference study 2026-11-03): a frame "moves" when > 10 % of its pixels change by > 12 grey levels
-# (idle blinks and captions stay under that; camera moves and big action go over). The two reference shorts measure
-# 64-82 % moving frames and no still stretch over 1.8 s; dna-drive-v2 measured 21 % and 5.1 s.
-G = F @ np.array([77, 150, 29], np.int32) // 256
-moving = (np.abs(np.diff(G, axis=0)) > 12).mean(axis=(1, 2)) > 0.10
+# motion gate (redesigned 2026-11-03 after the teleport short): a frame is "fresh" when > 25 % of its TEXTURED pixels
+# change by > 12 grey levels, or when it falls within 1.5 s after a hard cut. Flat areas (sky, plain walls) are left out
+# of the count so sky-heavy shots are not punished, the caption band (72-86 % of the height) is masked, and cuts count as
+# new framing, so the gate no longer rewards spinning the camera. Calibration (fresh %, longest still): references
+# 76 % / 79 %, teleport v2 90 % (accepted); dna-drive 42 %, dna-drive-v2 60 % with a 3.3 s still, animal-court 50 %.
+G = (F @ np.array([77, 150, 29], np.int32) // 256).astype(np.int16)
+G[:, int(.72 * H):int(.86 * H)] = 0
+gd = np.abs(np.diff(G, axis=0))
+gx, gy = np.zeros_like(G), np.zeros_like(G)
+gx[:, :, 1:], gy[:, 1:, :] = np.abs(np.diff(G, axis=2)), np.abs(np.diff(G, axis=1))
+tex = np.maximum(gx, gy) > 6
+tex = tex[1:] | tex[:-1]
+changed = gd > 12
+moving = (changed & tex).sum(axis=(1, 2)) / np.maximum(tex.sum(axis=(1, 2)), 0.05 * W * H) > 0.25
+gmd = gd.mean(axis=(1, 2)).astype(float)
+gmed = np.array([np.median(gmd[max(0, i - 8):i + 9]) for i in range(len(gmd))])
+cuts = np.flatnonzero((gmd > 3 * gmed + 1) & (changed.mean(axis=(1, 2)) > 0.30))
+for i in cuts: moving[i:i + 45] = True
 still, run_start = [], None
 for i, m in enumerate(list(moving) + [True]):
     if not m and run_start is None: run_start = i
@@ -70,8 +83,8 @@ for i, m in enumerate(list(moving) + [True]):
         if i - run_start > 90: still.append((run_start + 1, i))
         run_start = None
 share = moving.mean() * 100
-verdict = "FAIL" if share < 50 or still else "WARN" if share < 60 else "PASS"
-R.insert(0, f"MOTION GATE {verdict}: {share:.0f}% moving frames (fail < 50, warn < 60; references 64-82); still stretches > 3 s: "
+verdict = "FAIL" if share < 55 or still else "WARN" if share < 65 else "PASS"
+R.insert(0, f"MOTION GATE {verdict}: {share:.0f}% fresh frames (fail < 55, warn < 65; references 76-79), {len(cuts)} cuts; still stretches > 3 s: "
          + (", ".join(f"f{a}-{b} ({(b - a) / 30:.1f} s)" for a, b in still) or "none"))
 
 R.append("\nPER SHOT  (luma mean / std / p2 / p98 / saturation mean, medians over the shot)")

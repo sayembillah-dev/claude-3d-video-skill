@@ -22,6 +22,7 @@ User rules that apply:
 - English only.
 - Voice: one steady tone. The user records it in ElevenLabs from our script.
 - Jokes are researched real facts. Every number or date needs a source in `SCRIPT.md` before the voice is recorded.
+- Every beat needs a **visual gag or payoff on screen**, not just a funny line (teleport v1, 2026-11-03: the jokes fell flat because the picture only illustrated the narration). Before building, write one gag per shot in the shot plan: a reaction (spit-take, faint, double-take), a prop gag (the mug falls and spills), a contrast (asleep in a 'critical' moment), a callback, or a crowd payoff. Get the user's OK on the shot plan with its gags before building.
 - Standard mix: music +3 dB, SFX -6 dB, voice unchanged.
 - Output resolution: ask at intake (see below). The default is 1440x2560.
 - Opus max verifies every check.
@@ -73,7 +74,9 @@ Read `CLAUDE.md`, this file and `library/README.md`. Then use AskUserQuestion, o
      - `XFADE` links shots: 4-6 f dissolves by default, `ripple` / `double` for water, memory or time jumps; hard cuts only for punches; `flashAt` after the hook;
      - people (`director/people.ts`, `closeUp`): mix scale hard (extreme close-ups where faces fill half the frame, tiny figures in wides), put a foreground shape in some shots, let characters `leanIn` from the edges, and use `crowd`s of 3-5 instead of one figure in an empty set; carry facts on text props (`sets/props.ts`) when a calendar, headline or sign says it faster than narration;
      - effects kit (`director/fx.ts`): show emotion and physics as cartoon effects (steam, sweat, flush, smoke, glow, explode, `buildUp` time-lapses) and `speedLines` on rushes;
-     - `CAMS` (`push()` keys for holds; `flyPath` / `follow` / `whip` / `orbit` / `crane` so the framing changes every 1.5-3 s; motivated moves link places, hard cuts only for punches);
+     - `CAMS` (`push()` keys for holds; `flyPath` / `follow` / `whip` / `crane` and hard cuts so the framing changes every 1.5-3 s; motivated moves link places):
+       - **no orbits as a default move** (teleport v1, 2026-11-03: circling split the layered booth cards apart and the constant spin tired the viewer). Characters and props are flat cards, so keep the camera within about ±10° of their front. An `orbit` is allowed only around a single solid 3D object (a planet, a building) and for at most one shot per video;
+       - prefer a cut to a new angle over a long move: a 3-shot sequence (wide, medium, close-up) of the same moment reads better than one sweeping arc;
      - `KICKS` on impacts, `DOF` per beat;
      - depth: every shot has at least 3 layers (foreground shape or dressing, subject, and a background or `backdrop`);
      - light arcs and density (reference study 2026-11-03): let the light change with the story (`lightTo` storm / dusk, `rays` for reveals), and dress every set (`scatter`, `backdrop`, `rain`, `birds`) so no frame shows bare ground or empty sky;
@@ -97,7 +100,8 @@ Read `CLAUDE.md`, this file and `library/README.md`. Then use AskUserQuestion, o
     - Read that file to answer "how long?" and give the ETA up front. It muxes the audio (`-map 0:v:0 -map 1:a:0`) itself.
     - Captions on an already rendered video: copy it to `public/_render/` and render a `CaptionedVideo` composition. This takes minutes, not a 3D re-render.
     - QA: `.venv/bin/python scripts/short_qa.py final.mp4 out/<name>/qa shots.json` checks every frame for black, white, frozen and pop frames, plus loudness.
-      Its first line is the **motion gate**: it must PASS (>= 60 % moving frames, no still stretch over 3 s; the references measure 64-82 %). On FAIL, add camera moves to the listed stretches and re-render them before delivery.
+      Its first line is the **motion gate**: it must PASS (>= 65 % fresh frames, no still stretch over 3 s; the references measure 76-79 %). Fresh means the textured part of the picture changes or a cut happened in the last 1.5 s, so sky does not count against you and cuts count as motion.
+      On FAIL, fix the listed stretches with a cut to a new angle, character action, a gag or a slow push, never by adding an orbit, then re-render them. A PASS does not prove the staging works: still check the punch-word stills for broken cards.
     - Open its contact sheets only where it flags something. Pops on caption group changes are expected.
 8. **Deliver.** SendUserFile the final mp4 and write `out/<name>/NOTES.md`.
 9. **Publish kit** (`out/<name>/PUBLISH.md`):
