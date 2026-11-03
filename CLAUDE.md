@@ -12,6 +12,12 @@ Remotion + three.js project for cartoon 3D story shorts. The skill lives in `.cl
 - Before any render or tool: `source env.sh`. It puts REMOTION_TMP/TMPDIR in `tmp/`, HF_HOME in `.venv/hf`, and `.venv/bin` on PATH. Bundles are ~1.3 GB each and are never auto-deleted.
 - Final renders: `node scripts/render.mjs <Comp> out/<name>/<slug>.mp4 --res <1080|1440|2160> --audio projects/<name>/audio/mix.wav`, run in the background. Read `out/<name>/render_progress.json` for progress and ETA; don't poll the process.
 - Python: always `.venv/bin/python` (system python has no numpy).
+- Token budget: one session per video.
+  - Read `library/API.md` instead of library source.
+  - Videos are data (`story.ts`) plus staging (`cast.ts`); the shared runtime is `library/director/`.
+  - Use few, tiled images, no polling, and cheaper sub-agents for mechanical work.
+  - Turn off unrelated connectors for the session. Details: the skill's "Token budget" section.
+- Variety: before planning a video, run `.venv/bin/python scripts/variety.py recent` and avoid repeating its sets, variants, music or palette.
 - User rules:
   - Captions ON (library/captions, Montserrat, keyword highlights): small and low (6.2 % of the width, keywords 1.4x, centre at 79 % of the height) so they never block the visuals. No other text in the 3D scene.
   - English only.

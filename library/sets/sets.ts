@@ -1,6 +1,7 @@
 // Reusable sets (first built for "What If Animals Could Sue Humans"). Each builder fills a THREE.Group in LOCAL
 // coordinates around its origin (ground y = 0, the camera side is +z); place the group with group.position. Every
 // material comes from the shared engine (two-tone shading, painted HD textures), so the sets match any short.
+// Every builder takes { variant }: 0 is the original look, 1-3 re-dress it (see Variant).
 //   courtroom   : US-style courtroom 18 x 21 m: judges' bench + platform, seal, flags, witness box, counsel tables,
 //                 bar rail, gallery benches, optional open crates. Returns { tables, crates, flags } to toggle / wave.
 //   jungle      : tropical clearing: dirt patch, ring of round/tall trees, bushes; optional rock at o.rock.
@@ -49,15 +50,20 @@ const panelTex = () => ctex("panelWood", 512, 256, (g, r) => {
   for (const x of [22, 278]) g.strokeRect(x, 32, 212, 192);
 });
 
-export type CourtroomOpts = { witness?: V3; crates?: V3[] };
+/** variant 0 = the original look; other values re-dress the place (wall / stone colours, tree layout, house styles)
+ *  so a reused set looks different from one video to the next. Pick a variant that the variety log hasn't used lately. */
+export type Variant = { variant?: number };
+const PLASTER = ["#e6d3b0", "#d6dcc4", "#e7cbb6", "#cfd6e0"], DARKWOOD = ["#6e452c", "#5a3a2c", "#7a5232", "#4f3a30"];
+export type CourtroomOpts = Variant & { witness?: V3; crates?: V3[] };
 export function courtroom(G: THREE.Group, o: CourtroomOpts = {}) {
   const b = new Batch();
   const WITNESS = o.witness ?? [-5, 0.7, -7.6], CRATES = o.crates ?? [[-1.05, 0, -4], [1.05, 0, -4]];
   const tables = new THREE.Group(), crates = new THREE.Group(), flags: THREE.Mesh[] = [];
   const floor = lam("courtFloor", () => ({ map: planksHD() }));
-  const plaster = lam("plaster", () => ({ color: "#e6d3b0" }));
+  const vi = (o.variant ?? 0) % PLASTER.length;
+  const plaster = lam("plaster" + vi, () => ({ color: PLASTER[vi] }));
   const wood = lam("panelWood", () => ({ map: panelTex() }));
-  const dark = lam("darkWood", () => ({ color: "#6e452c" }));
+  const dark = lam("darkWood" + vi, () => ({ color: DARKWOOD[vi] }));
   const trim = lam("courtTrim", () => ({ color: "#f1e4c8" }));
   b.add(up(-9, 9, -12, 9, 4), floor);
   // walls: wood wainscot 0-1.3 m, plaster above, cornice; tall windows on both sides
@@ -122,7 +128,8 @@ export function courtroom(G: THREE.Group, o: CourtroomOpts = {}) {
   return { tables, crates, flags };
 }
 
-export function jungle(G: THREE.Group, o: { rock?: V3 | null } = {}) {
+export function jungle(G: THREE.Group, o: Variant & { rock?: V3 | null } = {}) {
+  const vs = o.variant ?? 0;
   const b = new Batch(), JX = 0, MONK_J = o.rock;
   b.add(up(JX - 300, JX + 300, -300, 300, 6), lam("grassHD", () => ({ map: grassHD() })));
   b.add(up(JX - 3.5, JX + 3.5, -2.5, 3.5, 3, 0.01), lam("dirt", () => ({ color: "#b48a5c" })));
@@ -132,13 +139,13 @@ export function jungle(G: THREE.Group, o: { rock?: V3 | null } = {}) {
     b.add(rock, lam("rock", () => ({ color: "#a39a8c" })), new THREE.Matrix4().makeTranslation(MONK_J[0], 0.0, MONK_J[2] - 0.05));
   }
   // a ring of rainforest: tall and round trees behind, bushes at the clearing's edge, nothing in front of the lenses
-  let seed = 11;
+  let seed = 11 + 1000 * vs;
   for (let i = 0; i < 90; i++) {
-    const a = (i / 90) * Math.PI * 2 + Math.sin(i * 7.1) * 0.05, r = 9 + (i % 5) * 4.5 + Math.sin(i * 3.3) * 1.5;
+    const a = (i / 90) * Math.PI * 2 + Math.sin(i * 7.1 + vs) * 0.05, r = 9 + ((i + vs) % 5) * 4.5 + Math.sin(i * 3.3 + vs * 1.7) * 1.5;
     const x = Math.cos(a) * r, z = Math.sin(a) * r;
     if (z > -3 && Math.abs(x) < 9) continue;           // keep the lenses' side open
     if (x > 0 && z > 0 && x < 24) continue;            // the aerial's line of sight
-    const k = (["round", "tall", "fat", "round", "tall"] as const)[i % 5];
+    const k = (["round", "tall", "fat", "round", "tall"] as const)[(i + vs) % 5];
     addVeg(b, k, JX + x, 0, z, 7 + (i % 4) * 2.2, seed++);
   }
   for (let i = 0; i < 18; i++) {
@@ -149,9 +156,12 @@ export function jungle(G: THREE.Group, o: { rock?: V3 | null } = {}) {
   b.build(G);
 }
 
-export function courthouse(G: THREE.Group) {
+const STONE: [string[], string][] = [[["#e9dfcd", "#e1d6c2", "#eee6d8", "#d9cdb8"], "#b3a693"], [["#e3e1dc", "#d8d6d1", "#ebe9e4", "#d0cec8"], "#a9a6a0"],
+  [["#ecd9bf", "#e2cdb0", "#f1e1ca", "#dac4a5"], "#b49c7f"]];
+export function courthouse(G: THREE.Group, o: Variant = {}) {
+  const [sc, sm] = STONE[(o.variant ?? 0) % STONE.length];
   const b = new Batch(), EX = 0;
-  const stoneM = lam("courtStone", () => ({ map: stoneHD("courtStone", ["#e9dfcd", "#e1d6c2", "#eee6d8", "#d9cdb8"], "#b3a693") }));
+  const sk = "courtStone" + ((o.variant ?? 0) % STONE.length || ""), stoneM = lam(sk, () => ({ map: stoneHD(sk, sc, sm) }));
   const trim = lam("courtTrimE", () => ({ color: "#f3ead8" }));
   b.add(up(EX - 400, EX + 400, -300, 400, 6), lam("grassHD", () => ({ map: grassHD() })));
   b.add(up(EX - 30, EX + 30, -12, 40, 4, 0.012), lam("cobbleHD", () => ({ map: cobbleHD() })));
@@ -175,7 +185,7 @@ export function courthouse(G: THREE.Group) {
   b.build(G);
 }
 
-export function townSquare(G: THREE.Group) {
+export function townSquare(G: THREE.Group, o: Variant = {}) {
   const b = new Batch(), MX = 0;
   b.add(up(MX - 300, MX + 300, -300, 300, 6), lam("grassHD", () => ({ map: grassHD() })));
   b.add(up(MX - 30, MX + 30, -30, 30, 4, 0.012), lam("cobbleHD", () => ({ map: cobbleHD() })));
@@ -184,7 +194,7 @@ export function townSquare(G: THREE.Group) {
     [MX - 13, -6, Math.PI / 2, 6, 7], [MX - 13, 0.5, Math.PI / 2, 6, 8.4], [MX - 13, 7, Math.PI / 2, 6, 9.8],
     [MX + 13, -6, -Math.PI / 2, 6, 8.4], [MX + 13, 0.5, -Math.PI / 2, 6, 7], [MX + 13, 7, -Math.PI / 2, 6, 8.4],
   ];
-  hs.forEach(([x, z, yaw, w, h], i) => house(b, x, z, yaw, w, 6, h, i + 3));
+  hs.forEach(([x, z, yaw, w, h], i) => house(b, x, z, yaw, w, 6, h, i + 3 + (o.variant ?? 0) * 3));
   const dark = lam("darkWood", () => ({ color: "#6e452c" })), cloth = lam("redCloth", () => ({ color: "#9e2f35" }));
   b.add(boxGeo(V(MX - 1.9, 0, -7.7), V(MX + 1.9, 0.45, -6.1), 2), dark);
   b.add(boxGeo(V(MX - 1.5, 0.45, -6.5), V(MX + 1.5, 1.2, -5.9)), cloth);

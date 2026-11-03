@@ -1,19 +1,25 @@
-// The four places of the animal-court short as one three.js scene: courtroom (origin), jungle clearing (x -200),
-// courthouse steps + plaza (x +200), 1519 town square (x +400). Sky shader, fog = horizon colour, camera-relative sun
-// frozen per shot and the two-tone materials come from the bridge short. update(id, f, camera) poses everything for
-// shot `id` at frame f (pure function of id + f).
+// Director: the world runtime shared by every short. One three.js scene holds every place of the film side by side
+// (each built once by a library set builder, shown only during its own shots), the sky shader, fog = horizon colour,
+// a camera-relative sun frozen per shot, the two-tone light uniforms, clouds and the character/fx card pool.
+// update(id, f, camera) poses everything for shot `id` at frame f (a pure function of id + f).
+// The video supplies a Production: its Film (story.ts), its places (which sets, where), its stage() (cast.ts) and an
+// optional pose() hook for per-shot toggles (e.g. hide tables in one shot, wave a flag).
 import * as THREE from "three";
-import { Batch, boxGeo, V, lam, Kit, house, addVeg, tri, quad } from "../../../library/engine/build";
-import { ctex, rep, planksHD, beamHD, stoneHD, cobbleHD, grassHD, cloudHD } from "../../../library/engine/paint";
-import { LIGHTS, LOOK, LightPreset } from "../../../library/engine/lights";
-import { TONE, CHAR, twoTone, untone } from "../../../library/engine/shade";
-import { NOINK } from "../../../library/engine/ink";
-import { Pool, Actor, Fx, stage } from "./cast";
-import { courtroom, jungle, courthouse, townSquare } from "../../../library/sets/sets";
-import { FPS, SHOTS, camAt, ShotDef, Set, JX, EX, MX, WITNESS, CRATES, MONK_J } from "./story";
+import { V } from "../engine/build";
+import { ctex, cloudHD } from "../engine/paint";
+import { LIGHTS, LOOK, LightPreset } from "../engine/lights";
+import { TONE, CHAR, untone } from "../engine/shade";
+import { NOINK } from "../engine/ink";
+import { Pool, Actor, Fx, Stage, CamInfo, beginStage } from "./stage";
+import { FPS, Film, ShotDef } from "./camera";
 
-/** no external models in this short: every prop is built here or painted on a card */
-export const loadKit = () => Promise.resolve({} as Kit);
+export type Place = { build: (G: THREE.Group) => any; x?: number; z?: number };
+export type Production = {
+  film: Film;
+  places: Record<string, Place>;
+  stage: (id: number, t: number, cam: CamInfo) => Stage;
+  pose?: (id: number, f: number, t: number, handles: Record<string, any>) => void;
+};
 
 /** sun disc (solid, soft rim) and the flat golden halo (lighting.md 6 / depth.md 6.4: r50 13-26 % of the frame width) */
 const discTex = () => ctex("sunDisc", 128, 128, (g) => {
@@ -41,14 +47,16 @@ export class World {
   private sunCache = new Map<number, THREE.Vector3>();
   private cloudMaps: Record<"day" | "golden", THREE.Texture[]>;
   private clouds: THREE.Mesh[] = [];
-  private sets: Record<Set, THREE.Group> = { C: new THREE.Group(), J: new THREE.Group(), E: new THREE.Group(), M: new THREE.Group() };
-  private tables: THREE.Group; private crates: THREE.Group;
-  private flags: THREE.Mesh[] = [];
+  private sets: Record<string, THREE.Group> = {};
+  /** whatever each place builder returned (groups / meshes the video's pose() toggles or animates) */
+  handles: Record<string, any> = {};
+  private film: Film;
   private frustum = new THREE.Frustum();
   private m4 = new THREE.Matrix4(); private v = new THREE.Vector3(); private sph = new THREE.Sphere();
 
-  constructor(_kit: Kit) {
+  constructor(private prod: Production) {
     const R = this.root;
+    this.film = prod.film;
     // ---- sky + light (bridge rig) ----
     this.skyMat = new THREE.ShaderMaterial({
       uniforms: { c0: { value: new THREE.Color() }, c1: { value: new THREE.Color() }, c2: { value: new THREE.Color() },
@@ -85,12 +93,12 @@ export class World {
       m.layers.set(NOINK);
       this.clouds.push(m); R.add(m);
     }
-    for (const g of Object.values(this.sets)) R.add(g);
-    const C = courtroom(this.sets.C, { witness: WITNESS, crates: CRATES });
-    this.tables = C.tables; this.crates = C.crates; this.flags = C.flags;
-    jungle(this.sets.J, { rock: [MONK_J[0] - JX, MONK_J[1], MONK_J[2]] }); this.sets.J.position.x = JX;
-    courthouse(this.sets.E); this.sets.E.position.x = EX;
-    townSquare(this.sets.M); this.sets.M.position.x = MX;
+    for (const [name, p] of Object.entries(prod.places)) {
+      const G = new THREE.Group();
+      G.position.set(p.x ?? 0, 0, p.z ?? 0);
+      this.handles[name] = p.build(G);
+      this.sets[name] = G; R.add(G);
+    }
   }
 
 
@@ -99,6 +107,7 @@ export class World {
 
   /** camera-relative sun, frozen per shot: the shot's mean view direction turned by az toward screen right, lifted by el */
   private shotSun(id: number, s: ShotDef, L: LightPreset) {
+    const camAt = this.film.camAt;
     let v = this.sunCache.get(id);
     if (v) return v;
     let fx = 0, fz = 0;
@@ -118,8 +127,8 @@ export class World {
   private fx(i: number) { while (this.fxs.length <= i) this.fxs.push(new Fx(this.root)); return this.fxs[i]; }
 
   update(id: number, f: number, cam: THREE.PerspectiveCamera, scene: THREE.Scene) {
-    const t = f / FPS, s = SHOTS[id - 1], L = LIGHTS[s.light];
-    const c = camAt(id, f);
+    const t = f / FPS, s = this.film.shots[id - 1], L = LIGHTS[s.light];
+    const c = this.film.camAt(id, f);
     cam.position.set(...c.pos); cam.up.set(0, 1, 0); cam.lookAt(...c.look); cam.rotateZ(c.roll);
     cam.fov = c.fov; cam.near = 0.1; cam.far = 1500; cam.updateProjectionMatrix(); cam.updateMatrixWorld();
     const focus = V(...c.look), dist = cam.position.distanceTo(focus);
@@ -156,21 +165,17 @@ export class World {
     }
     for (let i = 0; i < this.clouds.length; i++) {
       const m = this.clouds[i], mat = m.material as THREE.MeshBasicMaterial;
-      m.position.x = (s.set === "J" ? JX : s.set === "E" ? EX : s.set === "M" ? MX : 0) + Math.cos((i / 9) * Math.PI * 2 + 0.3) * (620 + (i % 3) * 60);
+      m.position.x = (this.prod.places[s.set]?.x ?? 0) + Math.cos((i / 9) * Math.PI * 2 + 0.3) * (620 + (i % 3) * 60);
       m.lookAt(cam.position.x, m.position.y, cam.position.z);
       mat.map = this.cloudMaps[s.light][i % 4];
     }
     // ---- which place, which furniture ----
     for (const [k, g] of Object.entries(this.sets)) g.visible = k === s.set;
-    this.tables.visible = id !== 8 && id !== 11; this.crates.visible = id === 8;
-    for (const fl of this.flags) {
-      const p = fl.geometry.attributes.position as THREE.BufferAttribute;
-      for (let i = 0; i < p.count; i++) { const u = (i % 11) / 10; p.setZ(i, 0.06 * u * Math.sin(t * 2.2 - u * 4)); }
-      p.needsUpdate = true;
-    }
+    this.prod.pose?.(id, f, t, this.handles);
     // ---- cast + effects ----
     const right = V(0, 0, 0).setFromMatrixColumn(cam.matrixWorld, 0);
-    const st = stage(id, t, { pos: cam.position, right });
+    beginStage(s.light, { pos: cam.position, right });
+    const st = this.prod.stage(id, t, { pos: cam.position, right });
     this.frustum.setFromProjectionMatrix(this.m4.multiplyMatrices(cam.projectionMatrix, cam.matrixWorldInverse));
     let ai = 0;
     const used: Actor[] = [];

@@ -2,14 +2,10 @@
 // four sets in one world (courtroom at the origin, jungle at x -200, courthouse steps at x +200, 1519 town square at
 // x +400) and the camera grammar of the bridge short: slow push-ins on every hold, smootherstep glides 18-60 f, big
 // reframes are cuts, impacts are 7-frame flip kicks. Visual reactions land 0-3 f before their word.
-export const FPS = 30;
+import { FPS, V3, ShotDef, Key, Dof, makeFilm, smooth, easeOut, clamp01, pushK, dolly, zoom, at } from "../../../library/director/camera";
+export { FPS, clamp01 };
+export type { V3 };
 export const TOTAL = 2082; // voice 68.91 s + tail
-export const D0 = 0; // ground height (build.ts reads it)
-export type V3 = [number, number, number];
-
-export const clamp01 = (x: number) => Math.max(0, Math.min(1, x));
-export const smooth = (x: number) => { const u = clamp01(x); return u * u * (3 - 2 * u); };
-export const easeOut = (u: number) => 1 - (1 - clamp01(u)) ** 4;
 
 // ---------------- places ----------------
 export const JX = -200, EX = 200, MX = 400;
@@ -35,10 +31,7 @@ export const DOCK: V3 = [MX - 1.4, 0, -3.3];
 export const CATWALL: V3 = [MX + 3.7, 0.9, -2.0];
 
 // ---------------- shots ----------------
-export type Light = "day" | "golden";
-export type Set = "C" | "J" | "E" | "M";
-export type ShotDef = { id: number; a: number; b: number; light: Light; set: Set; sunAz?: number; sunEl?: number };
-export const SHOTS: ShotDef[] = [
+const SHOTS: ShotDef[] = [
   { id: 1, a: 0, b: 127, light: "day", set: "C", sunEl: 64, sunAz: 120 },     // hook: the monkey in the witness box
   { id: 2, a: 127, b: 335, light: "day", set: "J", sunAz: 110 },              // Indonesia 2011: tripod, Naruto presses it
   { id: 3, a: 335, b: 511, light: "day", set: "C", sunEl: 64, sunAz: 120 },   // the photo, the man or the monkey?
@@ -53,18 +46,7 @@ export const SHOTS: ShotDef[] = [
   { id: 12, a: 1848, b: TOTAL, light: "golden", set: "J", sunAz: 145, sunEl: 17 }, // the selfie belongs to nobody
 ];
 /** crossfades (frames) at place changes; a white 4-frame flash after the hook */
-export const XFADE: Record<number, number> = { 3: 6, 4: 8, 5: 6, 6: 8, 8: 8, 9: 8, 10: 8, 11: 6, 12: 8 };
-export const FLASH_AT = 127;
-
-export const shotAt = (f: number) => SHOTS.find((s) => f >= s.a && f < s.b) ?? SHOTS[SHOTS.length - 1];
-export const layersAt = (f: number): { id: number; alpha: number }[] => {
-  for (const s of SHOTS) {
-    const x = XFADE[s.id];
-    if (x && f >= s.a - x / 2 && f < s.a + x / 2) return [{ id: s.id - 1, alpha: 1 }, { id: s.id, alpha: (f - (s.a - x / 2) + 1) / (x + 1) }];
-  }
-  return [{ id: shotAt(f).id, alpha: 1 }];
-};
-
+const XFADE: Record<number, number> = { 3: 6, 4: 8, 5: 6, 6: 8, 8: 8, 9: 8, 10: 8, 11: 6, 12: 8 };
 // ---------------- story motion ----------------
 /** monkey + lawyer walking to and up the courthouse steps (shot 4): z of the pair at frame f */
 export const climbZ = (f: number) => {
@@ -81,39 +63,7 @@ export const pop = (f: number, at: number) => {
   return u <= 0 ? 0 : u >= 1 ? 1 : easeOut(u) + 0.12 * Math.sin(Math.PI * u);
 };
 
-// ---------------- camera ----------------
-export type Cam = { pos: V3; look: V3; fov: number; roll: number };
-type Shot = Partial<Cam> & { pos: V3; look: V3 };
-type Key = { f: number; dur?: number; cut?: boolean; s: (f: number) => Shot };
-export const glide = (u: number) => { const x = clamp01(u); return x * x * x * (x * (6 * x - 15) + 10); };
-const mix = (a: Cam, b: Cam, k: number): Cam => ({
-  pos: a.pos.map((v, i) => v + (b.pos[i] - v) * k) as V3, look: a.look.map((v, i) => v + (b.look[i] - v) * k) as V3,
-  fov: a.fov + (b.fov - a.fov) * k, roll: a.roll + (b.roll - a.roll) * k,
-});
-const full = (c: Shot): Cam => ({ fov: 40, roll: 0, ...c });
-const run = (keys: Key[], f: number) => {
-  let cur = full(keys[0].s(f));
-  for (let i = 1; i < keys.length; i++) {
-    const k = keys[i];
-    if (f < k.f) break;
-    cur = k.cut ? full(k.s(f)) : mix(cur, full(k.s(f)), glide((f - k.f) / (k.dur ?? 24)));
-  }
-  return cur;
-};
-const T = (f: number) => f / FPS;
-const pushK = (f: number, f0: number, rate: number, punch = 0, n = 35) => {
-  const x = Math.max(0, f - f0);
-  let s = rate * x;
-  if (punch > rate) for (let i = 0; i < Math.min(x, n); i++) s += (punch - rate) * Math.max(0, Math.min(1, (i + 0.5) / 8, (n - i - 0.5) / 8));
-  return Math.exp(-s);
-};
-const dolly = (pos: V3, look: V3, k: number, rest: Partial<Cam> = {}): Shot =>
-  ({ pos: [look[0] + (pos[0] - look[0]) * k, look[1] + (pos[1] - look[1]) * k, look[2] + (pos[2] - look[2]) * k], look, ...rest });
-const zoom = (pos: V3, look: V3, fov: number, k: number, rest: Partial<Cam> = {}): Shot =>
-  ({ pos, look, fov: (360 / Math.PI) * Math.atan(Math.tan((fov * Math.PI) / 360) * k), ...rest });
-const rolled = (s: (f: number) => Shot, roll: number) => (f: number): Shot => ({ ...s(f), roll });
-const at = (p: V3, dx: number, dy: number, dz: number): V3 => [p[0] + dx, p[1] + dy, p[2] + dz];
-
+// ---------------- camera (data: keys per shot; helpers from library/director/camera) ----------------
 const W1 = at(WITNESS, 0, 0.52, 0); // monkey's face in the witness box
 const CAMS: Record<number, Key[]> = {
   1: [
@@ -177,26 +127,8 @@ CAMS[7] = CAMS[6];
 
 // impact kicks: the flash, the shutter, the gavel, the three paper thumps
 const KICKS: [number, number][] = [[1.17, 0.4], [9.75, 0.5], [24.1, 1.2], [60.0, 0.45], [60.44, 0.45], [60.82, 0.6]];
-export const kickAt = (t: number) => {
-  let a = 0;
-  for (const [t0, g] of KICKS) {
-    const n = Math.floor((t - t0) * FPS + 1e-6);
-    if (n >= 0 && n < 7) a += g * (n % 2 ? -1 : 1) * (1 - n / 7) ** 1.5;
-  }
-  return a;
-};
-export const camAt = (id: number, f: number): Cam => {
-  const c = run(CAMS[id], f), a = kickAt(T(f));
-  if (!a) return c;
-  const d: V3 = [c.look[0] - c.pos[0], c.look[1] - c.pos[1], c.look[2] - c.pos[2]];
-  const L = Math.hypot(...d), h = Math.hypot(d[0], d[2]) || 1;
-  const m = (3 / 640) * Math.tan((c.fov * Math.PI) / 360) * L * a;
-  return { ...c, look: [c.look[0] - (d[2] / h) * m, c.look[1] + 0.6 * m, c.look[2] + (d[0] / h) * m], roll: c.roll + a * 0.004 };
-};
-
 // ---------------- lens ----------------
-export type Dof = { f: number; dur?: number; cInf: number; focus?: (f: number) => V3 };
-export const DOF: Dof[] = [
+const DOF: Dof[] = [
   { f: 0, cInf: 14 },                 // monkey CU in the witness box
   { f: 78, cInf: 0 },                 // courtroom wide
   { f: 127, cInf: 0 },                // jungle aerial
@@ -222,14 +154,6 @@ export const DOF: Dof[] = [
   { f: 1986, cInf: 12 },              // monkey / man
   { f: 2052, dur: 30, cInf: 0 },      // pull out
 ];
-export const dofAt = (f: number) => {
-  let i = 0; while (i + 1 < DOF.length && f >= DOF[i + 1].f) i++;
-  const d = DOF[i], p = DOF[Math.max(0, i - 1)];
-  const k = d.dur ? Math.min(1, (f - d.f) / d.dur) : 1;
-  return { cInf: p.cInf + (d.cInf - p.cInf) * k, focus: d.focus };
-};
-export const focusAt = (id: number, f: number): V3 => {
-  const d = dofAt(f);
-  return d.focus ? d.focus(f) : camAt(id, f).look;
-};
-export { T as secOf };
+export const SHOTS_OF = (id: number) => SHOTS[id - 1];
+/** the whole film as data for the director (library/director) */
+export const FILM = makeFilm({ total: TOTAL, shots: SHOTS, xfade: XFADE, cams: CAMS, kicks: KICKS, dof: DOF, flashAt: 127 });
