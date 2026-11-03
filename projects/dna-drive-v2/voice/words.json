@@ -1,0 +1,1190 @@
+[
+{
+"word": "What",
+"start": 0.0,
+"end": 0.24,
+"line": 0
+},
+{
+"word": "if",
+"start": 0.24,
+"end": 0.38,
+"line": 0
+},
+{
+"word": "you",
+"start": 0.38,
+"end": 0.46,
+"line": 0
+},
+{
+"word": "could",
+"start": 0.46,
+"end": 0.68,
+"line": 0
+},
+{
+"word": "save",
+"start": 0.68,
+"end": 0.88,
+"line": 0
+},
+{
+"word": "your",
+"start": 0.88,
+"end": 1.12,
+"line": 0
+},
+{
+"word": "files",
+"start": 1.12,
+"end": 1.46,
+"line": 0
+},
+{
+"word": "inside",
+"start": 1.46,
+"end": 1.86,
+"line": 0
+},
+{
+"word": "your",
+"start": 1.86,
+"end": 2.16,
+"line": 0
+},
+{
+"word": "own",
+"start": 2.16,
+"end": 2.48,
+"line": 0
+},
+{
+"word": "body?",
+"start": 2.48,
+"end": 2.98,
+"line": 0
+},
+{
+"word": "Good",
+"start": 3.24,
+"end": 3.44,
+"line": 1
+},
+{
+"word": "news.",
+"start": 3.44,
+"end": 3.76,
+"line": 1
+},
+{
+"word": "You",
+"start": 4.04,
+"end": 4.18,
+"line": 1
+},
+{
+"word": "already",
+"start": 4.18,
+"end": 4.5,
+"line": 1
+},
+{
+"word": "do.",
+"start": 4.5,
+"end": 4.84,
+"line": 1
+},
+{
+"word": "It's",
+"start": 5.14,
+"end": 5.28,
+"line": 1
+},
+{
+"word": "called",
+"start": 5.28,
+"end": 5.66,
+"line": 1
+},
+{
+"word": "DNA.",
+"start": 5.66,
+"end": 6.04,
+"line": 1
+},
+{
+"word": "Every",
+"start": 6.58,
+"end": 6.9,
+"line": 2
+},
+{
+"word": "one",
+"start": 6.9,
+"end": 7.1,
+"line": 2
+},
+{
+"word": "of",
+"start": 7.1,
+"end": 7.18,
+"line": 2
+},
+{
+"word": "your",
+"start": 7.18,
+"end": 7.46,
+"line": 2
+},
+{
+"word": "cells",
+"start": 7.46,
+"end": 7.66,
+"line": 2
+},
+{
+"word": "carries",
+"start": 7.66,
+"end": 7.98,
+"line": 2
+},
+{
+"word": "about",
+"start": 7.98,
+"end": 8.74,
+"line": 2
+},
+{
+"word": "seven",
+"start": 8.74,
+"end": 9.09,
+"line": 2
+},
+{
+"word": "hundred",
+"start": 9.09,
+"end": 9.44,
+"line": 2
+},
+{
+"word": "and",
+"start": 9.44,
+"end": 9.44,
+"line": 2
+},
+{
+"word": "fifty",
+"start": 9.44,
+"end": 9.44,
+"line": 2
+},
+{
+"word": "megabytes",
+"start": 9.44,
+"end": 10.12,
+"line": 2
+},
+{
+"word": "of",
+"start": 10.12,
+"end": 10.32,
+"line": 2
+},
+{
+"word": "it.",
+"start": 10.32,
+"end": 10.68,
+"line": 2
+},
+{
+"word": "That's",
+"start": 10.88,
+"end": 11.28,
+"line": 3
+},
+{
+"word": "one",
+"start": 11.28,
+"end": 11.58,
+"line": 3
+},
+{
+"word": "old",
+"start": 11.58,
+"end": 11.94,
+"line": 3
+},
+{
+"word": "USB",
+"start": 11.94,
+"end": 12.26,
+"line": 3
+},
+{
+"word": "stick,",
+"start": 12.26,
+"end": 12.84,
+"line": 3
+},
+{
+"word": "inside",
+"start": 12.84,
+"end": 13.14,
+"line": 3
+},
+{
+"word": "something",
+"start": 13.14,
+"end": 13.6,
+"line": 3
+},
+{
+"word": "too",
+"start": 13.6,
+"end": 13.94,
+"line": 3
+},
+{
+"word": "small",
+"start": 13.94,
+"end": 14.12,
+"line": 3
+},
+{
+"word": "to",
+"start": 14.12,
+"end": 14.38,
+"line": 3
+},
+{
+"word": "see.",
+"start": 14.38,
+"end": 14.72,
+"line": 3
+},
+{
+"word": "You",
+"start": 15.18,
+"end": 15.26,
+"line": 4
+},
+{
+"word": "have",
+"start": 15.26,
+"end": 15.7,
+"line": 4
+},
+{
+"word": "thirty-seven",
+"start": 15.7,
+"end": 16.05,
+"line": 4
+},
+{
+"word": "trillion",
+"start": 16.42,
+"end": 16.98,
+"line": 4
+},
+{
+"word": "cells.",
+"start": 16.98,
+"end": 17.42,
+"line": 4
+},
+{
+"word": "Give",
+"start": 17.84,
+"end": 18.02,
+"line": 5
+},
+{
+"word": "each",
+"start": 18.02,
+"end": 18.28,
+"line": 5
+},
+{
+"word": "one",
+"start": 18.28,
+"end": 18.46,
+"line": 5
+},
+{
+"word": "a",
+"start": 18.46,
+"end": 18.56,
+"line": 5
+},
+{
+"word": "different",
+"start": 18.56,
+"end": 18.84,
+"line": 5
+},
+{
+"word": "file,",
+"start": 18.84,
+"end": 19.24,
+"line": 5
+},
+{
+"word": "and",
+"start": 19.24,
+"end": 19.54,
+"line": 5
+},
+{
+"word": "you'd",
+"start": 19.54,
+"end": 19.7,
+"line": 5
+},
+{
+"word": "be",
+"start": 19.7,
+"end": 19.94,
+"line": 5
+},
+{
+"word": "carrying",
+"start": 19.94,
+"end": 20.28,
+"line": 5
+},
+{
+"word": "twenty-eight",
+"start": 20.28,
+"end": 20.63,
+"line": 5
+},
+{
+"word": "zettabytes.",
+"start": 20.94,
+"end": 21.52,
+"line": 5
+},
+{
+"word": "That's",
+"start": 22.12,
+"end": 22.48,
+"line": 6
+},
+{
+"word": "a",
+"start": 22.48,
+"end": 22.62,
+"line": 6
+},
+{
+"word": "warehouse",
+"start": 22.62,
+"end": 22.92,
+"line": 6
+},
+{
+"word": "of",
+"start": 22.92,
+"end": 23.24,
+"line": 6
+},
+{
+"word": "hard",
+"start": 23.24,
+"end": 23.46,
+"line": 6
+},
+{
+"word": "drives.",
+"start": 23.46,
+"end": 23.82,
+"line": 6
+},
+{
+"word": "Walking",
+"start": 24.26,
+"end": 24.38,
+"line": 6
+},
+{
+"word": "around.",
+"start": 24.38,
+"end": 24.84,
+"line": 6
+},
+{
+"word": "Eating",
+"start": 25.18,
+"end": 25.3,
+"line": 6
+},
+{
+"word": "lunch.",
+"start": 25.3,
+"end": 25.72,
+"line": 6
+},
+{
+"word": "And",
+"start": 26.1,
+"end": 26.28,
+"line": 7
+},
+{
+"word": "it's",
+"start": 26.28,
+"end": 26.48,
+"line": 7
+},
+{
+"word": "not",
+"start": 26.48,
+"end": 26.68,
+"line": 7
+},
+{
+"word": "just",
+"start": 26.68,
+"end": 26.96,
+"line": 7
+},
+{
+"word": "a",
+"start": 26.96,
+"end": 27.1,
+"line": 7
+},
+{
+"word": "joke.",
+"start": 27.1,
+"end": 27.4,
+"line": 7
+},
+{
+"word": "In",
+"start": 27.4,
+"end": 27.94,
+"line": 7
+},
+{
+"word": "2017,",
+"start": 27.94,
+"end": 28.66,
+"line": 7
+},
+{
+"word": "scientists",
+"start": 29.38,
+"end": 29.42,
+"line": 7
+},
+{
+"word": "packed",
+"start": 29.42,
+"end": 29.82,
+"line": 7
+},
+{
+"word": "two",
+"start": 29.82,
+"end": 30.17,
+"line": 7
+},
+{
+"word": "hundred",
+"start": 30.17,
+"end": 30.52,
+"line": 7
+},
+{
+"word": "and",
+"start": 30.52,
+"end": 30.87,
+"line": 7
+},
+{
+"word": "fifteen",
+"start": 30.87,
+"end": 31.06,
+"line": 7
+},
+{
+"word": "petabytes",
+"start": 31.06,
+"end": 31.88,
+"line": 7
+},
+{
+"word": "into",
+"start": 31.88,
+"end": 32.22,
+"line": 7
+},
+{
+"word": "a",
+"start": 32.22,
+"end": 32.52,
+"line": 7
+},
+{
+"word": "single",
+"start": 32.52,
+"end": 32.88,
+"line": 7
+},
+{
+"word": "gram",
+"start": 32.88,
+"end": 33.22,
+"line": 7
+},
+{
+"word": "of",
+"start": 33.22,
+"end": 33.48,
+"line": 7
+},
+{
+"word": "DNA.",
+"start": 33.48,
+"end": 33.96,
+"line": 7
+},
+{
+"word": "One",
+"start": 34.52,
+"end": 34.82,
+"line": 8
+},
+{
+"word": "gram.",
+"start": 34.82,
+"end": 35.22,
+"line": 8
+},
+{
+"word": "About",
+"start": 35.68,
+"end": 35.78,
+"line": 8
+},
+{
+"word": "a",
+"start": 35.78,
+"end": 36.0,
+"line": 8
+},
+{
+"word": "paperclip.",
+"start": 36.0,
+"end": 36.35,
+"line": 8
+},
+{
+"word": "They",
+"start": 37.0,
+"end": 37.02,
+"line": 9
+},
+{
+"word": "stored",
+"start": 37.02,
+"end": 37.2,
+"line": 9
+},
+{
+"word": "a",
+"start": 37.2,
+"end": 37.4,
+"line": 9
+},
+{
+"word": "movie",
+"start": 37.4,
+"end": 37.78,
+"line": 9
+},
+{
+"word": "and",
+"start": 37.78,
+"end": 38.06,
+"line": 9
+},
+{
+"word": "an",
+"start": 38.06,
+"end": 38.64,
+"line": 9
+},
+{
+"word": "operating",
+"start": 38.64,
+"end": 38.64,
+"line": 9
+},
+{
+"word": "system",
+"start": 38.64,
+"end": 39.02,
+"line": 9
+},
+{
+"word": "in",
+"start": 39.02,
+"end": 39.18,
+"line": 9
+},
+{
+"word": "it,",
+"start": 39.18,
+"end": 39.5,
+"line": 9
+},
+{
+"word": "then",
+"start": 39.52,
+"end": 39.68,
+"line": 9
+},
+{
+"word": "read",
+"start": 39.68,
+"end": 39.9,
+"line": 9
+},
+{
+"word": "both",
+"start": 39.9,
+"end": 40.46,
+"line": 9
+},
+{
+"word": "back",
+"start": 40.46,
+"end": 40.88,
+"line": 9
+},
+{
+"word": "perfectly.",
+"start": 40.88,
+"end": 41.56,
+"line": 9
+},
+{
+"word": "Luckily,",
+"start": 42.14,
+"end": 42.6,
+"line": 10
+},
+{
+"word": "DNA",
+"start": 43.04,
+"end": 43.34,
+"line": 10
+},
+{
+"word": "can",
+"start": 43.34,
+"end": 43.64,
+"line": 10
+},
+{
+"word": "last",
+"start": 43.64,
+"end": 43.92,
+"line": 10
+},
+{
+"word": "for",
+"start": 43.92,
+"end": 44.24,
+"line": 10
+},
+{
+"word": "thousands",
+"start": 44.24,
+"end": 44.62,
+"line": 10
+},
+{
+"word": "of",
+"start": 44.62,
+"end": 44.86,
+"line": 10
+},
+{
+"word": "years.",
+"start": 44.86,
+"end": 45.32,
+"line": 10
+},
+{
+"word": "Unluckily,",
+"start": 45.9,
+"end": 46.54,
+"line": 11
+},
+{
+"word": "writing",
+"start": 47.24,
+"end": 47.44,
+"line": 11
+},
+{
+"word": "it",
+"start": 47.44,
+"end": 47.72,
+"line": 11
+},
+{
+"word": "costs",
+"start": 47.72,
+"end": 48.08,
+"line": 11
+},
+{
+"word": "thousands",
+"start": 48.08,
+"end": 48.66,
+"line": 11
+},
+{
+"word": "of",
+"start": 48.66,
+"end": 48.86,
+"line": 11
+},
+{
+"word": "dollars",
+"start": 48.86,
+"end": 49.16,
+"line": 11
+},
+{
+"word": "per",
+"start": 49.16,
+"end": 49.38,
+"line": 11
+},
+{
+"word": "megabyte,",
+"start": 49.38,
+"end": 49.78,
+"line": 11
+},
+{
+"word": "and",
+"start": 49.78,
+"end": 50.2,
+"line": 11
+},
+{
+"word": "reading",
+"start": 50.2,
+"end": 50.42,
+"line": 11
+},
+{
+"word": "it",
+"start": 50.42,
+"end": 50.74,
+"line": 11
+},
+{
+"word": "takes",
+"start": 50.74,
+"end": 51.12,
+"line": 11
+},
+{
+"word": "hours.",
+"start": 51.12,
+"end": 51.62,
+"line": 11
+},
+{
+"word": "Your",
+"start": 52.12,
+"end": 52.38,
+"line": 12
+},
+{
+"word": "selfie",
+"start": 52.38,
+"end": 52.68,
+"line": 12
+},
+{
+"word": "would",
+"start": 52.68,
+"end": 53.04,
+"line": 12
+},
+{
+"word": "cost",
+"start": 53.04,
+"end": 53.3,
+"line": 12
+},
+{
+"word": "more",
+"start": 53.3,
+"end": 53.6,
+"line": 12
+},
+{
+"word": "than",
+"start": 53.6,
+"end": 53.74,
+"line": 12
+},
+{
+"word": "your",
+"start": 53.74,
+"end": 54.0,
+"line": 12
+},
+{
+"word": "phone.",
+"start": 54.0,
+"end": 54.36,
+"line": 12
+},
+{
+"word": "And",
+"start": 54.76,
+"end": 55.08,
+"line": 13
+},
+{
+"word": "there's",
+"start": 55.08,
+"end": 55.3,
+"line": 13
+},
+{
+"word": "a",
+"start": 55.3,
+"end": 55.46,
+"line": 13
+},
+{
+"word": "bigger",
+"start": 55.46,
+"end": 55.72,
+"line": 13
+},
+{
+"word": "problem.",
+"start": 55.72,
+"end": 56.1,
+"line": 13
+},
+{
+"word": "Your",
+"start": 56.1,
+"end": 56.8,
+"line": 13
+},
+{
+"word": "cells",
+"start": 56.8,
+"end": 57.06,
+"line": 13
+},
+{
+"word": "copy",
+"start": 57.06,
+"end": 57.46,
+"line": 13
+},
+{
+"word": "their",
+"start": 57.46,
+"end": 57.74,
+"line": 13
+},
+{
+"word": "DNA",
+"start": 57.74,
+"end": 58.02,
+"line": 13
+},
+{
+"word": "every",
+"start": 58.02,
+"end": 58.48,
+"line": 13
+},
+{
+"word": "time",
+"start": 58.48,
+"end": 58.7,
+"line": 13
+},
+{
+"word": "they",
+"start": 58.7,
+"end": 58.88,
+"line": 13
+},
+{
+"word": "divide.",
+"start": 58.88,
+"end": 59.36,
+"line": 13
+},
+{
+"word": "Every",
+"start": 60.04,
+"end": 60.28,
+"line": 14
+},
+{
+"word": "copy",
+"start": 60.28,
+"end": 60.76,
+"line": 14
+},
+{
+"word": "risks",
+"start": 60.76,
+"end": 61.02,
+"line": 14
+},
+{
+"word": "a",
+"start": 61.02,
+"end": 61.32,
+"line": 14
+},
+{
+"word": "typo,",
+"start": 61.32,
+"end": 61.6,
+"line": 14
+},
+{
+"word": "so",
+"start": 61.98,
+"end": 62.12,
+"line": 14
+},
+{
+"word": "your",
+"start": 62.12,
+"end": 62.3,
+"line": 14
+},
+{
+"word": "vacation",
+"start": 62.3,
+"end": 62.58,
+"line": 14
+},
+{
+"word": "photo",
+"start": 62.58,
+"end": 62.96,
+"line": 14
+},
+{
+"word": "would",
+"start": 62.96,
+"end": 63.38,
+"line": 14
+},
+{
+"word": "slowly",
+"start": 63.38,
+"end": 63.66,
+"line": 14
+},
+{
+"word": "become",
+"start": 63.66,
+"end": 64.14,
+"line": 14
+},
+{
+"word": "a",
+"start": 64.14,
+"end": 64.52,
+"line": 14
+},
+{
+"word": "different",
+"start": 64.52,
+"end": 64.72,
+"line": 14
+},
+{
+"word": "vacation.",
+"start": 64.72,
+"end": 65.28,
+"line": 14
+},
+{
+"word": "That's",
+"start": 65.78,
+"end": 66.0,
+"line": 15
+},
+{
+"word": "why",
+"start": 66.0,
+"end": 66.16,
+"line": 15
+},
+{
+"word": "labs",
+"start": 66.16,
+"end": 66.42,
+"line": 15
+},
+{
+"word": "keep",
+"start": 66.42,
+"end": 66.78,
+"line": 15
+},
+{
+"word": "DNA",
+"start": 66.78,
+"end": 67.02,
+"line": 15
+},
+{
+"word": "drives",
+"start": 67.02,
+"end": 67.44,
+"line": 15
+},
+{
+"word": "in",
+"start": 67.44,
+"end": 67.78,
+"line": 15
+},
+{
+"word": "cold,",
+"start": 67.78,
+"end": 68.16,
+"line": 15
+},
+{
+"word": "dry",
+"start": 68.16,
+"end": 68.46,
+"line": 15
+},
+{
+"word": "tubes,",
+"start": 68.46,
+"end": 68.94,
+"line": 15
+},
+{
+"word": "not",
+"start": 69.26,
+"end": 69.38,
+"line": 15
+},
+{
+"word": "in",
+"start": 69.38,
+"end": 69.54,
+"line": 15
+},
+{
+"word": "people.",
+"start": 69.54,
+"end": 69.88,
+"line": 15
+},
+{
+"word": "The",
+"start": 70.38,
+"end": 70.54,
+"line": 16
+},
+{
+"word": "best",
+"start": 70.54,
+"end": 70.84,
+"line": 16
+},
+{
+"word": "hard",
+"start": 70.84,
+"end": 71.08,
+"line": 16
+},
+{
+"word": "drive",
+"start": 71.08,
+"end": 71.3,
+"line": 16
+},
+{
+"word": "was",
+"start": 71.3,
+"end": 71.66,
+"line": 16
+},
+{
+"word": "always",
+"start": 71.66,
+"end": 71.96,
+"line": 16
+},
+{
+"word": "inside",
+"start": 71.96,
+"end": 72.28,
+"line": 16
+},
+{
+"word": "you.",
+"start": 72.28,
+"end": 72.9,
+"line": 16
+},
+{
+"word": "It's",
+"start": 72.94,
+"end": 73.14,
+"line": 16
+},
+{
+"word": "just",
+"start": 73.14,
+"end": 73.4,
+"line": 16
+},
+{
+"word": "full.",
+"start": 73.4,
+"end": 73.74,
+"line": 16
+},
+{
+"word": "It's",
+"start": 74.12,
+"end": 74.4,
+"line": 16
+},
+{
+"word": "storing",
+"start": 74.4,
+"end": 74.76,
+"line": 16
+},
+{
+"word": "you.",
+"start": 74.76,
+"end": 75.26,
+"line": 16
+}
+]

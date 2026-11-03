@@ -1,3 +1,4 @@
 project,started,finished,video_s,resolution,models,plan,weekly_pct_start,weekly_pct_end,weekly_pct_used,context_tokens_end,turns,est_input_tokens,est_cache_read_tokens,est_output_tokens,est_claude_api_usd,elevenlabs_chars,est_elevenlabs_usd,render_min,renders_failed,stills,other_tools,est_total_usd,notes
 animal-court,,2026-11-03T08:35,68.8,1440x2560,claude-sonnet-5-5+claude-opus-5-5,Ultra,,54.0,,484078,300,72611700,67528881,169427,22.22,1133,0.25,30.0,2,60,"faster-whisper tiny.en (local, free)",22.47,first video + library/captions/ledger setup; weekly start not recorded (backfill); tokens est. from 300 turns x 484k end context
 dna-drive,2026-11-03T09:55,2026-11-03T10:22,75.3,1080x1920,claude-sonnet-5-5,Ultra,55.0,55.0,0.0,225000,30,3375000,3138750,78750,2.11,1142,0.25,3.5,0,25,,2.36,
+dna-drive-v2,2026-11-03T10:44,2026-11-03T11:02,75.3,1080x1920,claude-opus-5-5,Ultra,55.0,56.0,1.0,229288,52,5961488,5544183,80250,4.34,1142,0.25,3.0,0,41,,4.59,

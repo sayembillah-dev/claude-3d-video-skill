@@ -73,6 +73,10 @@ Every builder takes `variant` (0 = original, 1-3 re-dress: wall / stone colours,
 | `courthouse(G, { variant? })` + `courthouseStepY(z)` | — | 10 steps from z −12 (y 0) to −17 (y 2.5), columns at z −18.4, door at z −21. Plaza z −12..40, x ±30 |
 | `lab(G, { variant? })` | — | room x ±7, z −9..9, walls 4.6 m, long window on the back wall, benches at z −8.8..−7.4 and islands at x ±4.6 |
 | `microWorld(G, { variant? })` | — | open pink stage, ring of pastel cell blobs from r 28; keep scenes within x ±6, z −9..8 |
+| `homeOffice(G, { variant? })` | — | room x ±5, z −6..6, walls 3.2 m, window on the back wall (z −6), desk x ±1.3, z −4.2..−3.5 (top .76): stand a person behind it at z −4.65 |
+| `cityStreet(G, { variant? })` | — | pavement z −9..−3, road z −3..6, shopfront blocks along z −9 (x ±60), lamps at z −3.5; walk people along z ≈ −5.2 |
+| `museumHall(G, { variant?, plinths? })` | plinth positions (local) | hall x ±12, z −12..10, walls 7 m, columns x ±9.5; plinths 1.0 m tall (put exhibits at y 1.0); rope 1.6 m in front, posts between plinths. People beside a plinth (±0.8) read well in medium shots |
+| `coldVault(G, { variant? })` | — | room x ±6, z −8..6, walls 3.6 m, tube racks on the back wall, freezers on the sides, steel table x ±1.4, z −3..−2 (top .92) |
 | `townSquare(G, { variant? })` | — | square x ±30. Houses at z −14 and x ±13. Judge platform z −7.7..−6.1 (top .45), table z −6.5..−5.9 (top 1.27). Low wall x 2.6..4.8, z −2.4..−1.6 (top .9) |
 
 ## cast/ (drawings) and engine/toon.ts
@@ -80,7 +84,8 @@ Every builder takes `variant` (0 = original, 1-3 re-dress: wall / stone colours,
   - Animals: `monkey`, `hen`, `rat`, `cat`, drawn through `critter()`.
   - Props: `camera(p, cx, cy, k, flash)`, `tripod(p, flash)`, `paperStack(p)`, `dock(p)`, `chair(p)` (use with `card()`).
   - Colours: `FUR`, `FACE`.
-- `outfits.ts`: `PHOTOG`, `LAWYER`, `JUDGE[0..2]`, `MJ` (old-European judge), `MLAW` (advocate).
+- `outfits.ts`: `PHOTOG`, `LAWYER`, `JUDGE[0..2]`, `MJ` (old-European judge), `MLAW` (advocate), `OFFICE`, `GUIDE`, `SCIENTIST`.
+- `science.ts`: `dna`, `cell({ file, glow, split, fit })` (use `fit: true` for a split that stays inside the card), `usb`, `hardDrive`, `driveTower`, `tube`, `paperclip`, `clapper`, `monitor`, `pyramid`, `coins`, `clock`, `phone`, `priceTag`, `photo`, `fridge`, `sandwich`, `sparkle`, `redX`, `lens`.
   - In `engine/toon.ts`: `townsfolk(v)`, `soldier(v)`, `KID`, `PARENT`, `OFFICER`, `RIFLEMAN`.
 - Outfit fields: `{ jacket, pants, boots, hat?: "cap"|"hair"|"tophat"|"bonnet"|"shako"|"shako_tall", cap?, hair?, skin?, moustache?, build?: "adult"|"stout"|"kid", buttons?, belt? }`.
 - Drawing a new character or prop:

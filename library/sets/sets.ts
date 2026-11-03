@@ -261,3 +261,179 @@ export function microWorld(G: THREE.Group, o: Variant = {}) {
   }
   b.build(G);
 }
+
+// ---------------- home office, city street, museum hall, cold vault (first built for "dna-drive-v2") ----------------
+//   homeOffice : small room 10 x 12 m, walls 3.2 m, a window on the back wall (z = -6), a desk (x ±1.3, z -4.2..-3.5,
+//                top .76), a bookshelf on the left wall, a rug and a floor lamp. variant re-dresses wall + desk colours.
+//   cityStreet : modern street: pavement z -8..-3, road z -3..6 with dashes, far pavement z 6..9, a row of shopfront blocks
+//                along z -9 (x ±60), lamp posts and trees on the pavement. variant re-dresses the block colours.
+//   museumHall : marble hall x ±12, z -12..10, walls 7 m, columns along x ±9, framed paintings on the back wall (z -12),
+//                rope stanchions; plinths (1.0 m tall, .9 m square) at o.plinths. variant re-dresses wall + floor.
+//   coldVault  : icy storage room x ±6, z -8..6, walls 3.6 m, freezer racks of small tubes on the back wall (z -8) and the
+//                side walls, a steel table (x ±1.4, z -3..-2, top .92). variant re-dresses the wall tint + tube caps.
+const OFFICEWALL = ["#f3d9a4", "#cfe2d8", "#f0c9c0", "#d4d8ef"], DESK = ["#9a6a44", "#6f7f94", "#b98a5a", "#5f6e5a"];
+const floorBoards = (key: string, c0: string, c1: string) => ctex(key, 512, 512, (g, r) => {
+  for (let i = 0; i < 8; i++) { g.fillStyle = i % 2 ? c0 : c1; g.fillRect(0, i * 64, 512, 64); }
+  g.strokeStyle = "rgba(60,35,20,.35)"; g.lineWidth = 3;
+  for (let i = 0; i <= 8; i++) { g.beginPath(); g.moveTo(0, i * 64); g.lineTo(512, i * 64); g.stroke(); const x = r() * 512; g.beginPath(); g.moveTo(x, i * 64); g.lineTo(x, i * 64 + 64); g.stroke(); }
+});
+export function homeOffice(G: THREE.Group, o: Variant = {}) {
+  const vi = (o.variant ?? 0) % OFFICEWALL.length, b = new Batch();
+  const wall = lam("offWall" + vi, () => ({ color: OFFICEWALL[vi] })), desk = lam("offDesk" + vi, () => ({ color: DESK[vi] }));
+  const trim = lam("offTrim", () => ({ color: "#fbf3e2" })), dark = lam("offDark", () => ({ color: "#3a3040" }));
+  b.add(up(-5, 5, -6, 6, 2.5), lam("offFloor", () => ({ map: floorBoards("offBoards", "#c99a66", "#bb8b58") })));
+  b.add(boxGeo(V(-5, 0, -6.3), V(5, 3.2, -6)), wall);
+  b.add(boxGeo(V(-5.3, 0, -6.3), V(-5, 3.2, 6)), wall);
+  b.add(boxGeo(V(5, 0, -6.3), V(5.3, 3.2, 6)), wall);
+  b.add(boxGeo(V(-5, 0, -6.02), V(5, 0.14, -5.92)), trim);
+  // window with a blue sky and a cross frame
+  b.add(boxGeo(V(-2.2, 1.3, -6.02), V(0.6, 2.8, -5.97)), lam("offSky", () => ({ color: "#a9dcf6" })));
+  for (const [x0, y0, x1, y1] of [[-2.3, 1.22, 0.7, 1.32], [-2.3, 2.78, 0.7, 2.88], [-2.3, 1.22, -2.2, 2.88], [0.6, 1.22, 0.7, 2.88], [-0.85, 1.3, -0.75, 2.8], [-2.2, 2.0, 0.6, 2.08]])
+    b.add(boxGeo(V(x0, y0, -5.99), V(x1, y1, -5.9)), trim);
+  // desk with legs and a drawer block
+  b.add(boxGeo(V(-1.3, 0.7, -4.2), V(1.3, 0.76, -3.5)), desk);
+  for (const x of [-1.25, 1.17]) b.add(boxGeo(V(x, 0, -4.15), V(x + 0.08, 0.7, -3.55)), dark);
+  b.add(boxGeo(V(0.55, 0.12, -4.15), V(1.2, 0.7, -3.55)), desk);
+  b.add(boxGeo(V(0.58, 0.38, -3.56), V(1.17, 0.42, -3.53)), dark);
+  // bookshelf on the left wall with coloured books
+  b.add(boxGeo(V(-5, 0, -3.5), V(-4.55, 2.4, -0.5)), desk);
+  for (let s = 0; s < 4; s++) for (let k = 0; k < 9; k++) {
+    const c = ["#e0485a", "#4fa3e6", "#f6c344", "#6cc2a4", "#9b73d6"][(k + s * 2) % 5], h = 0.32 + ((k * 7 + s) % 3) * 0.06;
+    b.add(boxGeo(V(-4.6, 0.12 + s * 0.58, -3.35 + k * 0.31), V(-4.52, 0.12 + s * 0.58 + h, -3.12 + k * 0.31)), lam("book" + c, () => ({ color: c })));
+  }
+  // rug + floor lamp
+  b.add(up(-2.2, 2.2, -3.2, 0.8, 4.4, 0.01), lam("offRug" + vi, () => ({ color: ["#d9644f", "#4f86c6", "#6a9a5a", "#c4884a"][vi] })));
+  b.add(new THREE.CylinderGeometry(0.03, 0.03, 1.7, 8).translate(2.6, 0.85, -5.2), dark);
+  b.add(new THREE.ConeGeometry(0.32, 0.4, 16, 1, true).translate(2.6, 1.85, -5.2), lam("offShade", () => ({ color: "#ffe6a8", side: THREE.DoubleSide })));
+  b.add(new THREE.CylinderGeometry(0.22, 0.25, 0.04, 16).translate(2.6, 0.02, -5.2), dark);
+  addVeg(b, "bush", 4.2, 0, -5.2, 1.3, 77);
+  b.build(G);
+}
+
+const BLOCKS = [["#e9a77a", "#9fc6d9", "#f2d27e", "#b7a2d6", "#9fd1a8"], ["#d98c8c", "#8fb4e0", "#e9c89a", "#a9c99a", "#e0b0cf"],
+  ["#c9b39a", "#a7c4c9", "#e6a67a", "#9fb0d6", "#d6c87a"], ["#f0b8a0", "#86c0b0", "#f2e0a0", "#c0a0d0", "#a0c0e0"]];
+const winGrid = (key: string, wall: string) => ctex(key, 256, 256, (g) => {
+  g.fillStyle = wall; g.fillRect(0, 0, 256, 256);
+  for (let i = 0; i < 2; i++) for (let j = 0; j < 2; j++) {
+    g.fillStyle = "#3a4a6a"; g.fillRect(30 + i * 128, 30 + j * 128, 70, 80);
+    g.fillStyle = "rgba(190,225,250,.85)"; g.fillRect(36 + i * 128, 36 + j * 128, 58, 68);
+    g.fillStyle = "rgba(255,255,255,.5)"; g.fillRect(40 + i * 128, 40 + j * 128, 14, 60);
+  }
+});
+export function cityStreet(G: THREE.Group, o: Variant = {}) {
+  const vi = (o.variant ?? 0) % BLOCKS.length, b = new Batch();
+  const pave = lam("cityPave", () => ({ color: "#d8d2c8" })), road = lam("cityRoad", () => ({ color: "#575a66" })), white = lam("cityLine", () => ({ color: "#f4f1e6" }));
+  const dark = lam("cityDark", () => ({ color: "#3a3446" }));
+  b.add(up(-300, 300, -300, 300, 6), lam("grassHD", () => ({ map: grassHD() })));
+  b.add(up(-60, 60, -9, -3, 2), pave);
+  b.add(up(-60, 60, -3, 6, 4, 0.005), road);
+  b.add(up(-60, 60, 6, 9, 2), pave);
+  for (let x = -58; x < 60; x += 4) b.add(up(x, x + 2, 1.35, 1.6, 2, 0.01), white);
+  b.add(boxGeo(V(-60, 0, -3.12), V(60, 0.14, -2.98)), lam("cityKerb", () => ({ color: "#b4ada2" })));
+  // shopfront blocks: walls with a window grid, a coloured awning and a dark shop window at street level
+  let x = -60, k = 0;
+  while (x < 60) {
+    const w = 7 + (k % 3) * 2, h = 9 + ((k * 5) % 4) * 2.5, c = BLOCKS[vi][k % 5];
+    b.add(boxGeo(V(x, 0, -16), V(x + w - 0.2, h, -9), 4), lam(`cityWall${vi}_${k % 5}`, () => ({ map: winGrid(`cityWin${vi}_${k % 5}`, c) })));
+    b.add(boxGeo(V(x, h, -16.2), V(x + w - 0.2, h + 0.3, -8.8)), dark);
+    b.add(boxGeo(V(x + 0.6, 0, -9.02), V(x + w - 0.8, 2.3, -8.95)), lam("cityShop", () => ({ color: "#2f3c58" })));
+    const aw = ["#e0485a", "#4fa3e6", "#f6c344", "#6cc2a4", "#ef8a4a"][(k + vi) % 5];
+    b.add(quad(V(x + 0.4, 2.9, -9), V(x + w - 0.6, 2.9, -9), V(x + w - 0.6, 2.5, -8.0), V(x + 0.4, 2.5, -8.0)), lam("awn" + aw, () => ({ color: aw, side: THREE.DoubleSide })));
+    x += w; k++;
+  }
+  // lamp posts + trees on the near pavement edge
+  for (let lx = -56; lx < 60; lx += 12) {
+    b.add(new THREE.CylinderGeometry(0.06, 0.08, 4.2, 8).translate(lx, 2.1, -3.5), dark);
+    b.add(new THREE.SphereGeometry(0.22, 12, 8).translate(lx, 4.3, -3.5), lam("cityBulb", () => ({ color: "#fff3c4" })));
+    addVeg(b, "round", lx + 6, 0, -8.2, 5.5, 300 + lx);
+  }
+  b.build(G);
+}
+
+const HALL = [["#efe4d0", "#e8dcc6", "#c9b48f"], ["#dfe6ec", "#d6dee6", "#9fb0c4"], ["#efdcd2", "#e6cfc3", "#c09a8a"], ["#e3e8d8", "#d9e0cc", "#a9b48f"]];
+const marble = (key: string, a: string, c: string) => ctex(key, 512, 512, (g, r) => {
+  for (let i = 0; i < 4; i++) for (let j = 0; j < 4; j++) { g.fillStyle = (i + j) % 2 ? a : c; g.fillRect(i * 128, j * 128, 128, 128); }
+  g.strokeStyle = "rgba(120,100,90,.18)"; g.lineWidth = 2;
+  for (let n = 0; n < 24; n++) { g.beginPath(); const y = r() * 512; g.moveTo(0, y); g.bezierCurveTo(170, y + r() * 60 - 30, 340, y + r() * 60 - 30, 512, y + r() * 40 - 20); g.stroke(); }
+});
+const painting = (key: string, v: number) => ctex(key, 256, 200, (g) => {
+  g.fillStyle = ["#9ad0f0", "#f2c48a", "#b7e0b0", "#d8b8ec"][v % 4]; g.fillRect(0, 0, 256, 200);
+  g.fillStyle = ["#4f9a4a", "#c0603a", "#3a7ab0", "#9a5ab0"][v % 4];
+  g.beginPath(); g.moveTo(0, 200); g.lineTo(70 + v * 20, 90); g.lineTo(150, 150); g.lineTo(210 - v * 10, 70); g.lineTo(256, 200); g.fill();
+  g.fillStyle = "#ffe36b"; g.beginPath(); g.arc(190 - v * 30, 50, 22, 0, 7); g.fill();
+});
+export function museumHall(G: THREE.Group, o: Variant & { plinths?: V3[] } = {}) {
+  const vi = (o.variant ?? 0) % HALL.length, [wc, fc, ac] = HALL[vi], b = new Batch();
+  const wall = lam("hallWall" + vi, () => ({ color: wc })), trim = lam("hallTrim", () => ({ color: "#fbf6ea" }));
+  const gold = lam("hallGold", () => ({ color: "#d4aa48" })), rope = lam("hallRope", () => ({ color: "#b8343a" }));
+  b.add(up(-12, 12, -12, 10, 3), lam("hallFloor" + vi, () => ({ map: marble("hallMarble" + vi, fc, ac) })));
+  b.add(boxGeo(V(-12, 0, -12.4), V(12, 7, -12)), wall);
+  b.add(boxGeo(V(-12.4, 0, -12.4), V(-12, 7, 10)), wall);
+  b.add(boxGeo(V(12, 0, -12.4), V(12.4, 7, 10)), wall);
+  b.add(boxGeo(V(-12, 0, -12.02), V(12, 0.3, -11.9)), trim);
+  b.add(boxGeo(V(-12, 6.4, -12.05), V(12, 6.8, -11.85)), trim);
+  // paintings in gold frames on the back wall
+  for (let k = 0; k < 4; k++) {
+    const cx = -8.4 + k * 5.6;
+    b.add(boxGeo(V(cx - 1.5, 2.6, -12.0), V(cx + 1.5, 5.0, -11.92)), gold);
+    const pm = new THREE.Mesh(new THREE.PlaneGeometry(2.7, 2.1), new THREE.MeshBasicMaterial({ map: painting("hallPaint" + k, k + vi), color: 0xe4e4e4 }));
+    pm.position.set(cx, 3.8, -11.9); G.add(pm);
+  }
+  // columns along the sides
+  for (const s of [-1, 1]) for (let z = -10; z <= 8; z += 4.5) {
+    b.add(new THREE.CylinderGeometry(0.42, 0.48, 6.4, 20).translate(s * 9.5, 3.2, z), trim);
+    b.add(boxGeo(V(s * 9.5 - 0.6, 0, z - 0.6), V(s * 9.5 + 0.6, 0.3, z + 0.6)), trim);
+    b.add(boxGeo(V(s * 9.5 - 0.6, 6.3, z - 0.6), V(s * 9.5 + 0.6, 6.6, z + 0.6)), trim);
+  }
+  // plinths with a gold cap + rope stanchions in front of them
+  const P = o.plinths ?? [];
+  for (const p of P) {
+    b.add(boxGeo(V(p[0] - 0.45, 0, p[2] - 0.45), V(p[0] + 0.45, 0.94, p[2] + 0.45)), trim);
+    b.add(boxGeo(V(p[0] - 0.5, 0.94, p[2] - 0.5), V(p[0] + 0.5, 1.0, p[2] + 0.5)), gold);
+  }
+  // rope stanchions between the plinths (never in front of an exhibit), 1.6 m in front of them
+  if (P.length) {
+    const za = P[0][2] + 1.6, posts = [P[0][0] - 1.3, ...P.slice(1).map((p, k) => (p[0] + P[k][0]) / 2), P[P.length - 1][0] + 1.3];
+    for (const xs of posts) b.add(new THREE.CylinderGeometry(0.04, 0.04, 0.9, 8).translate(xs, 0.45, za), gold);
+    for (let k = 0; k + 1 < posts.length; k++) {
+      const xa = posts[k], xb = posts[k + 1];
+      b.add(new THREE.TubeGeometry(new THREE.CatmullRomCurve3([V(xa, 0.85, za), V((xa + xb) / 2, 0.55, za), V(xb, 0.85, za)]), 12, 0.03, 6), rope);
+    }
+  }
+  b.build(G);
+}
+
+const VAULT = [["#d6ecf6", "#4fa3e6"], ["#e1f3ee", "#e0485a"], ["#e4e6f6", "#f6c344"], ["#eef3f6", "#6cc2a4"]];
+export function coldVault(G: THREE.Group, o: Variant = {}) {
+  const vi = (o.variant ?? 0) % VAULT.length, [wc, cap] = VAULT[vi], b = new Batch();
+  const wall = lam("vaultWall" + vi, () => ({ color: wc })), steel = lam("vaultSteel", () => ({ color: "#aeb8c2" }));
+  const rack = lam("vaultRack", () => ({ color: "#7f8c99" })), glass = lam("vaultTube", () => ({ color: "#e8f4fb" })), capM = lam("vaultCap" + vi, () => ({ color: cap }));
+  b.add(up(-6, 6, -8, 6, 2), lam("vaultFloor", () => ({ map: tileTex() })));
+  b.add(boxGeo(V(-6, 0, -8.3), V(6, 3.6, -8)), wall);
+  b.add(boxGeo(V(-6.3, 0, -8.3), V(-6, 3.6, 6)), wall);
+  b.add(boxGeo(V(6, 0, -8.3), V(6.3, 3.6, 6)), wall);
+  // freezer racks: steel frames, shelves and rows of capped tubes (back wall + the two side walls)
+  const racks: [number, number, number, number][] = [[-5.4, -1.0, -7.95, -7.4], [1.0, 5.4, -7.95, -7.4]];
+  for (const [x0, x1, z0, z1] of racks) {
+    b.add(boxGeo(V(x0, 0, z0), V(x1, 3.0, z0 + 0.05)), rack);
+    for (let s = 0; s < 5; s++) {
+      const y = 0.35 + s * 0.6;
+      b.add(boxGeo(V(x0, y, z0), V(x1, y + 0.04, z1)), steel);
+      for (let x = x0 + 0.15; x < x1 - 0.1; x += 0.22) {
+        b.add(new THREE.CylinderGeometry(0.05, 0.05, 0.26, 8).translate(x, y + 0.17, (z0 + z1) / 2), glass);
+        b.add(new THREE.CylinderGeometry(0.056, 0.056, 0.06, 8).translate(x, y + 0.33, (z0 + z1) / 2), capM);
+      }
+    }
+    for (const x of [x0, x1 - 0.06]) b.add(boxGeo(V(x, 0, z0), V(x + 0.06, 3.0, z1)), steel);
+  }
+  for (const s of [-1, 1]) for (let z = -6.5; z < 2; z += 2.2) {
+    b.add(boxGeo(V(s < 0 ? -6 : 5.1, 0, z), V(s < 0 ? -5.1 : 6, 2.2, z + 2.0)), lam("vaultFreezer", () => ({ color: "#f4f8fb" })));
+    b.add(boxGeo(V(s < 0 ? -5.12 : 5.06, 1.4, z + 0.3), V(s < 0 ? -5.06 : 5.12, 1.9, z + 0.4)), steel);
+  }
+  // steel table in the middle
+  b.add(boxGeo(V(-1.4, 0.86, -3), V(1.4, 0.92, -2)), steel);
+  for (const [x, z] of [[-1.35, -2.95], [1.3, -2.95], [-1.35, -2.1], [1.3, -2.1]]) b.add(boxGeo(V(x, 0, z), V(x + 0.05, 0.86, z + 0.05)), rack);
+  // ceiling light strips (bright, cold)
+  for (const x of [-3, 0, 3]) b.add(boxGeo(V(x - 0.15, 3.5, -7), V(x + 0.15, 3.56, 4)), lam("vaultLamp", () => ({ color: "#ffffff", emissive: "#cfe8ff" })));
+  b.build(G);
+}

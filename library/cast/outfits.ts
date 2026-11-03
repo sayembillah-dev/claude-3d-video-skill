@@ -9,3 +9,7 @@ export const JUDGE = [0, 1, 2].map((v): Outfit => ({ jacket: "#26222e", pants: "
   skin: SKINS[[0, 3, 1][v]], build: v === 1 ? "stout" : "adult", moustache: v === 2 ? "#8f8a86" : undefined }));
 export const MJ: Outfit = { jacket: "#9e2f35", pants: "#5a2328", boots: "#3a2a20", hat: "cap", cap: "#7e2228", build: "stout", moustache: "#4a3020", skin: SKINS[0] };
 export const MLAW: Outfit = { jacket: "#4f3d6b", pants: "#33293f", boots: INK, hat: "cap", cap: "#2e2440", skin: SKINS[2], buttons: "#e8c45a" };
+// first made for "dna-drive-v2": an office worker (hero), a museum guide and a lab scientist in a white coat
+export const OFFICE: Outfit = { jacket: "#2f8f9d", pants: "#3b3f52", boots: "#5a3b2a", hat: "hair", hair: "#3a2a20", skin: SKINS[1], buttons: "#f1efe6" };
+export const GUIDE: Outfit = { jacket: "#8a2f4f", pants: "#2b2f3d", boots: INK, hat: "cap", cap: "#5a1f36", skin: SKINS[3], buttons: "#e8c45a" };
+export const SCIENTIST: Outfit = { jacket: "#f2f4f6", pants: "#5b6b8a", boots: "#3a3446", hat: "hair", hair: "#b8b0a8", skin: SKINS[2], buttons: "#9fb0c4" };

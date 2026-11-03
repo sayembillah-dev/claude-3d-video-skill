@@ -1,0 +1,91 @@
+# soundtrack cue sheet
+
+- mix.wav: 48 kHz stereo 24-bit, 3680000 samples = 76.667 s
+- integrated -15.1 LUFS, true peak -1.2 dBTP, max limiter reduction 3.91 dB
+- stems: voice -15.3 / music -22.8 / sfx -34.3 LUFS
+
+## Cues
+
+-   0.00 s  home: room tone
+-   0.66 s  save click
+-   2.30 s  swish: body?
+-   5.64 s  DNA ding
+-   5.66 s  DNA ding (glock)
+-   6.50 s  body: soft bubbles
+-   8.72 s  file pops in
+-   8.74 s  file pops in (glock)
+-   9.44 s  files flip
+-   9.79 s  files flip
+-  10.14 s  files flip
+-  10.49 s  files flip
+-  11.92 s  USB pop
+-  11.94 s  USB pop (glock)
+-  12.84 s  pull back: too small to see
+-  15.20 s  street: breeze
+-  15.20 s  street: lunch crowd
+-  18.00 s  cell file pop
+-  18.26 s  cell file pop
+-  18.54 s  cell file pop
+-  20.60 s  towers rise
+-  20.92 s  drive towers land
+-  22.20 s  towers walk
+-  22.82 s  towers walk
+-  23.44 s  towers walk
+-  24.06 s  towers walk
+-  24.68 s  towers walk
+-  25.20 s  bite
+-  25.30 s  towers walk
+-  26.10 s  museum: hall tone
+-  27.92 s  2017 ding
+-  31.04 s  petabyte tower
+-  32.86 s  gram pop
+-  35.98 s  paperclip clink
+-  40.86 s  perfectly sparkle
+-  40.93 s  perfectly sparkle
+-  41.00 s  perfectly sparkle
+-  41.07 s  perfectly sparkle
+-  42.10 s  Luckily
+-  45.88 s  Unluckily
+-  47.70 s  coin clinks
+-  47.80 s  coin clinks
+-  47.90 s  coin clinks
+-  48.00 s  coin clinks
+-  48.10 s  coin clinks
+-  48.20 s  coin clinks
+-  48.30 s  coin clinks
+-  48.40 s  coin clinks
+-  48.50 s  coin clinks
+-  48.60 s  coin clinks
+-  48.70 s  coin clinks
+-  48.80 s  coin clinks
+-  50.20 s  clock ticks fast
+-  50.32 s  clock ticks fast
+-  50.44 s  clock ticks fast
+-  50.56 s  clock ticks fast
+-  50.68 s  clock ticks fast
+-  50.80 s  clock ticks fast
+-  50.92 s  clock ticks fast
+-  51.04 s  clock ticks fast
+-  51.16 s  clock ticks fast
+-  51.28 s  clock ticks fast
+-  51.40 s  clock ticks fast
+-  51.52 s  clock ticks fast
+-  51.64 s  clock ticks fast
+-  51.76 s  clock ticks fast
+-  51.88 s  clock ticks fast
+-  52.00 s  clock ticks fast
+-  52.36 s  selfie shutter
+-  53.28 s  price tag grows
+-  54.60 s  back into the body
+-  54.76 s  body: bubbles
+-  57.06 s  cell stretches
+-  58.86 s  cell splits
+-  61.30 s  typo glitch
+-  61.35 s  typo glitch
+-  64.50 s  typo glitch
+-  64.55 s  typo glitch
+-  65.78 s  vault: cold hum
+-  67.70 s  cold mist hiss
+-  69.24 s  not in people
+-  70.38 s  home: room tone
+-  73.38 s  full sparkle

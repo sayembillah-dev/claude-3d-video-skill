@@ -22,7 +22,8 @@ const fileIcon = (p: Pen, cx: number, cy: number, k: number, v: number) => {
   if (v === 2) { p.ell(cx - 14 * k, cy + 30 * k, 16 * k, 12 * k, INK, 0); p.stroke([[cx + 2 * k, cy + 28 * k], [cx + 2 * k, cy - 40 * k], [cx + 30 * k, cy - 28 * k]], 7); }
 };
 /** one body cell: soft blob, purple nucleus with a tiny helix; file = 0..2 shows a file icon on top (or -1 none) */
-export const cell = (p: Pen, o: { file?: number; glow?: boolean; split?: number; mouth?: boolean } = {}) => {
+/** fit: keep both halves of a split inside the 600-wide canvas (the original split runs past its edges) */
+export const cell = (p: Pen, o: { file?: number; glow?: boolean; split?: number; mouth?: boolean; fit?: boolean } = {}) => {
   const body = (cx: number, rx: number, ry: number) => {
     p.ell(cx, 540, rx, ry, o.glow ? "#ffd9a0" : "#f7b3c9", 12);
     p.ell(cx, 520, rx * 0.5, ry * 0.43, "#9b73d6", 9);
@@ -30,7 +31,8 @@ export const cell = (p: Pen, o: { file?: number; glow?: boolean; split?: number;
     p.stroke(pts, 8, "#f6c344");
   };
   const s = o.split ?? 0;
-  if (s > 0.02) { body(300 - 150 * s, 250 - 60 * s, 330 - 70 * s); body(300 + 150 * s, 250 - 60 * s, 330 - 70 * s); }
+  if (s > 0.02 && o.fit) { body(300 - 142 * s, 250 - 100 * s, 330 - 90 * s); body(300 + 142 * s, 250 - 100 * s, 330 - 90 * s); }
+  else if (s > 0.02) { body(300 - 150 * s, 250 - 60 * s, 330 - 70 * s); body(300 + 150 * s, 250 - 60 * s, 330 - 70 * s); }
   else body(300, 250, 330);
   if (o.file !== undefined && o.file >= 0) fileIcon(p, 300, 120, 0.9, o.file % 3);
 };

@@ -3,6 +3,7 @@ import { Composition } from "remotion";
 import { BridgeShort, BRIDGE_FRAMES } from "./videos/bridge/Bridge";
 import { AnimalCourtShort, COURT_FRAMES } from "./videos/animal-court";
 import { DnaDriveShort, DNA_FRAMES } from "./videos/dna-drive";
+import { DnaDrive2Short, DNA2_FRAMES } from "./videos/dna-drive-v2";
 import { CaptionedVideo } from "../library/captions/CaptionedVideo";
 import { Thumbnail } from "../library/thumbnail/Thumbnail";
 import COURT_WORDS from "../projects/animal-court/voice/words.json";
@@ -13,6 +14,11 @@ export const Root: React.FC = () => (
     <Composition id="BridgeShort" component={BridgeShort} durationInFrames={BRIDGE_FRAMES} fps={30} width={1080} height={1920} />
     <Composition id="AnimalCourt" component={AnimalCourtShort} durationInFrames={COURT_FRAMES} fps={30} width={1080} height={1920} />
     <Composition id="DnaDrive" component={DnaDriveShort} durationInFrames={DNA_FRAMES} fps={30} width={1080} height={1920} />
+    <Composition id="DnaDrive2" component={DnaDrive2Short} durationInFrames={DNA2_FRAMES} fps={30} width={1080} height={1920} />
+    <Composition id="DnaDrive2Thumb" component={Thumbnail} durationInFrames={1} fps={30} width={1080} height={1920}
+      defaultProps={{ image: "_render/dna-drive-v2-thumb.jpg", lines: ["YOU ARE A", "28 ZETTABYTE", "HARD DRIVE"], accent: ["28", "ZETTABYTE"] }} />
+    <Composition id="DnaDrive2ThumbWide" component={Thumbnail} durationInFrames={1} fps={30} width={1280} height={720}
+      defaultProps={{ image: "_render/dna-drive-v2-thumb.jpg", lines: ["YOU ARE A", "HARD DRIVE"], accent: ["HARD", "DRIVE"] }} />
     <Composition id="DnaDriveThumb" component={Thumbnail} durationInFrames={1} fps={30} width={1080} height={1920}
       defaultProps={{ image: "_render/dna-drive-thumb.jpg", lines: ["YOUR BODY IS A", "HARD DRIVE"], accent: ["HARD", "DRIVE"] }} />
     <Composition id="DnaDriveThumbWide" component={Thumbnail} durationInFrames={1} fps={30} width={1280} height={720}
