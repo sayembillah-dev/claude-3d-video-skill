@@ -1,7 +1,7 @@
 import React from "react";
 import { Composition } from "remotion";
 import { BridgeShort, BRIDGE_FRAMES } from "./videos/bridge/Bridge";
-import { AnimalCourtShort, COURT_FRAMES } from "./videos/animal-court/Court";
+import { AnimalCourtShort, COURT_FRAMES } from "./videos/animal-court";
 import { CaptionedVideo } from "../library/captions/CaptionedVideo";
 import { Thumbnail } from "../library/thumbnail/Thumbnail";
 import COURT_WORDS from "../projects/animal-court/voice/words.json";
