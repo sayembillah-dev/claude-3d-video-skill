@@ -147,8 +147,12 @@ export const crane = (f: number, from: V3, to: V3, look: V3, o: Mov & { dur: num
 export type FilmData = {
   total: number;
   shots: ShotDef[];
-  /** crossfade frames at a shot's start (place / time changes) */
-  xfade?: Record<number, number>;
+  /** transition into shot id: frames (a plain dissolve) or { n, kind } (reference study 2026-11-03: link shots with
+   *  dissolves, keep hard cuts for punches). "dissolve" 4-6 f; "ripple" ~18 f, water / memory / soup-to-sea; "double"
+   *  ~24 f, both shots held at half (a face ghosted over the place it remembers). */
+  xfade?: Record<number, number | Xfade>;
+  /** anime speed lines over the frame: frames a..b, k = strength 0..1 (default 1), centre in frame fractions */
+  speedLines?: { a: number; b: number; k?: number; cx?: number; cy?: number }[];
   /** camera keys per shot id (shots may share a key list) */
   cams: Record<number, Key[]>;
   /** impact kicks [time s, strength] */
@@ -160,6 +164,10 @@ export type FilmData = {
 export type Film = FilmData & {
   shotAt(f: number): ShotDef;
   layersAt(f: number): { id: number; alpha: number }[];
+  /** the transition running at f (kind and progress 0..1), or null */
+  transAt(f: number): { kind: XfadeKind; k: number } | null;
+  /** speed-line strength at f (0 = none) and centre */
+  speedAt(f: number): { k: number; cx: number; cy: number };
   camAt(id: number, f: number): Cam;
   /** motion-blur exposure (frames) at f and the camera that long before; null = no blur (a cut inside the exposure) */
   shutterAt(id: number, f: number): { dt: number; prev: Cam } | null;
@@ -168,15 +176,35 @@ export type Film = FilmData & {
   lightAt(id: number, f: number): { A: Light; B: Light; k: number };
 };
 
+export type XfadeKind = "dissolve" | "ripple" | "double";
+export type Xfade = { n: number; kind?: XfadeKind };
+/** incoming layer opacity over a transition's progress k: "double" rises to half, holds, then resolves */
+const xAlpha = (kind: XfadeKind, k: number) => kind === "double" ? (k < 0.3 ? 0.5 * smooth(k / 0.3) : k < 0.7 ? 0.5 : 0.5 + 0.5 * smooth((k - 0.7) / 0.3))
+  : kind === "ripple" ? smooth(Math.min(1, Math.max(0, (k - 0.25) / 0.5))) : k;
+
 export const makeFilm = (d: FilmData): Film => {
-  const xf = d.xfade ?? {}, kicks = d.kicks ?? [];
+  const xf = d.xfade ?? {}, kicks = d.kicks ?? [], sl = d.speedLines ?? [];
   const shotAt = (f: number) => d.shots.find((s) => f >= s.a && f < s.b) ?? d.shots[d.shots.length - 1];
-  const layersAt = (f: number) => {
+  const transAt = (f: number) => {
     for (const s of d.shots) {
-      const x = xf[s.id];
-      if (x && f >= s.a - x / 2 && f < s.a + x / 2) return [{ id: s.id - 1, alpha: 1 }, { id: s.id, alpha: (f - (s.a - x / 2) + 1) / (x + 1) }];
+      const v = xf[s.id];
+      if (!v) continue;
+      const x = typeof v === "number" ? v : v.n, kind = typeof v === "number" ? "dissolve" : v.kind ?? "dissolve";
+      if (f >= s.a - x / 2 && f < s.a + x / 2) return { id: s.id, kind, k: (f - (s.a - x / 2) + 1) / (x + 1) };
     }
+    return null;
+  };
+  const layersAt = (f: number) => {
+    const t = transAt(f);
+    if (t) return [{ id: t.id - 1, alpha: 1 }, { id: t.id, alpha: xAlpha(t.kind, t.k) }];
     return [{ id: shotAt(f).id, alpha: 1 }];
+  };
+  const speedAt = (f: number) => {
+    for (const l of sl) if (f >= l.a && f < l.b) {
+      const e = Math.min(1, (f - l.a + 1) / 4, (l.b - f) / 4); // 4-frame ramp in and out
+      return { k: (l.k ?? 1) * e, cx: l.cx ?? 0.5, cy: l.cy ?? 0.45 };
+    }
+    return { k: 0, cx: 0.5, cy: 0.45 };
   };
   const run = (keys: Key[], f: number) => {
     let cur = full(keys[0].s(f));
@@ -227,5 +255,5 @@ export const makeFilm = (d: FilmData): Film => {
     if (!to) return { A: s.light, B: s.light, k: 0 };
     return { A: s.light, B: to.light, k: smooth((f - to.a) / Math.max(1, to.b - to.a)) };
   };
-  return { ...d, shotAt, layersAt, camAt, shutterAt, dofAt, lightAt };
+  return { ...d, shotAt, layersAt, transAt: (f: number) => { const t = transAt(f); return t && { kind: t.kind as XfadeKind, k: t.k }; }, speedAt, camAt, shutterAt, dofAt, lightAt };
 };

@@ -5,7 +5,8 @@
 // Ink runs before the DOF so lines blur with what they belong to; bloom after the DOF so glows defocus with their
 // source; the grade is display-referred, so it comes after tone mapping. Every pixel-sized parameter is specified at
 // 1080x1920 and scaled with the output size, so stills at --scale 0.5 and 2K / 4K finals match.
-// Place changes crossfade by stacking a second canvas for the fade frames; optional 4-frame white flash; captions last.
+// Place changes crossfade by stacking a second canvas for the fade frames (dissolve, ripple = SVG displacement over both
+// layers, double = held half-mix: transitions.tsx); speed-line overlay; optional 4-frame white flash; captions last.
 // Usage (a video's index.tsx): export const MyShort = makeShort(PRODUCTION, { words, keywords });
 import React, { useEffect, useMemo } from "react";
 import * as THREE from "three";
@@ -20,6 +21,7 @@ import { InkPass, noInkFallback } from "../engine/ink";
 import { LensBlur, GrainEffect } from "../engine/lensblur";
 import { GradeEffect, GRADES, GRADE_STRENGTH, gradeMix } from "../engine/grade";
 import { Captions, Word, CaptionStyle } from "../captions/Captions";
+import { RippleWrap, SpeedLines } from "./transitions";
 
 /** A/B switches for test stills only (Remotion inputProps `{ post: { ink: false, ... } }`); everything is on by default. */
 type PostToggles = { ink: boolean; lens: boolean; pre: boolean; blur: boolean; bloom: boolean; grade: boolean; grain: boolean };
@@ -115,9 +117,13 @@ export const makeShort = (prod: Production, o: ShortOptions = {}): React.FC => (
   const fa = prod.film.flashAt ?? -99;
   const flash = f >= fa && f < fa + 4 ? [1, 0.75, 0.45, 0.2][f - fa] : 0;
   const caps = o.words && (getInputProps() as { captions?: boolean }).captions !== false;
+  const tr = prod.film.transAt(f), sp = prod.film.speedAt(f);
   return (
     <AbsoluteFill style={{ background: o.background ?? "#cfe3f2" }}>
-      {prod.film.layersAt(f).map((l, i) => <ShotView key={i ? "over" : "base"} id={l.id} prod={prod} alpha={l.alpha} />)}
+      <RippleWrap k={tr && tr.kind === "ripple" ? tr.k : null}>
+        {prod.film.layersAt(f).map((l, i) => <ShotView key={i ? "over" : "base"} id={l.id} prod={prod} alpha={l.alpha} />)}
+      </RippleWrap>
+      <SpeedLines f={f} k={sp.k} cx={sp.cx} cy={sp.cy} />
       {flash > 0 && <AbsoluteFill style={{ background: "#ffffff", opacity: flash }} />}
       {caps && <Captions words={o.words!} keywords={o.keywords} style={o.captionStyle} />}
     </AbsoluteFill>
