@@ -3,3 +3,4 @@ animal-court,,2026-11-03T08:35,68.8,1440x2560,claude-sonnet-5-5+claude-opus-5-5,
 dna-drive,2026-11-03T09:55,2026-11-03T10:22,75.3,1080x1920,claude-sonnet-5-5,Ultra,55.0,55.0,0.0,225000,30,3375000,3138750,78750,2.11,1142,0.25,3.5,0,25,,2.36,
 dna-drive-v2,2026-11-03T10:44,2026-11-03T11:02,75.3,1080x1920,claude-opus-5-5,Ultra,55.0,56.0,1.0,229288,52,5961488,5544183,80250,4.34,1142,0.25,3.0,0,41,,4.59,
 teleport,,2026-11-03T18:34,83.7,1080x1920,claude-opus-5-5,Ultra,58.0,60.0,2.0,300000,220,33000000,30690000,105000,12.38,1365,0.3,13.3,0,150,,12.68,"v1 orbits passed the motion gate (65%) but broke the booth cards; v2 restaged with pushes/cuts after user review (44%, accepted); thumbnails via bridge-stills"
+sleep-experiment,2026-11-05T08:50,2026-11-05T09:59,73.8,1080x1920,claude-opus-5-5+claude-sonnet-5-5,Ultra,77.0,77.0,0.0,347097,95,16487107,15333009,121483,7.18,1230,0.27,9.0,1,75,,7.45,

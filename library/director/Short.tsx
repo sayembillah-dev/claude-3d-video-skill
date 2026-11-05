@@ -110,7 +110,11 @@ const ShotView: React.FC<{ id: number; prod: Production; alpha: number }> = ({ i
   </AbsoluteFill>
 );
 
-export type ShortOptions = { words?: Word[]; keywords?: string[]; captionStyle?: CaptionStyle; background?: string };
+export type ShortOptions = { words?: Word[]; keywords?: string[]; captionStyle?: CaptionStyle; background?: string;
+  /** 2D picture shake per frame (handheld, impacts): px offsets at 1080 wide, rotation in degrees, zoom >= 1 hides edges */
+  shake?: (f: number) => { x: number; y: number; rot: number; s: number };
+  /** a full-frame layer over the picture and under the captions (film grain, vignette, flicker, flash frames) */
+  overlay?: React.FC<{ f: number }> };
 /** the composition for a production: crossfaded shot layers, the white flash after the hook, captions on top
  *  (inputProps `{ captions: false }` renders without captions, e.g. for a clean master) */
 export const makeShort = (prod: Production, o: ShortOptions = {}): React.FC => () => {
@@ -124,14 +128,17 @@ export const makeShort = (prod: Production, o: ShortOptions = {}): React.FC => (
   const fa = prod.film.flashAt ?? -99;
   const flash = f >= fa && f < fa + 4 ? [1, 0.75, 0.45, 0.2][f - fa] : 0;
   const caps = o.words && (getInputProps() as { captions?: boolean }).captions !== false;
-  const tr = prod.film.transAt(f), sp = prod.film.speedAt(f);
+  const tr = prod.film.transAt(f), sp = prod.film.speedAt(f), sh = o.shake?.(f);
   return (
     <AbsoluteFill style={{ background: o.background ?? "#cfe3f2" }}>
-      <RippleWrap k={tr && tr.kind === "ripple" ? tr.k : null}>
-        {ready && prod.film.layersAt(f).map((l, i) => <ShotView key={i ? "over" : "base"} id={l.id} prod={prod} alpha={l.alpha} />)}
-      </RippleWrap>
+      <AbsoluteFill style={sh ? { transform: `translate(${sh.x}px, ${sh.y}px) rotate(${sh.rot}deg) scale(${sh.s})` } : undefined}>
+        <RippleWrap k={tr && tr.kind === "ripple" ? tr.k : null}>
+          {ready && prod.film.layersAt(f).map((l, i) => <ShotView key={i ? "over" : "base"} id={l.id} prod={prod} alpha={l.alpha} />)}
+        </RippleWrap>
+      </AbsoluteFill>
       <SpeedLines f={f} k={sp.k} cx={sp.cx} cy={sp.cy} />
       {flash > 0 && <AbsoluteFill style={{ background: "#ffffff", opacity: flash }} />}
+      {o.overlay && <o.overlay f={f} />}
       {caps && <Captions words={o.words!} keywords={o.keywords} style={o.captionStyle} />}
     </AbsoluteFill>
   );

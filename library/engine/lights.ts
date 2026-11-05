@@ -14,10 +14,11 @@ export type LightPreset = {
 };
 /** every light a shot can use: day / golden (bridge study), storm (saturated ultramarine, from the 2026-11-03 reference
  *  study: sky #1d2991 -> #4444c1 at the horizon, water ~#3a5ad8, heavy blue fog), dusk (blue hour after sunset) */
-export type LightName = "day" | "golden" | "storm" | "dusk";
-export const LIGHT_NAMES: LightName[] = ["day", "golden", "storm", "dusk"];
+// dread (first made for "sleep-experiment"): a dark, desaturated, sickly interior with deep fog; night: moonlit blue room
+export type LightName = "day" | "golden" | "storm" | "dusk" | "dread" | "night";
+export const LIGHT_NAMES: LightName[] = ["day", "golden", "storm", "dusk", "dread", "night"];
 /** lights whose sun is low: real card shadows, a wider shadow camera, the sun disc + halo on screen */
-export const LOW_SUN: Record<LightName, boolean> = { day: false, golden: true, storm: false, dusk: true };
+export const LOW_SUN: Record<LightName, boolean> = { day: false, golden: true, storm: false, dusk: true, dread: false, night: false };
 export const LIGHTS: Record<LightName, LightPreset> = {
   day: {
     az: 75, el: 48,
@@ -54,6 +55,24 @@ export const LIGHTS: Record<LightName, LightPreset> = {
     top: "#1f2a66", hor: "#f0a37c", skyCurve: [0.05, 0.6, 1.0], fog: "#b58aa6", fogNear: 40, fogFar: 320, sunDisc: "#ff9f8a",
     sunCol: "#ff9a7a", sunI: 3.2, sky: "#9a8ac8", ground: "#4a3f6a", hemiI: 0.55,
     bias: -0.0006, normalBias: 0.03,
+  },
+  dread: {
+    az: 160, el: 60,
+    lit: [0.66, 0.68, 0.5], shade: [0.07, 0.1, 0.1], lift: [0.015, 0.025, 0.025], lambert: 0.45, sideK: 0.8, term: 0.25,
+    charTint: [0.84, 0.86, 0.7], charShade: 0.78, charGrad: 0.16, bodyGrad: 0.36, sideTint: [0.78, 0.84, 0.82],
+    blob: [0.35, 0.38, 0.38], actorShadow: false,
+    top: "#0a100e", hor: "#18201d", skyCurve: [0.0, 0.5, 0.6], fog: "#0f1513", fogNear: 3, fogFar: 22, sunDisc: "#000000",
+    sunCol: "#dfe3b4", sunI: 1.25, sky: "#4f5a4a", ground: "#1a1f1b", hemiI: 0.42,
+    bias: -0.00025, normalBias: 0.015,
+  },
+  night: {
+    az: 150, el: 40,
+    lit: [0.36, 0.44, 0.8], shade: [0.05, 0.06, 0.15], lift: [0.015, 0.02, 0.06], lambert: 0.4, sideK: 0.82, term: 0.2,
+    charTint: [0.62, 0.7, 0.98], charShade: 0.82, charGrad: 0.14, bodyGrad: 0.32, sideTint: [0.75, 0.8, 1.0],
+    blob: [0.3, 0.3, 0.45], actorShadow: false,
+    top: "#04071a", hor: "#121a3a", skyCurve: [0.0, 0.5, 0.6], fog: "#0a0f28", fogNear: 4, fogFar: 26, sunDisc: "#000000",
+    sunCol: "#a8b8ff", sunI: 1.2, sky: "#38447c", ground: "#12162c", hemiI: 0.4,
+    bias: -0.00025, normalBias: 0.015,
   },
 };
 
@@ -97,6 +116,20 @@ export const LOOK: Record<LightName, WorldLook> = {
     cloud: { lit: "#ffc2a0", mid: "#c88ab0", shade: "#5d5a9e" },
     bounce: [0.03, 0.01, 0.02],
     sat: 1.1,
+  },
+  dread: {
+    sky: { c: ["#18201d", "#141b18", "#101614", "#0c1210", "#0a100e"], e: [0, 3, 8, 16, 40] },
+    water: { near: "#2a3a36", mid: "#22302c", far: "#18201d", crest: "#6a7a70", trough: "#101614", glint: "#a8b0a0", shade: [0.4, 0.45, 0.45] },
+    cloud: { lit: "#3a443e", mid: "#2a322e", shade: "#1a201d" },
+    bounce: [0, 0.01, 0.01],
+    sat: 0.72,
+  },
+  night: {
+    sky: { c: ["#121a3a", "#0e1532", "#0a1028", "#070c20", "#04071a"], e: [0, 3, 8, 16, 40] },
+    water: { near: "#1a2450", mid: "#141c42", far: "#121a3a", crest: "#5a6aa0", trough: "#0a1028", glint: "#c0ccff", shade: [0.4, 0.42, 0.65] },
+    cloud: { lit: "#3a4470", mid: "#262e54", shade: "#141a36" },
+    bounce: [0, 0, 0.02],
+    sat: 0.85,
   },
 };
 

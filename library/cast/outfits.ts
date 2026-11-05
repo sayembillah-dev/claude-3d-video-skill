@@ -16,3 +16,15 @@ export const SCIENTIST: Outfit = { jacket: "#f2f4f6", pants: "#5b6b8a", boots: "
 // first made for "teleport": a commuter in a mustard jacket (hero) and a tweedy philosopher
 export const COMMUTER: Outfit = { jacket: "#e8a33a", pants: "#3b4a7a", boots: "#4a3020", hat: "hair", hair: "#b8572a", skin: SKINS[0], buttons: "#3b4a7a" };
 export const PHILOSOPHER: Outfit = { jacket: "#7a5a3a", pants: "#4a3f36", boots: INK, hat: "hair", hair: "#d9d4cc", skin: SKINS[0], moustache: "#d9d4cc", build: "stout" };
+// first made for "sleep-experiment": 1940s Soviet roles. Prisoners are bald (no hat) in grey camp uniforms; the gaunt
+// version is pale with sleepless eye bags. Soldiers wear an ushanka and carry a rifle; the commander a peaked cap.
+export const PRISONER = [0, 1, 2, 3, 4].map((v): Outfit => ({ jacket: ["#7d8078", "#73776e", "#868a80", "#6f726a", "#7a7e74"][v], pants: "#55584f",
+  boots: "#3a3430", hat: null, skin: SKINS[[0, 1, 2, 3, 1][v]], buttons: "#c9cbbd", moustache: v === 3 ? "#3a2a20" : undefined, build: v === 2 ? "stout" : "adult" }));
+export const PRISONER_GAUNT = PRISONER.map((o): Outfit => ({ ...o, skin: ["#e3dcc0", "#d9d2b0", "#dcd8bc", "#b8a68a", "#d9d2b0"][PRISONER.indexOf(o)],
+  bags: "#7a5a72", build: "adult" }));
+export const SOVIET_SOLDIER = [0, 1, 2].map((v): Outfit => ({ jacket: "#6b6e48", pants: "#4d4f36", boots: INK, hat: "ushanka", cap: ["#6b5440", "#5a4a3a", "#7a6450"][v],
+  belt: "#4a3020", buttons: "#c9b46a", rifle: true, skin: SKINS[[1, 0, 2][v]], moustache: v === 1 ? "#4a3426" : undefined }));
+export const COMMANDER: Outfit = { jacket: "#5c5a46", pants: "#3e3d30", boots: INK, hat: "peaked", cap: "#56603e", belt: "#3a2a1c",
+  buttons: "#e8c45a", moustache: "#3a2a20", build: "stout", skin: SKINS[1] };
+export const SOV_SCIENTIST = [0, 1, 2].map((v): Outfit => ({ jacket: "#e4e0d0", pants: ["#4a4f5a", "#5a5046", "#3e4a46"][v], boots: "#2e2a30", hat: "hair",
+  hair: ["#2e2620", "#8f8a86", "#6a4a30"][v], skin: SKINS[[0, 2, 1][v]], buttons: "#9fb0c4", moustache: v === 1 ? "#8f8a86" : undefined }));

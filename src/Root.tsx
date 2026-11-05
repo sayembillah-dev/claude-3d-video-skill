@@ -5,6 +5,7 @@ import { AnimalCourtShort, COURT_FRAMES } from "./videos/animal-court";
 import { DnaDriveShort, DNA_FRAMES } from "./videos/dna-drive";
 import { DnaDrive2Short, DNA2_FRAMES } from "./videos/dna-drive-v2";
 import { TeleportShort, TELEPORT_FRAMES } from "./videos/teleport";
+import { SleepShort, SLEEP_FRAMES } from "./videos/sleep-experiment";
 import { CaptionedVideo } from "../library/captions/CaptionedVideo";
 import { Thumbnail } from "../library/thumbnail/Thumbnail";
 import COURT_WORDS from "../projects/animal-court/voice/words.json";
@@ -16,6 +17,11 @@ export const Root: React.FC = () => (
     <Composition id="AnimalCourt" component={AnimalCourtShort} durationInFrames={COURT_FRAMES} fps={30} width={1080} height={1920} />
     <Composition id="DnaDrive" component={DnaDriveShort} durationInFrames={DNA_FRAMES} fps={30} width={1080} height={1920} />
     <Composition id="DnaDrive2" component={DnaDrive2Short} durationInFrames={DNA2_FRAMES} fps={30} width={1080} height={1920} />
+    <Composition id="SleepExperiment" component={SleepShort} durationInFrames={SLEEP_FRAMES} fps={30} width={1080} height={1920} />
+    <Composition id="SleepThumb" component={Thumbnail} durationInFrames={1} fps={30} width={1080} height={1920}
+      defaultProps={{ image: "_render/sleep-thumb.jpg", lines: ["THE RUSSIAN", "SLEEP", "EXPERIMENT"], accent: ["SLEEP"] }} />
+    <Composition id="SleepThumbWide" component={Thumbnail} durationInFrames={1} fps={30} width={1280} height={720}
+      defaultProps={{ image: "_render/sleep-thumb-wide.jpg", lines: ["THE RUSSIAN", "SLEEP EXPERIMENT"], accent: ["SLEEP"] }} />
     <Composition id="Teleport" component={TeleportShort} durationInFrames={TELEPORT_FRAMES} fps={30} width={1080} height={1920} />
     <Composition id="TeleportThumb" component={Thumbnail} durationInFrames={1} fps={30} width={1080} height={1920}
       defaultProps={{ image: "_render/teleport-thumb.jpg", lines: ["TELEPORT", "= DEATH?"], accent: ["DEATH"] }} />

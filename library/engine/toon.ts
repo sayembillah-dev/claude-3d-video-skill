@@ -17,7 +17,7 @@ export type Build = "adult" | "stout" | "kid";
 export type Outfit = {
   jacket: string; pants: string; boots: string; hat?: string | null; belt?: string | null; buttons?: string; rifle?: boolean;
   sash?: string; sword?: boolean; moustache?: string; skin?: string; head?: number; cap?: string; hair?: string; dress?: string;
-  build?: Build;
+  build?: Build; bags?: string;
 };
 type P2 = [number, number];
 
@@ -227,9 +227,10 @@ const DEF_LIGHT = rad(-120);
 
 // ---------------- faces ----------------
 export type Expr = "neutral" | "stern" | "grin" | "laugh" | "whistle" | "nervous" | "shock" | "relief" | "relief_open" | "dazed"
-  | "pained" | "smile" | "smile_closed" | "lick";
-type EyeK = "dot" | "small" | "lid" | "slit" | "happy" | "dash" | "squeeze" | "shock" | "shockHalf" | "spiral";
-type MouthK = "dash" | "frown" | "smirk" | "smile" | "smileWide" | "grin" | "laugh" | "o" | "O" | "wave" | "teeth" | "lick";
+  | "pained" | "smile" | "smile_closed" | "lick" | "creepy" | "scream" | "haunted" | "hollow" | "hollowGrin" | "hollowScream"
+  | "fear" | "terror" | "weary" | "whisper" | "plead" | "grim" | "hope" | "hollowPlead";
+type EyeK = "dot" | "small" | "lid" | "slit" | "happy" | "dash" | "squeeze" | "shock" | "shockHalf" | "spiral" | "hollow";
+type MouthK = "dash" | "frown" | "smirk" | "smile" | "smileWide" | "grin" | "laugh" | "o" | "O" | "wave" | "teeth" | "lick" | "creep" | "scream";
 /** eyes [back, front], brows [inner, outer] offsets in u (+ = down), mouth kind */
 const FACE: Record<Expr, { eye: [EyeK, EyeK]; brow: [number, number]; mouth: MouthK }> = {
   neutral: { eye: ["lid", "lid"], brow: [0, -1], mouth: "dash" },
@@ -246,6 +247,23 @@ const FACE: Record<Expr, { eye: [EyeK, EyeK]; brow: [number, number]; mouth: Mou
   smile: { eye: ["dot", "dot"], brow: [0, -1], mouth: "smirk" },
   smile_closed: { eye: ["happy", "happy"], brow: [0, -1], mouth: "smile" },
   lick: { eye: ["dot", "dot"], brow: [0, -1], mouth: "lick" },
+  // first made for "sleep-experiment": an unblinking too-wide grin, a full scream, a wide-eyed haunted stare
+  creepy: { eye: ["shock", "shock"], brow: [5, -3], mouth: "creep" },
+  scream: { eye: ["squeeze", "squeeze"], brow: [-6, 3], mouth: "scream" },
+  haunted: { eye: ["shock", "shock"], brow: [-2, 3], mouth: "dash" },
+  // black sunken sockets with pinprick pupils (horror): blank stare, too-wide grin, scream
+  hollow: { eye: ["hollow", "hollow"], brow: [1, 1], mouth: "dash" },
+  hollowGrin: { eye: ["hollow", "hollow"], brow: [-1, 2], mouth: "creep" },
+  hollowScream: { eye: ["hollow", "hollow"], brow: [-5, 4], mouth: "scream" },
+  // realistic fear set (sleep-experiment v3): worried brows (inner ends up), no smiles
+  fear: { eye: ["shock", "shock"], brow: [-7, 3], mouth: "frown" },
+  terror: { eye: ["shock", "shock"], brow: [-9, 4], mouth: "scream" },
+  weary: { eye: ["lid", "lid"], brow: [-3, 3], mouth: "frown" },
+  whisper: { eye: ["small", "small"], brow: [-2, 1], mouth: "o" },
+  plead: { eye: ["shock", "shock"], brow: [-8, 4], mouth: "O" },
+  grim: { eye: ["lid", "lid"], brow: [3, -1], mouth: "frown" },
+  hope: { eye: ["dot", "dot"], brow: [-4, 2], mouth: "dash" },
+  hollowPlead: { eye: ["hollow", "hollow"], brow: [-6, 4], mouth: "O" },
 };
 const halfLid = (k: EyeK): EyeK => (k === "dot" || k === "small" ? "lid" : k === "lid" ? "slit" : k === "shock" ? "shockHalf" : k);
 const eyeKind = (k: EyeK, lid: number): EyeK =>
@@ -262,6 +280,10 @@ const eye = (p: Pen, kind: EyeK, x: number, ey: number, u: number, side: number,
     case "happy": p.arc(x, ey + 3 * u, 8 * u, 6 * u, 200, 340, lw); break;
     case "dash": p.stroke([[x - 8.5 * u, ey], [x + 8.5 * u, ey]], lw); break;
     case "squeeze": p.stroke([[x + 6 * u * side, ey - 5 * u], [x - 6 * u * side, ey], [x + 6 * u * side, ey + 5 * u]], lw); break;
+    case "hollow":
+      p.ell(x, ey + 2 * u, 15 * u, 17 * u, "rgba(40,20,40,.35)", 0); p.ell(x, ey + u, 12 * u, 14 * u, "#0b0709", 0);
+      p.ell(lx, ey + 2 * u, 2.2 * u, 2.2 * u, "#f4f0e0", 0);
+      break;
     case "shock": case "shockHalf":
       p.ell(x, ey, 11 * u, 11 * u, WHITE, 2.6 * u); p.dot(lx - side * 1.5 * u, ey + 1.5 * u, 3 * u);
       if (kind === "shockHalf") { p.ell(x, ey, 11 * u, 11 * u, skin, 0, 180, 360); p.stroke([[x - 11 * u, ey], [x + 11 * u, ey]], 2.6 * u); }
@@ -300,15 +322,30 @@ const mouth = (p: Pen, kind: MouthK, mx: number, my: number, u: number, k = 1) =
       for (const j of [-1, 0, 1]) p.stroke([[mx + j * 6 * u * k, my - 4 * u], [mx + j * 6 * u * k, my + 4 * u]], 1.5 * u);
       break;
     case "lick": p.arc(mx, my - 3 * u, 8 * u * k, 4.5 * u, 20, 160, mw); p.ell(mx + 6 * u * k, my + 3 * u, 3.6 * u, 4.6 * u, TONGUE, 2.4 * u); break;
+    case "creep": { // a thin crescent of teeth stretched almost ear to ear, corners hooked up
+      const w = 22 * u * k, cr: P2[] = [];
+      for (let i = 0; i <= 16; i++) { const t = i / 16, x = mx - w + 2 * w * t; cr.push([x, my - 6 * u + 9 * u * Math.sin(Math.PI * t)]); }
+      for (let i = 16; i >= 0; i--) { const t = i / 16, x = mx - w + 2 * w * t; cr.push([x, my - 6 * u + 3 * u * Math.sin(Math.PI * t)]); }
+      p.poly(cr, WHITE, 3 * u);
+      for (let j = -3; j <= 3; j++) { const x = mx + j * 5.5 * u * k, t = (x - mx + w) / (2 * w); p.stroke([[x, my - 6 * u + 3 * u * Math.sin(Math.PI * t)], [x, my - 6 * u + 9 * u * Math.sin(Math.PI * t)]], 1.3 * u); }
+      for (const sd of [-1, 1]) p.stroke([[mx + sd * w, my - 6 * u], [mx + sd * (w + 4 * u), my - 11 * u]], 3 * u);
+      break;
+    }
+    case "scream": p.ell(mx, my + 5 * u, 11 * u * k, 17 * u, MOUTH, 3.4 * u); p.ell(mx, my + 15 * u, 6 * u * k, 5 * u, TONGUE, 0); break;
   }
 };
 
 /** face v2 (front / 3-4). u = 1 % of the head path width W. Eyes 26u apart on the centre line, brows 20u up, mouth 20u
  *  down, everything slid toward the facing side. No blush, no catchlights. */
 export const faceFront = (p: Pen, cx: number, cy: number, W: number, expr: Expr, facing: number, look: number, lid: number, brim: boolean,
-  skin: string, moustache?: string, stout = false) => {
-  const u = W / 100, F = FACE[expr], fx = cx + 7 * u * facing;
+  skin: string, moustache?: string, stout = false, bags?: string, mouthK?: string) => {
+  const u = W / 100, F = mouthK ? { ...FACE[expr], mouth: mouthK as MouthK } : FACE[expr], fx = cx + 7 * u * facing;
   const ex = (F.eye[0] === "shock" ? 12 : 13) * u, ey = cy;
+  if (bags) for (const side of [-1, 1]) { // sleepless eye bags: two dark crescents under each eye
+    const x = fx + side * ex;
+    p.arc(x, ey + 9 * u, 10 * u, 5 * u, 20, 160, 3.2 * u, bags);
+    p.arc(x, ey + 14 * u, 8 * u, 4 * u, 30, 150, 2 * u, bags);
+  }
   for (const side of [-1, 1]) {
     const x = fx + side * ex;
     const kind = eyeKind(F.eye[(facing ? side === facing : side > 0) ? 1 : 0], lid);
@@ -339,6 +376,12 @@ const faceSide = (p: Pen, hx: number, hy: number, W: number, expr: Expr, lid: nu
 };
 
 // ---------------- hats ----------------
+/** a small five-point badge star */
+const star = (p: Pen, x: number, y: number, r: number, fill: string, ol: number) => {
+  const pts: P2[] = [];
+  for (let i = 0; i < 10; i++) { const a = -Math.PI / 2 + (i * Math.PI) / 5, rr = i % 2 ? r * 0.45 : r; pts.push([x + rr * Math.cos(a), y + rr * Math.sin(a)]); }
+  p.poly(pts, fill, ol);
+};
 const BONNET = "#e9cf8f", BONNET_BRIM = "#d6b46a";
 /** parts of a hat that sit behind the head (bonnet) */
 const hatBehind = (p: Pen, o: Outfit, H: Blob, cx: number, hc: number, light: number, thick: number, ow: number, side: boolean) => {
@@ -404,6 +447,28 @@ const hatOn = (p: Pen, o: Outfit, hp: P2[], H: Blob, cx: number, hc: number, lig
         p.ell(px, py, 32 * u, 0.06 * HH, shade(col, 0.8), ow, 0, 180, deg);
       }
     }
+  } else if (o.hat === "ushanka") { // fur trapper hat: a fluffy crown band, a raised front flap and two ear flaps (o.cap = fur)
+    const fur = o.cap ?? "#6b5440", yb = crown + 0.3 * HH, wb = 0.52 * W;
+    const top = R([[cx - wb, yb], ...ellPts(cx, yb, wb, 0.42 * HH, 180, 360, 0, 24), [cx + wb, yb]]);
+    p.shadedFill(top, shade(fur, 0.82), mul(fur, SH_FELT), light, wb, 0.4); p.poly(top, null, ow);
+    if (!side) for (const sd of [-1, 1]) { // ear flaps hanging past the cheeks
+      const fl = R([[cx + sd * 0.4 * W, yb - 2 * u], [cx + sd * 0.56 * W, yb], [cx + sd * 0.54 * W, yb + 0.42 * HH], [cx + sd * 0.42 * W, yb + 0.38 * HH]]);
+      p.shadedFill(fl, fur, mul(fur, SH_FELT), light, 0.1 * W, 0.4); p.poly(fl, null, ow);
+    }
+    const band = R(ellPts(cx, yb - 0.02 * HH, wb * 1.04, 0.13 * HH, 0, 360, 0, 28));
+    p.shadedFill(band, fur, mul(fur, SH_FELT), light, wb, 0.4); p.poly(band, null, ow);
+    for (let i = 0; i < 9; i++) { const [tx, ty] = R([[cx - wb * 0.9 + (i * 1.8 * wb) / 8, yb - 0.02 * HH + ((i % 2) - 0.5) * 0.08 * HH]])[0]; p.stroke([[tx, ty], [tx + 2 * u, ty - 3 * u]], 1.3 * u, shade(fur, 0.6)); }
+    if (!side) { const [sx, sy] = R([[cx, yb - 0.2 * HH]])[0]; star(p, sx, sy, 6 * u, "#d8343a", 1.8 * u); }
+  } else if (o.hat === "peaked") { // military peaked cap: wide flat crown, coloured band, black visor, red star (o.cap = crown)
+    const col = o.cap ?? "#5a6a48", yb = crown + 0.3 * HH, wt = 0.62 * W, wb = 0.44 * W, h = 0.3 * HH;
+    const crownP = R([[cx - wb, yb], [cx - wt, yb - h * 0.7], ...ellPts(cx, yb - h * 0.7, wt, 0.16 * HH, 180, 360, 0, 20), [cx + wt, yb - h * 0.7], [cx + wb, yb]]);
+    p.shadedFill(crownP, col, mul(col, SH_FELT), light, wt, 0.4); p.poly(crownP, null, ow);
+    const band = R([[cx - wb, yb], [cx + wb, yb], [cx + wb, yb - 0.11 * HH], [cx - wb, yb - 0.11 * HH]]);
+    p.poly(band, "#b8323a", ow);
+    const deg = (a * 180) / Math.PI, [px, py] = R([[cx + 3 * u * facing, yb + 2 * u]])[0];
+    if (side) p.poly(R([[cx + 30 * u, yb - u], [cx + 62 * u, yb + 9 * u], [cx + 30 * u, yb + 5 * u]]), "#16171b", 2.5 * u);
+    else p.ell(px, py, 36 * u, 0.06 * HH, "#16171b", 2.5 * u, 0, 180, deg);
+    if (!side) { const [sx, sy] = R([[cx, yb - 0.06 * HH]])[0]; star(p, sx, sy, 5 * u, "#e8c45a", 1.6 * u); }
   } else if (o.hat === "tophat") {
     const yb = crown + 0.22 * HH, ht = 0.8 * HH, wb = 0.31 * W, wt = 0.33 * W, col = "#2e2a36";
     const body = R([...sag(yb, wb).reverse(), [cx - wt, yb - ht], [cx + wt, yb - ht]]);
@@ -433,7 +498,15 @@ const BUILD: Record<Build, { a: number; torso: number; legs: number; tw: number 
   kid: { a: 112, torso: 0.85, legs: 1.0, tw: 0.72 },
 };
 
+/** arm poses (sleep-experiment v3): head = clutching the head, throat = both hands at the throat, cover = a sleeve over
+ *  the face, point = one arm straight out (armK > 0 screen right, < 0 left), reach = both arms up, hold = both hands at
+ *  the chest (armK 0..1 pulls them apart: tearing), press = both palms up at the face (pressing on glass toward the lens),
+ *  ear = a hand on the ear, knees = hugging the knees (sit) */
+export type ArmPose = "head" | "throat" | "cover" | "point" | "reach" | "hold" | "press" | "ear" | "knees";
 export type FrontOpts = {
+  /** an arm pose (overrides wave / prop arms), its animation 0..1 (point: -1..1), a head bowed to the chest 0..1, and a
+   *  mouth shape that overrides the expression's (talking: cycle "dash" / "o" / "O") */
+  arms?: ArmPose; armK?: number; headDrop?: number; mouth?: string;
   phase?: number; expr?: Expr; mode?: "march" | "stroll" | "stand" | "sit" | "fall"; look?: number; blink?: boolean | number; lift?: number;
   prop?: Prop; tilt?: number; headTilt?: number; wave?: number;
   /** canvas angle the key light comes FROM (painted crescent + thick outline side) */
@@ -447,7 +520,7 @@ const footStroke = (p: Pen, a: P2, b: P2, w: number, col: string) => {
 
 export const bodyFront = (p: Pen, o: Outfit, opts: FrontOpts) => {
   const { phase = 0, expr = "neutral", mode = "march", look = 0, blink = false, lift = 60, prop = null, tilt = 0, headTilt = 0, wave,
-    light = DEF_LIGHT, facing = 0, seed = 1 } = opts;
+    light = DEF_LIGHT, facing = 0, seed = 1, arms: pose, armK = 0, headDrop = 0, mouth: mouthK } = opts;
   const Bd = BUILD[o.build ?? "adult"], skin = o.skin ?? SKIN, two = Math.PI * 2, lid = lidOf(blink);
   const H = headBlob(seed, Bd.a, facing), W = 2 * H.a, HH = 2 * H.b, u = W / 100;
   const tall = (1 + Bd.torso + Bd.legs) * HH, sole = 975;
@@ -511,7 +584,25 @@ export const bodyFront = (p: Pen, o: Outfit, opts: FrontOpts) => {
   const rifle = !!o.rifle && (mode === "march" || mode === "stand" || mode === "stroll");
   type Arm = { pts: [P2, P2, P2]; front: boolean };
   const arms: Arm[] = [];
-  if (mode === "sit") for (const side of [-1, 1]) arms.push({ pts: [sh(side), [tcx + side * (1.1 * T.a + 6 * u), sh(side)[1] + 0.4 * HH], [tcx + side * (1.2 * T.a + 10 * u), torsoBot + 0.04 * HH]], front: false });
+  const late: Arm[] = []; // arms drawn over the head (hands on the head / face / throat / ear / pressing)
+  const hdY = hc + headDrop * 0.3 * HH;
+  if (pose) {
+    for (const side of [-1, 1]) {
+      const S = sh(side), k = armK;
+      if (pose === "head") late.push({ pts: [S, [tcx + side * (1.35 * T.a + 18 * u), S[1] - 0.42 * HH], [300 + side * 0.92 * H.a, hdY - 0.25 * HH + side * 2 * u * k]], front: true });
+      else if (pose === "throat") late.push({ pts: [S, [tcx + side * (1.05 * T.a + 6 * u), S[1] + 0.32 * HH], [300 + side * 9 * u, chin + 3 * u]], front: true });
+      else if (pose === "cover") (side < 0 ? late : arms).push(side < 0 ? { pts: [S, [tcx - 1.05 * T.a, S[1] + 0.2 * HH], [300 + 6 * u, hdY + 0.28 * HH]], front: true } : { pts: hang(1, 0), front: false });
+      else if (pose === "point") {
+        const s = k >= 0 ? 1 : -1;
+        if (side === s) late.push({ pts: [S, [tcx + s * (1.3 * T.a + 26 * u), S[1] - 0.02 * HH], [tcx + s * (1.45 * T.a + 50 * u), S[1] - 0.12 * HH]], front: true });
+        else arms.push({ pts: hang(side, 0), front: false });
+      } else if (pose === "reach") arms.push({ pts: [S, [tcx + side * (1.1 * T.a + 8 * u), S[1] - 0.45 * HH], [tcx + side * (0.7 * T.a + 6 * u), crown - (0.25 + 0.2 * k) * HH]], front: false });
+      else if (pose === "hold") arms.push({ pts: [S, [tcx + side * (1.12 * T.a + 4 * u), S[1] + 0.48 * HH], [300 + side * (12 * u + 18 * u * k), chin + 0.42 * HH]], front: true });
+      else if (pose === "press") late.push({ pts: [S, [tcx + side * (1.2 * T.a + 8 * u), S[1] + 0.12 * HH], [300 + side * (26 * u + 4 * u * k), hdY + (0.12 - 0.12 * k) * HH]], front: true });
+      else if (pose === "ear") (side > 0 ? late : arms).push(side > 0 ? { pts: [S, [tcx + 1.32 * T.a + 12 * u, S[1] + 0.08 * HH], [300 + 0.98 * H.a, hdY + 0.02 * HH]], front: true } : { pts: hang(-1, 0), front: false });
+      else if (pose === "knees") arms.push({ pts: [S, [tcx + side * (1.08 * T.a + 4 * u), S[1] + 0.35 * HH], [300 + side * 18 * u, torsoBot + 0.02 * HH]], front: true });
+    }
+  } else if (mode === "sit") for (const side of [-1, 1]) arms.push({ pts: [sh(side), [tcx + side * (1.1 * T.a + 6 * u), sh(side)[1] + 0.4 * HH], [tcx + side * (1.2 * T.a + 10 * u), torsoBot + 0.04 * HH]], front: false });
   else if (mode === "fall") for (const side of [-1, 1]) arms.push({ pts: [sh(side), [tcx + side * (1.15 * T.a + 12 * u), sh(side)[1] - 0.25 * HH], [tcx + side * (1.3 * T.a + 24 * u), sh(side)[1] - 0.68 * HH]], front: false });
   else {
     arms.push({ pts: prop === "shako" ? hang(-1, 0) : hang(-1, -sw), front: false });
@@ -606,13 +697,19 @@ export const bodyFront = (p: Pen, o: Outfit, opts: FrontOpts) => {
   const Ah = A + headTilt, [cpx, cpy] = rotAbout([300, chin], rad(A), [300, hipY]);
   p.rot = Ah ? [rad(Ah), 300, chin, cpx - 300, cpy - chin] : null;
   hatBehind(p, o, H, 300, hc, light, thick, ow, false);
-  const hp = blobPts(300, hc, H);
+  const hp = blobPts(300, hdY, H);
   p.shadedFill(hp, skin, mul(skin, SH_SKIN), light, H.a);
   p.inkRing(hp, ow, thick);
-  hatOn(p, o, hp, H, 300, hc, light, seed, facing, false);
+  hatOn(p, o, hp, H, 300, hdY, light, seed, facing, false);
   const brim = !!o.hat && o.hat !== "hair" && o.hat !== "bonnet" && o.hat !== "cap";
-  faceFront(p, 300, hc, W, expr, facing, look, lid, brim, skin, o.moustache, o.build === "stout");
+  // a bowed head: the features slide down toward the chin and the eyes look down (lids)
+  const dropExpr: Expr = headDrop > 0.5 && FACE[expr].eye[0] !== "hollow" ? "weary" : expr;
+  faceFront(p, 300, hdY + headDrop * 0.2 * HH, W, dropExpr, facing, look, headDrop > 0.5 ? Math.max(lid, 0.6) : lid, brim, skin, o.moustache, o.build === "stout", o.bags, mouthK);
   p.rot = null;
+  for (const a of late) { // hands over the head / face (fingers as a fat mitten dot)
+    p.stroke(curve(a.pts[0], a.pts[1], a.pts[2]), 5.2 * u, armCol);
+    p.ell(a.pts[2][0], a.pts[2][1], 7.5 * u, 8.5 * u, skin, 2.2 * u);
+  }
 };
 
 export type SideOpts = {

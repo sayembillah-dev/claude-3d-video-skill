@@ -1,0 +1,172 @@
+# soundtrack cue sheet
+
+- mix.wav: 48 kHz stereo 24-bit, 3648000 samples = 76.000 s
+- integrated -15.3 LUFS, true peak -1.2 dBTP, max limiter reduction 5.57 dB
+- stems: voice -15.0 / music off / sfx -30.0 LUFS
+
+## Cues
+
+-   0.00 s  [cr] control-room ventilation
+-   0.00 s  [cr] gas behind the glass (muffled)
+-   0.00 s  [cr] ragged breathing behind the glass
+-   0.00 s  [dry] riser into the slam
+-   0.00 s  [dry] tension drone
+-   2.17 s  [cr] HAND SLAMS THE GLASS
+-   2.17 s  [dry] sub hit
+-   3.03 s  [ch] chamber ventilation
+-   3.03 s  [ch] gas jets out of the vents
+-   3.10 s  [ch] second vent
+-   3.17 s  [ch] panicked breathing
+-   3.37 s  [ch] panicked breathing
+-   3.57 s  [ch] panicked breathing
+-   4.00 s  [ch] they shift
+-   4.53 s  [ch] drip
+-   5.23 s  [ch] a thin screech on the snap
+-   5.23 s  [dry] snap-in hit
+-   7.47 s  [ch] drip
+-   8.93 s  [ch] the wave
+-   9.90 s  [ch] drip
+-  10.00 s  [ch] calendar page 2
+-  10.50 s  [ch] calendar page 3
+-  11.00 s  [ch] calendar page 4
+-  11.00 s  [ch] distant pipe knock
+-  11.50 s  [ch] calendar page 5
+-  12.80 s  [ch] drip
+-  13.40 s  [ch] whispering into the grille
+-  15.17 s  [ch] a second whisperer
+-  15.17 s  [ch] the informer steps
+-  15.40 s  [ch] the informer steps
+-  15.43 s  [ch] drip
+-  15.63 s  [ch] the informer steps
+-  16.50 s  [ch] running footsteps
+-  16.83 s  [ch] running footsteps
+-  17.17 s  [ch] running footsteps
+-  17.50 s  [ch] running footsteps
+-  17.83 s  [ch] running footsteps
+-  17.83 s  [ch] the clock races
+-  17.83 s  [ch] the scream (strained), cut dead on tore
+-  18.00 s  [ch] fists on the wall
+-  18.17 s  [ch] running footsteps
+-  18.40 s  [ch] drip
+-  18.50 s  [ch] running footsteps
+-  18.83 s  [ch] running footsteps
+-  19.17 s  [ch] running footsteps
+-  19.50 s  [ch] running footsteps
+-  19.83 s  [ch] running footsteps
+-  20.17 s  [ch] running footsteps
+-  20.40 s  [dry] the rope strains and frays
+-  20.50 s  [ch] running footsteps
+-  20.83 s  [ch] running footsteps
+-  20.90 s  [dry] fibres pop
+-  20.97 s  [dry] snap crack
+-  20.97 s  [dry] the rope snaps and whips
+-  21.07 s  [ch] the calm ones breathing slowly
+-  21.50 s  [ch] drip
+-  23.93 s  [ch] drip
+-  24.00 s  [ch] distant pipe knock
+-  24.27 s  [ch] page ripped out of the book
+-  24.70 s  [ch] page ripped out of the book
+-  25.23 s  [ch] page ripped out of the book
+-  25.73 s  [ch] page ripped out of the book
+-  26.10 s  [ch] page ripped out of the book
+-  26.40 s  [cr] hands smearing
+-  26.57 s  [cr] page smeared and slapped on the glass (heard through it)
+-  26.87 s  [cr] page smeared and slapped on the glass (heard through it)
+-  27.10 s  [ch] drip
+-  27.17 s  [cr] page smeared and slapped on the glass (heard through it)
+-  27.47 s  [cr] page smeared and slapped on the glass (heard through it)
+-  27.77 s  [cr] page smeared and slapped on the glass (heard through it)
+-  28.00 s  [ch] bulb stutters out
+-  28.07 s  [cr] page smeared and slapped on the glass (heard through it)
+-  28.37 s  [cr] page smeared and slapped on the glass (heard through it)
+-  28.67 s  [cr] page smeared and slapped on the glass (heard through it)
+-  28.97 s  [cr] page smeared and slapped on the glass (heard through it)
+-  29.17 s  [cr] control-room ventilation
+-  30.07 s  [cr] taps the headphones
+-  30.60 s  [cr] taps the headphones
+-  31.17 s  [cr] BANG on the covered glass
+-  31.17 s  [dry] sub hit
+-  31.23 s  [cr] the scientist flinches back
+-  31.50 s  [cr] his breathing, shaky
+-  31.60 s  [dry] tension drone
+-  34.67 s  [dry] heartbeat under the dial
+-  36.67 s  [cr] O2 alarm pips
+-  38.67 s  [cr] he steps to the mic
+-  38.93 s  [cr] he steps to the mic
+-  39.20 s  [cr] he steps to the mic
+-  40.10 s  [cr] mic switch
+-  40.57 s  [cr] rifle bolt
+-  40.67 s  [cr] rifle bolt
+-  41.67 s  [ch] distant pipe knock
+-  42.27 s  [cr] speaker crackle
+-  44.37 s  [cr] the cigarette lands
+-  45.07 s  [ch] chamber ventilation
+-  45.07 s  [ch] door wheel spins
+-  45.53 s  [ch] bolts release
+-  45.53 s  [dry] riser into the door
+-  45.60 s  [ch] door swings open
+-  46.00 s  [ch] boots in the corridor
+-  46.20 s  [ch] boots in the corridor
+-  46.40 s  [ch] boots in the corridor
+-  46.60 s  [ch] boots in the corridor
+-  46.83 s  [ch] the soldiers scream
+-  46.90 s  [dry] sub hit on the flash
+-  47.87 s  [ch] flood water
+-  47.87 s  [dry] tension drone
+-  48.00 s  [dry] slow heartbeat
+-  48.23 s  [ch] drip in the flood
+-  49.60 s  [ch] drip in the flood
+-  51.53 s  [ch] drip in the flood
+-  51.67 s  [ch] four of them breathing, wet and ragged
+-  51.97 s  [ch] four of them breathing, wet and ragged
+-  52.27 s  [ch] four of them breathing, wet and ragged
+-  52.57 s  [ch] four of them breathing, wet and ragged
+-  52.77 s  [ch] drip in the flood
+-  53.33 s  [ch] distant pipe knock
+-  54.23 s  [ch] they beg
+-  54.63 s  [ch] drip in the flood
+-  55.90 s  [ch] drip in the flood
+-  56.20 s  [ch] the gas comes back on
+-  57.23 s  [ch] steps in the water
+-  57.40 s  [ch] drip in the flood
+-  57.77 s  [ch] steps in the water
+-  58.17 s  [ch] steps in the water
+-  58.57 s  [ch] steps in the water
+-  58.97 s  [ch] drip in the flood
+-  59.10 s  [ch] steps in the water
+-  59.57 s  [ch] steps in the water
+-  59.90 s  [ch] the shove
+-  59.93 s  [ch] door swings shut
+-  60.07 s  [ch] steps in the water
+-  60.67 s  [ch] the door clangs shut
+-  60.93 s  [ch] drip in the flood
+-  62.10 s  [ch] drip in the flood
+-  62.20 s  [ch] pistol drawn from the coat
+-  62.67 s  [ch] hammer cocked
+-  63.43 s  [ch] GUNSHOT
+-  63.43 s  [dry] 
+-  63.53 s  [dry] ears ringing
+-  63.70 s  [ch] drip in the flood
+-  63.80 s  [ch] the body hits the water (off screen)
+-  63.83 s  [ch] the cap rolls
+-  65.70 s  [ch] drip in the flood
+-  66.00 s  [ch] distant pipe knock
+-  66.70 s  [dry] riser into the smile
+-  66.93 s  [ch] drip in the flood
+-  68.00 s  [dry] snap-in hit
+-  68.17 s  [ch] slow, calm breathing (too calm)
+-  68.63 s  [ch] drip in the flood
+-  68.67 s  [ch] the bulb flickers
+-  70.17 s  [ch] drip in the flood
+-  71.40 s  [ch] lights out
+-  71.47 s  [dry] low drop into the dark
+-  71.50 s  [ch] drip in the flood
+-  72.67 s  [bd] bedroom clock
+-  72.73 s  [bd] a child asleep
+-  72.93 s  [bd] lamp click
+-  73.20 s  [dry] tension drone
+-  73.43 s  [bd] bed springs: something under the bed
+-  73.67 s  [bd] breathing under the bed
+-  74.07 s  [dry] riser
+-  75.00 s  [bd] SCREECH as the eyes lunge
+-  75.00 s  [dry] final sub hit

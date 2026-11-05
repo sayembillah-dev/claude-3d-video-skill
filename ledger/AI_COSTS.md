@@ -9,5 +9,6 @@ USD columns are API-equivalent estimates (+-50 %) from `ledger/prices.json`. Ful
 | dna-drive | 2026-11-03T10:22 | 75.3 | 1080x1920 | claude-sonnet-5-5 | 0.0 | 225000 | 2.11 | 0.25 | 3.5 | 2.36 |  |
 | dna-drive-v2 | 2026-11-03T11:02 | 75.3 | 1080x1920 | claude-opus-5-5 | 1.0 | 229288 | 4.34 | 0.25 | 3.0 | 4.59 |  |
 | teleport | 2026-11-03T18:34 | 83.7 | 1080x1920 | claude-opus-5-5 | 2.0 | 300000 | 12.38 | 0.3 | 13.3 | 12.68 | v1 orbits passed the motion gate (65%) but broke the booth cards; v2 restaged with pushes/cuts after user review (44%, accepted); thumbnails via bridge-stills |
+| sleep-experiment | 2026-11-05T09:59 | 73.8 | 1080x1920 | claude-opus-5-5+claude-sonnet-5-5 | 0.0 | 347097 | 7.18 | 0.27 | 9.0 | 7.45 |  |
 
-**Total est. API-equivalent spend: $42.10 over 4 video(s).**
+**Total est. API-equivalent spend: $49.55 over 5 video(s).**

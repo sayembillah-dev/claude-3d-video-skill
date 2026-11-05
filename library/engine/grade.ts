@@ -181,11 +181,24 @@ export const GRADE_DUSK: GradeParams = {
   tintS: [0.025, 0.006], tintM: [0, 0], tintH: [-0.01, 0.008],
   vig: [0.22, 0.4],
 };
-export const GRADES: Record<LightName, GradeParams> = { day: GRADE_DAY2, golden: GRADE_GOLDEN2, storm: GRADE_STORM, dusk: GRADE_DUSK };
+// dread: crushed blacks, desaturated, teal-green shadows, sodium-yellow highlights, a heavy vignette. night: deep blue.
+export const GRADE_DREAD: GradeParams = {
+  ky: [0, 0.035, 0.15, 0.42, 0.7, 0.87, 0.97],
+  sat: [0.62, 0.68, 0.78],
+  tintS: [0.012, -0.022], tintM: [-0.006, -0.01], tintH: [-0.03, 0.016],
+  vig: [0.6, 0.22],
+};
+export const GRADE_NIGHT: GradeParams = {
+  ky: [0, 0.04, 0.16, 0.44, 0.72, 0.89, 0.98],
+  sat: [0.8, 0.85, 0.9],
+  tintS: [0.04, -0.006], tintM: [0.02, -0.004], tintH: [0, 0],
+  vig: [0.55, 0.25],
+};
+export const GRADES: Record<LightName, GradeParams> = { day: GRADE_DAY2, golden: GRADE_GOLDEN2, storm: GRADE_STORM, dusk: GRADE_DUSK, dread: GRADE_DREAD, night: GRADE_NIGHT };
 /** One strength (0..1, the effect's `amount`) per preset, set against the NEW world (bridge_world, 2026-10-31): full-strength
  *  presets overshot (day median Y' .59-.67 vs target .571, golden .58 vs .52); day 0.65 / golden 0.45 land at
  *  .54-.62 / ~.52. Re-fit the presets (grade.md 5.C) after the merge and raise these again. */
-export const GRADE_STRENGTH: Record<LightName, number> = { day: 1, golden: 1, storm: 1, dusk: 1 };
+export const GRADE_STRENGTH: Record<LightName, number> = { day: 1, golden: 1, storm: 1, dusk: 1, dread: 1, night: 1 };
 /** Blend two lights' grades (an in-shot light change); k = 0 is exactly gradeFor(a). */
 export function gradeMix(fx: GradeEffect, a: LightName, b: LightName, k: number) {
   if (k <= 0) return gradeFor(fx, a);

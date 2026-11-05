@@ -1,0 +1,1316 @@
+[
+{
+"word": "In",
+"start": 0.0,
+"end": 0.2,
+"line": 0
+},
+{
+"word": "the",
+"start": 0.2,
+"end": 0.44,
+"line": 0
+},
+{
+"word": "1940s,",
+"start": 0.44,
+"end": 1.3,
+"line": 0
+},
+{
+"word": "Soviet",
+"start": 1.36,
+"end": 1.58,
+"line": 0
+},
+{
+"word": "scientists",
+"start": 1.58,
+"end": 2.18,
+"line": 0
+},
+{
+"word": "locked",
+"start": 2.18,
+"end": 2.58,
+"line": 0
+},
+{
+"word": "five",
+"start": 2.58,
+"end": 3.02,
+"line": 0
+},
+{
+"word": "prisoners",
+"start": 3.02,
+"end": 3.3,
+"line": 0
+},
+{
+"word": "in",
+"start": 3.3,
+"end": 3.56,
+"line": 0
+},
+{
+"word": "a",
+"start": 3.56,
+"end": 3.7,
+"line": 0
+},
+{
+"word": "room",
+"start": 3.7,
+"end": 3.92,
+"line": 0
+},
+{
+"word": "full",
+"start": 3.92,
+"end": 4.12,
+"line": 0
+},
+{
+"word": "of",
+"start": 4.12,
+"end": 4.24,
+"line": 0
+},
+{
+"word": "a",
+"start": 4.24,
+"end": 4.34,
+"line": 0
+},
+{
+"word": "gas",
+"start": 4.34,
+"end": 4.56,
+"line": 0
+},
+{
+"word": "that",
+"start": 4.56,
+"end": 4.74,
+"line": 0
+},
+{
+"word": "made",
+"start": 4.74,
+"end": 5.0,
+"line": 0
+},
+{
+"word": "sleep",
+"start": 5.0,
+"end": 5.38,
+"line": 0
+},
+{
+"word": "impossible.",
+"start": 5.38,
+"end": 6.24,
+"line": 0
+},
+{
+"word": "Stay",
+"start": 6.68,
+"end": 6.86,
+"line": 1
+},
+{
+"word": "awake",
+"start": 6.86,
+"end": 7.04,
+"line": 1
+},
+{
+"word": "for",
+"start": 7.04,
+"end": 7.28,
+"line": 1
+},
+{
+"word": "thirty",
+"start": 7.28,
+"end": 7.52,
+"line": 1
+},
+{
+"word": "days,",
+"start": 7.52,
+"end": 7.88,
+"line": 1
+},
+{
+"word": "they",
+"start": 7.88,
+"end": 8.02,
+"line": 1
+},
+{
+"word": "were",
+"start": 8.02,
+"end": 8.22,
+"line": 1
+},
+{
+"word": "told,",
+"start": 8.22,
+"end": 8.58,
+"line": 1
+},
+{
+"word": "and",
+"start": 8.58,
+"end": 8.78,
+"line": 1
+},
+{
+"word": "you",
+"start": 8.78,
+"end": 8.92,
+"line": 1
+},
+{
+"word": "walk",
+"start": 8.92,
+"end": 9.12,
+"line": 1
+},
+{
+"word": "free.",
+"start": 9.12,
+"end": 9.56,
+"line": 1
+},
+{
+"word": "For",
+"start": 9.9,
+"end": 10.08,
+"line": 2
+},
+{
+"word": "four",
+"start": 10.08,
+"end": 10.32,
+"line": 2
+},
+{
+"word": "days,",
+"start": 10.32,
+"end": 10.72,
+"line": 2
+},
+{
+"word": "everything",
+"start": 10.9,
+"end": 10.98,
+"line": 2
+},
+{
+"word": "was",
+"start": 10.98,
+"end": 11.24,
+"line": 2
+},
+{
+"word": "fine.",
+"start": 11.24,
+"end": 11.64,
+"line": 2
+},
+{
+"word": "On",
+"start": 12.0,
+"end": 12.16,
+"line": 3
+},
+{
+"word": "day",
+"start": 12.16,
+"end": 12.4,
+"line": 3
+},
+{
+"word": "five,",
+"start": 12.4,
+"end": 12.88,
+"line": 3
+},
+{
+"word": "they",
+"start": 12.9,
+"end": 13.1,
+"line": 3
+},
+{
+"word": "started",
+"start": 13.1,
+"end": 13.4,
+"line": 3
+},
+{
+"word": "whispering",
+"start": 13.4,
+"end": 13.84,
+"line": 3
+},
+{
+"word": "into",
+"start": 13.84,
+"end": 14.12,
+"line": 3
+},
+{
+"word": "the",
+"start": 14.12,
+"end": 14.32,
+"line": 3
+},
+{
+"word": "microphones,",
+"start": 14.32,
+"end": 14.82,
+"line": 3
+},
+{
+"word": "betraying",
+"start": 15.32,
+"end": 15.56,
+"line": 3
+},
+{
+"word": "each",
+"start": 15.56,
+"end": 15.74,
+"line": 3
+},
+{
+"word": "other.",
+"start": 15.74,
+"end": 16.02,
+"line": 3
+},
+{
+"word": "On",
+"start": 16.38,
+"end": 16.54,
+"line": 4
+},
+{
+"word": "day",
+"start": 16.54,
+"end": 16.66,
+"line": 4
+},
+{
+"word": "nine,",
+"start": 16.66,
+"end": 17.14,
+"line": 4
+},
+{
+"word": "one",
+"start": 17.52,
+"end": 17.6,
+"line": 4
+},
+{
+"word": "man",
+"start": 17.6,
+"end": 17.84,
+"line": 4
+},
+{
+"word": "screamed",
+"start": 17.84,
+"end": 18.3,
+"line": 4
+},
+{
+"word": "for",
+"start": 18.3,
+"end": 18.68,
+"line": 4
+},
+{
+"word": "three",
+"start": 18.68,
+"end": 19.08,
+"line": 4
+},
+{
+"word": "hours,",
+"start": 19.08,
+"end": 19.6,
+"line": 4
+},
+{
+"word": "until",
+"start": 19.6,
+"end": 20.26,
+"line": 4
+},
+{
+"word": "his",
+"start": 20.26,
+"end": 20.62,
+"line": 4
+},
+{
+"word": "voice",
+"start": 20.62,
+"end": 20.98,
+"line": 4
+},
+{
+"word": "tore.",
+"start": 20.98,
+"end": 21.46,
+"line": 4
+},
+{
+"word": "The",
+"start": 21.92,
+"end": 22.12,
+"line": 5
+},
+{
+"word": "others",
+"start": 22.12,
+"end": 22.4,
+"line": 5
+},
+{
+"word": "didn't",
+"start": 22.4,
+"end": 22.8,
+"line": 5
+},
+{
+"word": "even",
+"start": 22.8,
+"end": 23.04,
+"line": 5
+},
+{
+"word": "look",
+"start": 23.04,
+"end": 23.22,
+"line": 5
+},
+{
+"word": "up.",
+"start": 23.22,
+"end": 23.6,
+"line": 5
+},
+{
+"word": "Two",
+"start": 23.94,
+"end": 24.14,
+"line": 6
+},
+{
+"word": "of",
+"start": 24.14,
+"end": 24.24,
+"line": 6
+},
+{
+"word": "them",
+"start": 24.24,
+"end": 24.48,
+"line": 6
+},
+{
+"word": "tore",
+"start": 24.48,
+"end": 24.64,
+"line": 6
+},
+{
+"word": "pages",
+"start": 24.64,
+"end": 24.98,
+"line": 6
+},
+{
+"word": "out",
+"start": 24.98,
+"end": 25.22,
+"line": 6
+},
+{
+"word": "of",
+"start": 25.22,
+"end": 25.3,
+"line": 6
+},
+{
+"word": "their",
+"start": 25.3,
+"end": 25.46,
+"line": 6
+},
+{
+"word": "books,",
+"start": 25.46,
+"end": 25.82,
+"line": 6
+},
+{
+"word": "and",
+"start": 25.82,
+"end": 26.14,
+"line": 6
+},
+{
+"word": "glued",
+"start": 26.14,
+"end": 26.3,
+"line": 6
+},
+{
+"word": "them",
+"start": 26.3,
+"end": 26.56,
+"line": 6
+},
+{
+"word": "over",
+"start": 26.56,
+"end": 26.66,
+"line": 6
+},
+{
+"word": "the",
+"start": 26.66,
+"end": 26.9,
+"line": 6
+},
+{
+"word": "windows",
+"start": 26.9,
+"end": 27.14,
+"line": 6
+},
+{
+"word": "with",
+"start": 27.14,
+"end": 27.4,
+"line": 6
+},
+{
+"word": "their",
+"start": 27.4,
+"end": 27.6,
+"line": 6
+},
+{
+"word": "own",
+"start": 27.6,
+"end": 28.48,
+"line": 6
+},
+{
+"word": "filth.",
+"start": 28.48,
+"end": 29.16,
+"line": 6
+},
+{
+"word": "Then",
+"start": 29.16,
+"end": 29.8,
+"line": 7
+},
+{
+"word": "the",
+"start": 29.8,
+"end": 30.12,
+"line": 7
+},
+{
+"word": "room",
+"start": 30.12,
+"end": 30.3,
+"line": 7
+},
+{
+"word": "went",
+"start": 30.3,
+"end": 30.58,
+"line": 7
+},
+{
+"word": "silent.",
+"start": 30.58,
+"end": 31.0,
+"line": 7
+},
+{
+"word": "For",
+"start": 31.6,
+"end": 31.76,
+"line": 8
+},
+{
+"word": "three",
+"start": 31.76,
+"end": 32.06,
+"line": 8
+},
+{
+"word": "days,",
+"start": 32.06,
+"end": 32.52,
+"line": 8
+},
+{
+"word": "the",
+"start": 32.62,
+"end": 32.76,
+"line": 8
+},
+{
+"word": "microphones",
+"start": 32.76,
+"end": 33.04,
+"line": 8
+},
+{
+"word": "heard",
+"start": 33.04,
+"end": 33.48,
+"line": 8
+},
+{
+"word": "nothing,",
+"start": 33.48,
+"end": 33.98,
+"line": 8
+},
+{
+"word": "but",
+"start": 34.16,
+"end": 34.4,
+"line": 8
+},
+{
+"word": "the",
+"start": 34.4,
+"end": 34.6,
+"line": 8
+},
+{
+"word": "oxygen",
+"start": 34.6,
+"end": 34.9,
+"line": 8
+},
+{
+"word": "meter",
+"start": 34.9,
+"end": 35.18,
+"line": 8
+},
+{
+"word": "said",
+"start": 35.18,
+"end": 35.58,
+"line": 8
+},
+{
+"word": "five",
+"start": 35.58,
+"end": 35.9,
+"line": 8
+},
+{
+"word": "people",
+"start": 35.9,
+"end": 36.24,
+"line": 8
+},
+{
+"word": "were",
+"start": 36.24,
+"end": 36.48,
+"line": 8
+},
+{
+"word": "working",
+"start": 36.48,
+"end": 36.86,
+"line": 8
+},
+{
+"word": "very",
+"start": 36.86,
+"end": 37.3,
+"line": 8
+},
+{
+"word": "hard.",
+"start": 37.3,
+"end": 37.68,
+"line": 8
+},
+{
+"word": "On",
+"start": 38.02,
+"end": 38.16,
+"line": 9
+},
+{
+"word": "day",
+"start": 38.16,
+"end": 38.34,
+"line": 9
+},
+{
+"word": "fourteen,",
+"start": 38.34,
+"end": 38.69,
+"line": 9
+},
+{
+"word": "the",
+"start": 38.98,
+"end": 39.14,
+"line": 9
+},
+{
+"word": "scientists",
+"start": 39.14,
+"end": 39.5,
+"line": 9
+},
+{
+"word": "warned",
+"start": 39.5,
+"end": 39.8,
+"line": 9
+},
+{
+"word": "them:",
+"start": 39.8,
+"end": 40.18,
+"line": 9
+},
+{
+"word": "we're",
+"start": 40.36,
+"end": 40.56,
+"line": 9
+},
+{
+"word": "coming",
+"start": 40.56,
+"end": 40.76,
+"line": 9
+},
+{
+"word": "in.",
+"start": 40.76,
+"end": 41.34,
+"line": 9
+},
+{
+"word": "A",
+"start": 41.6,
+"end": 41.8,
+"line": 10
+},
+{
+"word": "calm",
+"start": 41.8,
+"end": 42.04,
+"line": 10
+},
+{
+"word": "voice",
+"start": 42.04,
+"end": 42.34,
+"line": 10
+},
+{
+"word": "answered:",
+"start": 42.34,
+"end": 42.74,
+"line": 10
+},
+{
+"word": "we",
+"start": 43.14,
+"end": 43.26,
+"line": 10
+},
+{
+"word": "don't",
+"start": 43.26,
+"end": 43.5,
+"line": 10
+},
+{
+"word": "want",
+"start": 43.5,
+"end": 43.7,
+"line": 10
+},
+{
+"word": "to",
+"start": 43.7,
+"end": 43.76,
+"line": 10
+},
+{
+"word": "come",
+"start": 43.76,
+"end": 43.9,
+"line": 10
+},
+{
+"word": "out",
+"start": 43.9,
+"end": 44.08,
+"line": 10
+},
+{
+"word": "anymore.",
+"start": 44.08,
+"end": 44.46,
+"line": 10
+},
+{
+"word": "When",
+"start": 45.08,
+"end": 45.2,
+"line": 11
+},
+{
+"word": "the",
+"start": 45.2,
+"end": 45.4,
+"line": 11
+},
+{
+"word": "soldiers",
+"start": 45.4,
+"end": 45.6,
+"line": 11
+},
+{
+"word": "opened",
+"start": 45.6,
+"end": 45.96,
+"line": 11
+},
+{
+"word": "the",
+"start": 45.96,
+"end": 46.18,
+"line": 11
+},
+{
+"word": "door,",
+"start": 46.18,
+"end": 46.34,
+"line": 11
+},
+{
+"word": "they",
+"start": 46.62,
+"end": 46.98,
+"line": 11
+},
+{
+"word": "screamed.",
+"start": 46.98,
+"end": 47.42,
+"line": 11
+},
+{
+"word": "One",
+"start": 47.86,
+"end": 48.1,
+"line": 12
+},
+{
+"word": "prisoner",
+"start": 48.1,
+"end": 48.34,
+"line": 12
+},
+{
+"word": "was",
+"start": 48.34,
+"end": 48.66,
+"line": 12
+},
+{
+"word": "dead,",
+"start": 48.66,
+"end": 48.94,
+"line": 12
+},
+{
+"word": "and",
+"start": 48.94,
+"end": 49.2,
+"line": 12
+},
+{
+"word": "the",
+"start": 49.2,
+"end": 49.44,
+"line": 12
+},
+{
+"word": "drain",
+"start": 49.44,
+"end": 49.6,
+"line": 12
+},
+{
+"word": "was",
+"start": 49.6,
+"end": 49.96,
+"line": 12
+},
+{
+"word": "clogged",
+"start": 49.96,
+"end": 50.22,
+"line": 12
+},
+{
+"word": "with",
+"start": 50.22,
+"end": 50.42,
+"line": 12
+},
+{
+"word": "what",
+"start": 50.42,
+"end": 50.56,
+"line": 12
+},
+{
+"word": "was",
+"start": 50.56,
+"end": 50.76,
+"line": 12
+},
+{
+"word": "left",
+"start": 50.76,
+"end": 50.98,
+"line": 12
+},
+{
+"word": "of",
+"start": 50.98,
+"end": 51.12,
+"line": 12
+},
+{
+"word": "him.",
+"start": 51.12,
+"end": 51.48,
+"line": 12
+},
+{
+"word": "The",
+"start": 51.66,
+"end": 51.82,
+"line": 13
+},
+{
+"word": "others",
+"start": 51.82,
+"end": 52.06,
+"line": 13
+},
+{
+"word": "hadn't",
+"start": 52.06,
+"end": 52.44,
+"line": 13
+},
+{
+"word": "eaten",
+"start": 52.44,
+"end": 52.7,
+"line": 13
+},
+{
+"word": "in",
+"start": 52.7,
+"end": 52.94,
+"line": 13
+},
+{
+"word": "ten",
+"start": 52.94,
+"end": 53.3,
+"line": 13
+},
+{
+"word": "days,",
+"start": 53.3,
+"end": 53.72,
+"line": 13
+},
+{
+"word": "and",
+"start": 53.72,
+"end": 53.9,
+"line": 13
+},
+{
+"word": "they",
+"start": 53.9,
+"end": 54.22,
+"line": 13
+},
+{
+"word": "begged",
+"start": 54.22,
+"end": 54.44,
+"line": 13
+},
+{
+"word": "for",
+"start": 54.44,
+"end": 54.76,
+"line": 13
+},
+{
+"word": "one",
+"start": 54.76,
+"end": 55.06,
+"line": 13
+},
+{
+"word": "thing:",
+"start": 55.06,
+"end": 55.42,
+"line": 13
+},
+{
+"word": "turn",
+"start": 55.66,
+"end": 56.0,
+"line": 13
+},
+{
+"word": "the",
+"start": 56.0,
+"end": 56.2,
+"line": 13
+},
+{
+"word": "gas",
+"start": 56.2,
+"end": 56.46,
+"line": 13
+},
+{
+"word": "back",
+"start": 56.46,
+"end": 56.76,
+"line": 13
+},
+{
+"word": "on.",
+"start": 56.76,
+"end": 57.04,
+"line": 13
+},
+{
+"word": "The",
+"start": 57.04,
+"end": 57.58,
+"line": 14
+},
+{
+"word": "commander",
+"start": 57.58,
+"end": 57.88,
+"line": 14
+},
+{
+"word": "ordered",
+"start": 57.88,
+"end": 58.24,
+"line": 14
+},
+{
+"word": "the",
+"start": 58.24,
+"end": 58.44,
+"line": 14
+},
+{
+"word": "room",
+"start": 58.44,
+"end": 58.68,
+"line": 14
+},
+{
+"word": "sealed",
+"start": 58.68,
+"end": 58.94,
+"line": 14
+},
+{
+"word": "again,",
+"start": 58.94,
+"end": 59.4,
+"line": 14
+},
+{
+"word": "with",
+"start": 59.4,
+"end": 59.56,
+"line": 14
+},
+{
+"word": "the",
+"start": 59.56,
+"end": 59.9,
+"line": 14
+},
+{
+"word": "scientists",
+"start": 59.9,
+"end": 60.22,
+"line": 14
+},
+{
+"word": "locked",
+"start": 60.22,
+"end": 60.66,
+"line": 14
+},
+{
+"word": "inside.",
+"start": 60.66,
+"end": 61.28,
+"line": 14
+},
+{
+"word": "One",
+"start": 61.8,
+"end": 61.86,
+"line": 15
+},
+{
+"word": "scientist",
+"start": 61.86,
+"end": 62.3,
+"line": 15
+},
+{
+"word": "drew",
+"start": 62.3,
+"end": 62.56,
+"line": 15
+},
+{
+"word": "his",
+"start": 62.56,
+"end": 62.86,
+"line": 15
+},
+{
+"word": "pistol,",
+"start": 62.86,
+"end": 63.12,
+"line": 15
+},
+{
+"word": "shot",
+"start": 63.42,
+"end": 63.6,
+"line": 15
+},
+{
+"word": "the",
+"start": 63.6,
+"end": 63.82,
+"line": 15
+},
+{
+"word": "commander,",
+"start": 63.82,
+"end": 64.1,
+"line": 15
+},
+{
+"word": "and",
+"start": 64.1,
+"end": 64.54,
+"line": 15
+},
+{
+"word": "aimed",
+"start": 64.54,
+"end": 64.7,
+"line": 15
+},
+{
+"word": "at",
+"start": 64.7,
+"end": 64.94,
+"line": 15
+},
+{
+"word": "the",
+"start": 64.94,
+"end": 65.04,
+"line": 15
+},
+{
+"word": "last",
+"start": 65.04,
+"end": 65.3,
+"line": 15
+},
+{
+"word": "prisoner.",
+"start": 65.3,
+"end": 65.6,
+"line": 15
+},
+{
+"word": "What",
+"start": 66.08,
+"end": 66.22,
+"line": 16
+},
+{
+"word": "are",
+"start": 66.22,
+"end": 66.56,
+"line": 16
+},
+{
+"word": "you?",
+"start": 66.56,
+"end": 66.96,
+"line": 16
+},
+{
+"word": "he",
+"start": 67.02,
+"end": 67.16,
+"line": 16
+},
+{
+"word": "asked.",
+"start": 67.16,
+"end": 67.48,
+"line": 16
+},
+{
+"word": "It",
+"start": 67.92,
+"end": 68.14,
+"line": 17
+},
+{
+"word": "smiled.",
+"start": 68.14,
+"end": 68.6,
+"line": 17
+},
+{
+"word": "We're",
+"start": 68.6,
+"end": 68.95,
+"line": 17
+},
+{
+"word": "what",
+"start": 68.95,
+"end": 69.3,
+"line": 17
+},
+{
+"word": "you",
+"start": 69.44,
+"end": 69.68,
+"line": 17
+},
+{
+"word": "lock",
+"start": 69.68,
+"end": 69.82,
+"line": 17
+},
+{
+"word": "away",
+"start": 69.82,
+"end": 70.16,
+"line": 17
+},
+{
+"word": "every",
+"start": 70.16,
+"end": 70.48,
+"line": 17
+},
+{
+"word": "night,",
+"start": 70.48,
+"end": 70.88,
+"line": 17
+},
+{
+"word": "when",
+"start": 70.88,
+"end": 71.16,
+"line": 17
+},
+{
+"word": "you",
+"start": 71.16,
+"end": 71.48,
+"line": 17
+},
+{
+"word": "fall",
+"start": 71.48,
+"end": 71.5,
+"line": 17
+},
+{
+"word": "asleep.",
+"start": 71.5,
+"end": 72.0,
+"line": 17
+},
+{
+"word": "So,",
+"start": 72.96,
+"end": 72.96,
+"line": 18
+},
+{
+"word": "sleep",
+"start": 72.96,
+"end": 73.54,
+"line": 18
+},
+{
+"word": "tight.",
+"start": 73.54,
+"end": 73.76,
+"line": 18
+}
+]

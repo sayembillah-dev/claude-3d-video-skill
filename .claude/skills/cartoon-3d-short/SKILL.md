@@ -25,6 +25,15 @@ User rules that apply:
 - Every beat needs a **visual gag or payoff on screen**, not just a funny line (teleport v1, 2026-11-03: the jokes fell flat because the picture only illustrated the narration). Before building, write one gag per shot in the shot plan (`SHOTPLAN.md`, step 4): a reaction (spit-take, faint, double-take), a prop gag (the mug falls and spills), a contrast (asleep in a 'critical' moment), a callback, or a crowd payoff. Get the user's OK on the shot plan with its gags before building.
 - **Sound: SFX only, no background music** by default (2026-11-03: BGM distracted viewers from the voice). Standard mix: SFX -6 dB, voice unchanged. Add a quiet bed (`MUSIC_DB`, -12 dB or lower) only when the user asks.
 - **Pacing: calm enough to follow** (2026-11-03: the teleport short, a cut every 2.3 s, was too rapid and viewers lost track of what to look at). One idea per shot, held 3-5 s; one clear focal subject per frame; cut on sentence boundaries, never mid-sentence; no more than one whip or flash per 15 s.
+- **Direction: every line is acted out** (2026-11-05, sleep-experiment v1 was "basic, boring, minimal movement, no fear"). These apply to any topic; pick the tone tools per topic.
+  - Each sentence gets a visual that does what it says: talking means a mouth moving at the mic (`mouth` + a `talk()` cycle); whispering means a close-up at the grille; accusing means two people pointing (`arms: "point"`); screaming means hands on the head and a staggering walk; tearing means a book ripping in the hands. Abstract lines get a metaphor insert (a torn voice becomes a rope snapping). Split a sentence into shots when it holds two actions. Never a figure just standing over narration.
+  - Faces match the moment (fear, terror, weary, grim, plead, whisper, hope). Nobody smiles unless the line says so.
+  - Shaking is meaningful: tremble only in a beat of fear (it decays over about 1.5 s); twitches are rare. Characters keep a slow sway and looking eyes, never constant shaking.
+  - Frame 1 of the hook is the most intriguing image, already in motion.
+  - Dress the world with in-world text and artifacts wherever they help: room signs, warning tags, stencils, logs, labels, number patches.
+  - Sound feels real: reverb per room on the foley, a sound for every action (steps, cloth, paper, breathing), room tone, hits and silences on the beats. SFX may sit about 4 dB above the house -6 when the design is dense.
+  - Look, light and camera match the mood. For horror: `dread`/`night` lights, `HorrorFX` (grain, flicker, vignette, flash frames) and `handheld` shake from `library/director/horror.tsx`, snap-ins, hard cuts. Lighter tools for comedy or science.
+  - Thumbnail text is the video's title unless the user says otherwise.
 - Output resolution: ask at intake (see below). The default is 1440x2560.
 - Opus max verifies every check.
 - Save after every step.
@@ -68,7 +77,7 @@ Read `CLAUDE.md`, this file and `library/README.md`. Then use AskUserQuestion, o
    - It uses local faster-whisper, maps the heard words onto the script words, and writes `voice/voice.wav` (48 kHz) and `voice/words.json`.
    - It prints line starts in frames and lists any words to hand-fix. Everything is timed to `words.json`.
 4. **Visual flow plan (before any code).** Once `words.json` exists, write `projects/<name>/SHOTPLAN.md` and get the user's OK before building. Plan the picture the way an editor would: what the viewer must look at during each sentence, then the camera that shows it best.
-   - One row per shot: frames and the narration it covers, **focus** (the one thing the viewer must look at), **shot size**, **camera move + why**, **visual aid** (if any), **gag**, hold time.
+   - One row per shot: frames and the narration it covers, **focus** (the one thing the viewer must look at), **action** (the gesture or event that shows the line), **faces**, **shot size**, **camera move + why**, **visual aid** (if any), **gag / payoff**, **sound** (foley and room), hold time.
    - **Pacing:** one idea per shot, 3-5 s each (55-65 s ≈ 14-18 shots), cuts on sentence boundaries. A new subject gets a cut; the same subject gets a slow push or character action, not a new angle.
    - **Choose the camera from what the shot has to do** (not for variety):
      | The shot has to... | Use |

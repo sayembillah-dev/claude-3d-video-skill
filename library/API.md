@@ -19,7 +19,7 @@ Register it in `src/Root.tsx`: `<Composition id="X" component={MyShort} duration
 ## director/camera.ts (timeline, camera, lens)
 - Types:
   - `V3 = [x, y, z]` (metres; y up; the camera usually looks toward −z).
-  - `ShotDef = { id, a, b, light: "day"|"golden"|"storm"|"dusk", set: placeKey, sunAz?, sunEl?, lightTo?, rays? }`: frames `a..b`. The sun is camera-relative degrees: az 0 = backlight, 90 = screen right, 180 = behind the camera.
+  - `ShotDef = { id, a, b, light: "day"|"golden"|"storm"|"dusk"|"dread"|"night", set: placeKey, sunAz?, sunEl?, lightTo?, rays? }`: frames `a..b`. The sun is camera-relative degrees: az 0 = backlight, 90 = screen right, 180 = behind the camera.
     - `lightTo: { light, a, b }`: blend sky, fog, ambient, sun colour, clouds and grade to another preset between frames a..b (storm rolls in, day turns to dusk). The sun direction and shadows stay the shot's.
     - `rays: { n?=5, k?=.6, at?: V3, spread?=10, len?=40 }`: god-ray shafts along the shot's sun (default anchor on the ground between camera and look point). Best with a high side sun (sunEl 30-45) in storm or golden.
 - `makeFilm({ total, shots, xfade?, cams, kicks?, dof, flashAt?, speedLines? })` → `Film`.
@@ -86,13 +86,13 @@ Register it in `src/Root.tsx`: `<Composition id="X" component={MyShort} duration
   - `hh(i, s)`: deterministic random in [0, 1).
   - `q(v, n)`: quantise; use it on every float that goes into a drawing key, so canvases get shared.
   - `FOLK[0..5]`: townsfolk outfits.
-- **Expressions (`Expr`):** neutral, stern, grin, laugh, whistle, nervous, shock, relief, relief_open, dazed, pained, smile, smile_closed, lick.
+- **Expressions (`Expr`):** neutral, stern, grin, laugh, whistle, nervous, shock, relief, relief_open, dazed, pained, smile, smile_closed, lick, creepy, scream, haunted. Outfit `bags` draws sleepless eye bags; hats include `ushanka` and `peaked`.
 
 ## director/world.ts + Short.tsx
 - `Production = { film, places: Record<key, { x?, z?, build(G) }>, stage, pose?(id, f, t, handles) }`.
   - Every place is built once and shown only during its shots.
   - `handles[key]` is whatever `build` returned (for toggles and animation in `pose`).
-- `makeShort(prod, { words?, keywords?, captionStyle?, background? })` → the composition.
+- `makeShort(prod, { words?, keywords?, captionStyle?, background?, shake?, overlay? })` → the composition. `shake(f)` = 2D picture shake `{x, y, rot, s}` (e.g. `handheld` from `director/horror.tsx`); `overlay` = a full-frame layer under the captions (e.g. `HorrorFX`: grain, vignette, flicker, scratches, flash frames, cut to black).
   - The post chain: ink → DOF → motion blur → bloom → tone map → grade, with transitions (`director/transitions.tsx`), speed lines, the flash and captions.
   - inputProps `{ captions: false }` renders a clean master.
 
@@ -125,6 +125,9 @@ Every builder takes `variant` (0 = original, 1-3 re-dress: wall / stone colours,
 | `coldVault(G, { variant? })` | — | room x ±6, z −8..6, walls 3.6 m, tube racks on the back wall, freezers on the sides, steel table x ±1.4, z −3..−2 (top .92) |
 | `townSquare(G, { variant? })` | — | square x ±30. Houses at z −14 and x ±13. Judge platform z −7.7..−6.1 (top .45), table z −6.5..−5.9 (top 1.27). Low wall x 2.6..4.8, z −2.4..−1.6 (top .9) |
 
+**Interiors** (`sets/interiors.ts`): `testChamber(G, { variant?, tinRows? })` → `{ door, pages, water, tins }` (room x ±5, z −6..5, 3.6 m with a ceiling; door + portholes on the back wall, positions in `CHAMBER`); `controlRoom(G, { variant?, glow? })` (x ±4, z −4..4, desk along the back wall, `CONTROL`); `bedroom(G, { variant? })` → `{ lampOn, lampOff }` (`BEDROOM`).
+- Full-frame dimming ("lights out"): cards are alpha-tested (no translucency), so push a `soft` fx quad in front of the lens (see `dim()` in `src/videos/sleep-experiment/cast.ts`); a card that must stay lit goes on the camera ray in front of it (`near()`).
+
 ## cast/ (drawings) and engine/toon.ts
 - `critters.ts`:
   - Animals: `monkey`, `hen`, `rat`, `cat`, drawn through `critter()`.
@@ -135,6 +138,7 @@ Every builder takes `variant` (0 = original, 1-3 re-dress: wall / stone colours,
   - Booth in two cards so a human stands inside: `boothBack(p, v)` behind, `boothFront(p, v, scan, glow)` in front (`v` 0-2 colour, `scan` 0..1 laser line or -1 off, `glow` 0..1).
   - `fax(p, page)`, `shredder(p, k, jam)`, `satellite(p)`, `dish(p)`, `car(p, col)`, `plane(p, col)`, `door(p, open, col)` (a free-standing border door, `open` 0..1).
   - `atom(p, ph, col)` (spinning orbit phase), `bomb(p, spark)`, `atomBin(p)` (a bin of loose atoms).
+- `sinister.ts`: thriller props (`o2Dial`, `pistol`, `eyesDark`, `peakedCap`, `cigarette`, `speakerBox`, `headphones`, `foodTin`, `openBook`, `sheetBody`, `paperedGlass`, `blackout`, `wallMic`).
 - `science.ts`: `dna`, `cell({ file, glow, split, fit })` (use `fit: true` for a split that stays inside the card), `usb`, `hardDrive`, `driveTower`, `tube`, `paperclip`, `clapper`, `monitor`, `pyramid`, `coins`, `clock`, `phone`, `priceTag`, `photo`, `fridge`, `sandwich`, `sparkle`, `redX`, `lens`.
   - In `engine/toon.ts`: `townsfolk(v)`, `soldier(v)`, `KID`, `PARENT`, `OFFICER`, `RIFLEMAN`.
 - Outfit fields: `{ jacket, pants, boots, hat?: "cap"|"hair"|"tophat"|"bonnet"|"shako"|"shako_tall", cap?, hair?, skin?, moustache?, build?: "adult"|"stout"|"kid", buttons?, belt? }`.
@@ -159,6 +163,7 @@ Every builder takes `variant` (0 = original, 1-3 re-dress: wall / stone colours,
   - `audio/dsp.py`: filters, loudness (`integrated`, `true_peak`, `norm_to`), `place`, `pan`, `st`, reverb, wav i/o.
   - `audio/instruments.py`: `brass`, `glock`, `vibes`, `musicbox`, `pluck`, `fife`, `snare`, `cymbal`, `timpani`, `brush`, `pad`, `triangle`, `whistle`.
   - `audio/sfx_gen.py`: `whoosh`, `creak`, `clink`, `rattle`, `boot`, `stroll_step`, `hammer_hit`, `splash_big`, `bubbles`, `water_bed`, `breeze`, `bird_chirps`, `crickets`, `babble`, `applause`, `hurrah`, `oof`, `whoa`, `flag_flutter`, `swing_squeak`.
+  - `audio/sfx_dark.py` (+ realism: `concrete_step`, `water_step`, `breath`, `cloth`, `vent`, `drone`, `riser`, `sub_hit`, `glass_slam`, `knock`): `hiss`, `whisper`, `pound`, `strain`, `rip`, `slap`, `metal_clank`, `metal_creak`, `gunshot`, `click`, `buzz`, `drip`, `heartbeat`, `tinroll`.
   - `audio/sfx_more.py`: `pop`, `shutter`, `flash_whine`, `hoot`, `cluck`, `bawk`, `squeak`, `meow`, `thump`, `bell`, `sad_trombone`, `room`, `zap(r, up, dur)` (teleport zap, rising or falling), `hum(dur, r, f0)`, `boom(r, big, dur)`, `ticks(dur, r, rate)` (clock), `grind(dur, r, jam)` (shredder), `beeps(r, n, f, gap)`.
   - Skeleton for a new soundtrack: `projects/_template/audio/sound_template.py`. Copy it and change the cue list and `build_music()`.
 - `music/README.md`: the track catalog (mood, key, BPM, sections). Reuse a track or write a new score.
